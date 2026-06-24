@@ -97,25 +97,63 @@
     </script>
 <style>
       body {
-        background-color: #0B0F19;
+        background-color: #070a13;
         color: #dfe2f1;
         overflow-x: hidden;
       }
+      .starlit-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 60%),
+                    #050811;
+        background-size: 200% 200%;
+        animation: nebulaShift 25s ease-in-out infinite alternate;
+      }
+      @keyframes nebulaShift {
+        0% { background-position: 0% 0%; }
+        50% { background-position: 100% 100%; }
+        100% { background-position: 0% 0%; }
+      }
+      .stars-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-image: radial-gradient(rgba(255,255,255,0.85) 1.5px, transparent 1.5px),
+                          radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px),
+                          radial-gradient(rgba(255,255,255,0.4) 1.5px, transparent 1.5px);
+        background-size: 550px 550px, 350px 350px, 250px 250px;
+        background-position: 0 0, 40px 60px, 130px 270px;
+        opacity: 0.35;
+        animation: starsTwinkle 12s ease-in-out infinite;
+      }
+      @keyframes starsTwinkle {
+        0%, 100% { opacity: 0.25; }
+        50% { opacity: 0.45; }
+      }
       .glass-card {
-        background: rgba(255, 255, 255, 0.04);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
       }
       .glass-card-top-light {
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
       }
       .glowing-indigo {
-        box-shadow: 0 0 20px rgba(192, 193, 255, 0.3);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
         transition: all 0.3s ease;
       }
       .glowing-indigo:hover {
-        box-shadow: 0 0 30px rgba(192, 193, 255, 0.5);
+        box-shadow: 0 0 35px rgba(99, 102, 241, 0.45);
         transform: scale(1.02);
       }
       .text-gradient-indigo-emerald {
@@ -136,6 +174,8 @@
     </style>
 </head>
 <body class="font-body-md text-body-md selection:bg-primary/30">
+<div class="starlit-bg"></div>
+<div class="stars-overlay"></div>
 <!-- TopNavBar -->
 <nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-margin-desktop py-4 max-w-container-max mx-auto bg-background/80 backdrop-blur-xl border-b border-white/10 shadow-sm">
 <div class="flex items-center gap-2">
@@ -154,14 +194,20 @@
 <div class="hidden md:flex items-center gap-8">
 <a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md" href="#solutions">Giải pháp</a>
 <a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-body-md" href="#story">Câu chuyện</a>
-<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-body-md" href="#pricing">Lộ trình</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-body-md" href="#roadmap">Lộ trình</a>
 <a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-body-md" href="#parents">Phụ huynh</a>
 <a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-body-md" href="#contact">Liên hệ</a>
 </div>
-<button class="glowing-indigo bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full font-bold active:scale-95 transition-transform flex items-center gap-2" onclick="window.location.href='app.html'">
-            Bắt đầu ngay
-            <span class="material-symbols-outlined text-sm">arrow_forward</span>
-        </button>
+<div class="flex items-center gap-3">
+    <!-- Floating Settings Gear Button -->
+    <button class="flex items-center justify-center w-10 h-10 rounded-full border border-white/10 hover:bg-white/10 text-white transition-colors" onclick="openSettingsModal()" title="Cấu hình Gemini AI Key">
+        <span class="material-symbols-outlined text-xl">settings</span>
+    </button>
+    <button class="glowing-indigo bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full font-bold active:scale-95 transition-transform flex items-center gap-2" onclick="window.location.href='app.html'">
+        Bắt đầu ngay
+        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+    </button>
+</div>
 </nav>
 <main class="pt-24">
 <!-- Hero Section -->
@@ -238,7 +284,7 @@
             <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
             1. Cổng Chòm Sao
           </div>
-          <div class="w-full h-full rounded-2xl bg-cover bg-center" style="background-image: url('hero_star_chart.png')"></div>
+          <div class="w-full h-full rounded-2xl bg-cover bg-center" style="background-image: url('galaxy_careers.png')"></div>
         </div>
         <!-- Slide 2 -->
         <div class="carousel-slide absolute inset-0 transition-opacity duration-700 opacity-0 ease-in-out z-0" data-slide="1">
@@ -375,6 +421,137 @@
     </div>
 </section>
 
+<!-- Roadmap Section -->
+<section id="roadmap" class="px-margin-mobile md:px-margin-desktop py-24 max-w-container-max mx-auto border-t border-white/5 scroll-mt-20">
+  <div class="text-center max-w-3xl mx-auto mb-16">
+    <span class="text-xs font-bold uppercase tracking-widest text-primary mb-3 block">Phương pháp luận</span>
+    <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg leading-tight text-white font-extrabold mb-4">
+      Lộ Trình Hướng Nghiệp <span class="text-gradient-indigo-emerald">3 Bước Cá Nhân Hóa</span>
+    </h2>
+    <p class="font-body-md text-on-surface-variant">
+      Được thiết kế khoa học nhằm giúp học sinh đi từ việc khám phá bản thân đến lựa chọn đúng đắn cho chặng đường dài.
+    </p>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+    <!-- Connecting Line for desktop -->
+    <div class="hidden md:block absolute top-1/2 left-4 right-4 h-0.5 bg-gradient-to-r from-primary/30 via-secondary/30 to-tertiary/20 -translate-y-1/2 z-0"></div>
+    
+    <!-- Step 1 -->
+    <div class="glass-card p-8 rounded-3xl border-white/10 relative z-10 hover:border-primary/40 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
+      <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 border border-primary/20 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+        <span class="font-label-sm text-lg font-bold text-primary">01</span>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-3">Thấu Hiểu Bản Thể</h3>
+      <p class="text-sm text-on-surface-variant leading-relaxed mb-4 flex-grow">
+        Làm bài trắc nghiệm RIASEC định hướng nghề nghiệp, kết hợp giải mã bản đồ Thần số học và Tử Vi để khám phá tính cách, thế mạnh bẩm sinh và điểm yếu ẩn giấu.
+      </p>
+      <div class="text-xs text-primary font-semibold flex items-center gap-1">
+        <span class="material-symbols-outlined text-xs">done</span> Khoa học & Huyền học hội tụ
+      </div>
+    </div>
+    
+    <!-- Step 2 -->
+    <div class="glass-card p-8 rounded-3xl border-white/10 relative z-10 hover:border-secondary/40 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
+      <div class="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 border border-secondary/20 shadow-[0_0_15px_rgba(78,222,163,0.2)]">
+        <span class="font-label-sm text-lg font-bold text-secondary">02</span>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-3">Lựa Chọn Tổ Hợp & Ngành</h3>
+      <p class="text-sm text-on-surface-variant leading-relaxed mb-4 flex-grow">
+        AI phân tích xu hướng tuyển sinh THPT Quốc Gia, đối chiếu điểm chuẩn, tổ hợp xét tuyển phổ biến (A00, A01, D01...) để đề xuất ngành học tối ưu tại các trường Đại học danh tiếng.
+      </p>
+      <div class="text-xs text-secondary font-semibold flex items-center gap-1">
+        <span class="material-symbols-outlined text-xs">done</span> Tối ưu điểm số & cơ hội
+      </div>
+    </div>
+    
+    <!-- Step 3 -->
+    <div class="glass-card p-8 rounded-3xl border-white/10 relative z-10 hover:border-tertiary/40 hover:-translate-y-2 transition-all duration-300 flex flex-col h-full">
+      <div class="w-12 h-12 rounded-2xl bg-tertiary/10 flex items-center justify-center mb-6 border border-tertiary/20 shadow-[0_0_15px_rgba(255,183,131,0.2)]">
+        <span class="font-label-sm text-lg font-bold text-tertiary">03</span>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-3">Đồng Hành & Kiến Tạo</h3>
+      <p class="text-sm text-on-surface-variant leading-relaxed mb-4 flex-grow">
+        Trò chuyện trực tiếp với Socratic AI để giải tỏa áp lực, thảo luận lộ trình và tạo Báo Cáo Gia Đình giúp cha mẹ và con cái tìm thấy tiếng nói chung đầy yêu thương.
+      </p>
+      <div class="text-xs text-tertiary font-semibold flex items-center gap-1">
+        <span class="material-symbols-outlined text-xs">done</span> Gắn kết ước mơ thế hệ
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Parents Section -->
+<section id="parents" class="px-margin-mobile md:px-margin-desktop py-24 max-w-container-max mx-auto border-t border-white/5 scroll-mt-20">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <!-- Left Column: Image/Visual Demo of Mediation -->
+    <div class="lg:col-span-5 order-2 lg:order-1 relative w-full aspect-[4/3] md:aspect-square flex items-center justify-center">
+      <div class="absolute -inset-6 bg-indigo-500/10 rounded-full blur-3xl opacity-60"></div>
+      
+      <!-- Premium Glass Mockup of Parent Report -->
+      <div class="glass-card w-full rounded-3xl p-6 border-white/15 relative overflow-hidden bg-gradient-to-br from-surface-container-low to-surface-container shadow-[0_0_40px_rgba(99,102,241,0.25)] flex flex-col justify-between">
+        <div class="flex justify-between items-center border-b border-white/10 pb-4 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-secondary">handshake</span>
+            <span class="text-xs font-bold text-white uppercase tracking-wider">Hòa Giải Gia Đình</span>
+          </div>
+          <span class="text-[10px] bg-secondary/10 text-secondary border border-secondary/20 px-2 py-0.5 rounded-full font-bold">Độc quyền AI</span>
+        </div>
+        
+        <div class="space-y-3 flex-grow text-left">
+          <div class="p-3 bg-white/5 border border-white/5 rounded-xl">
+            <p class="text-xs font-bold text-primary mb-1">Góc nhìn của Con (Thần số học 7):</p>
+            <p class="text-[11px] text-on-surface-variant italic">"Mong muốn tự do nghiên cứu, làm việc độc lập trong ngành Công nghệ/AI, lo sợ bị áp đặt hướng đi văn phòng truyền thống."</p>
+          </div>
+          
+          <div class="p-3 bg-white/5 border border-white/5 rounded-xl">
+            <p class="text-xs font-bold text-tertiary mb-1">Kỳ vọng của Cha Mẹ (Thực tế tài chính):</p>
+            <p class="text-[11px] text-on-surface-variant italic">"Lo ngại ngành công nghệ bão hòa và đào thải nhanh. Mong muốn con học Ngoại thương/Kinh tế có sự ổn định lâu dài."</p>
+          </div>
+          
+          <div class="p-3.5 bg-secondary/5 border border-secondary/20 rounded-xl">
+            <p class="text-xs font-bold text-secondary mb-1">🤖 Đề xuất Hòa Giải của Orion AI:</p>
+            <p class="text-[11px] text-on-surface-variant">"Kết hợp thế mạnh nghiên cứu chuyên sâu của con vào khối ngành Phân tích Dữ liệu Tài chính (Business Analytics). Lộ trình chất lượng cao tại UEH/FTU vừa đảm bảo độ an toàn tài chính cho gia đình, vừa thỏa mãn đam mê công nghệ của con."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Column: Content -->
+    <div class="lg:col-span-7 order-1 lg:order-2 text-left flex flex-col items-start">
+      <span class="text-xs font-bold uppercase tracking-widest text-secondary mb-3 block">Đồng hành cùng con</span>
+      <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg leading-tight text-white font-extrabold mb-6">
+        Giải Tỏa Áp Lực <span class="text-gradient-indigo-emerald">Yên Lòng Cha Mẹ</span>
+      </h2>
+      <p class="font-body-md text-on-surface-variant leading-relaxed mb-6 text-justify">
+        Chúng tôi hiểu rằng đằng sau sự lo lắng của cha mẹ là tình yêu thương vô bờ bến và mong muốn con có tương lai ổn định. Orion Path AI đóng vai trò như chiếc cầu nối thông thái, giúp cha mẹ hiểu rõ thế mạnh ẩn giấu của con và đồng thời phản ánh những băn khoăn thực tế về tài chính, việc làm.
+      </p>
+      
+      <div class="space-y-4 w-full">
+        <div class="flex gap-4 items-start">
+          <div class="w-8 h-8 rounded-full bg-secondary/15 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-secondary text-sm">finance_chip</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-sm mb-1">Đánh giá Viễn cảnh Tài chính & Nghề nghiệp</h4>
+            <p class="text-xs text-on-surface-variant leading-relaxed">Cung cấp báo cáo thị trường việc làm Việt Nam thực tế, chi phí đào tạo dự kiến giúp phụ huynh cân đối ngân sách gia đình.</p>
+          </div>
+        </div>
+        
+        <div class="flex gap-4 items-start">
+          <div class="w-8 h-8 rounded-full bg-primary/15 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary text-sm">psychology</span>
+          </div>
+          <div>
+            <h4 class="font-bold text-white text-sm mb-1">Phá bỏ 'Bức tường thế hệ'</h4>
+            <p class="text-xs text-on-surface-variant leading-relaxed">Chuyển hóa những bất đồng ý kiến thành cuộc trò chuyện mang tính xây dựng nhờ dữ liệu khách quan từ khoa học học thuật và năng lực số mệnh.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Pricing Section -->
 <section class="px-margin-mobile md:px-margin-desktop py-24 max-w-4xl mx-auto">
 <h2 class="font-display-lg text-display-lg-mobile text-center mb-16">Chọn lộ trình của bạn</h2>
@@ -450,6 +627,71 @@
 </div>
 </section>
 </main>
+<!-- Contact Section -->
+<section id="contact" class="px-margin-mobile md:px-margin-desktop py-24 max-w-container-max mx-auto border-t border-white/5 scroll-mt-20">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+    <!-- Contact Info -->
+    <div class="lg:col-span-5 text-left flex flex-col justify-between">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-widest text-primary mb-3 block">Liên hệ ngay</span>
+        <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg leading-tight text-white font-extrabold mb-6">
+          Kiến Tạo <span class="text-gradient-indigo-emerald">Bầu Trời Sao</span> Của Riêng Bạn
+        </h2>
+        <p class="font-body-md text-on-surface-variant leading-relaxed mb-8">
+          Bạn có câu hỏi hoặc cần hỗ trợ về lộ trình học tập? Hãy gửi thông điệp cho đội ngũ Orion Path AI, chúng tôi luôn ở đây để đồng hành cùng bạn.
+        </p>
+      </div>
+      
+      <div class="space-y-4 font-body-md">
+        <div class="flex items-center gap-3 text-on-surface-variant">
+          <span class="material-symbols-outlined text-primary">mail</span>
+          <span>support@orionpath.ai</span>
+        </div>
+        <div class="flex items-center gap-3 text-on-surface-variant">
+          <span class="material-symbols-outlined text-primary">location_on</span>
+          <span>Tòa nhà Đổi mới Sáng tạo Quốc gia, Cầu Giấy, Hà Nội</span>
+        </div>
+        <div class="flex items-center gap-3 text-on-surface-variant">
+          <span class="material-symbols-outlined text-primary">call</span>
+          <span>+84 (24) 888 9999</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Contact Form -->
+    <div class="lg:col-span-7">
+      <form class="glass-card p-8 md:p-10 rounded-3xl border-white/10 text-left space-y-6" onsubmit="event.preventDefault(); alert('Cảm ơn bạn đã gửi thông tin! Đội ngũ Orion Path AI sẽ liên hệ lại sớm nhất.'); this.reset();">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-primary mb-2">Họ & Tên</label>
+            <input type="text" required placeholder="Nguyễn Văn A" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all text-sm"/>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-primary mb-2">Bạn là?</label>
+            <select class="w-full bg-surface-container-lowest border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all text-sm">
+              <option value="student">Học sinh / Sinh viên</option>
+              <option value="parent">Phụ huynh học sinh</option>
+              <option value="educator">Giáo viên / Nhà tư vấn</option>
+            </select>
+          </div>
+        </div>
+        
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-primary mb-2">Địa chỉ Email</label>
+          <input type="email" required placeholder="name@example.com" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all text-sm"/>
+        </div>
+        
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-primary mb-2">Thông điệp</label>
+          <textarea required rows="4" placeholder="Tôi muốn tìm hiểu thêm về lộ trình..." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all text-sm"></textarea>
+        </div>
+        
+        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-primary-container to-indigo-600 hover:from-indigo-600 hover:to-primary-container text-white font-bold text-sm shadow-[0_0_20px_rgba(99,102,241,0.2)] hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] transition-all hover:scale-[1.01] active:scale-95">Gửi Thông Điệp</button>
+      </form>
+    </div>
+  </div>
+</section>
+
 <!-- Footer -->
 <footer class="w-full py-12 px-margin-desktop border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-gutter bg-surface-container-lowest">
 <div class="flex flex-col items-center md:items-start gap-2">
@@ -543,5 +785,79 @@
         showSlide(0);
         startTimer();
       }
+
+      window.openSettingsModal = function() {
+        const modal = document.getElementById('settings-modal');
+        const input = document.getElementById('gemini-key-input');
+        const savedKey = localStorage.getItem('orion_gemini_api_key') || '';
+        input.value = savedKey;
+        
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+          modal.classList.remove('opacity-0');
+          modal.querySelector('.glass-card').classList.remove('scale-95');
+        }, 10);
+      };
+
+      window.closeSettingsModal = function() {
+        const modal = document.getElementById('settings-modal');
+        modal.classList.add('opacity-0');
+        modal.querySelector('.glass-card').classList.add('scale-95');
+        setTimeout(() => {
+          modal.classList.remove('flex');
+          modal.classList.add('hidden');
+        }, 300);
+      };
+
+      window.saveSettingsModalKey = function() {
+        const input = document.getElementById('gemini-key-input');
+        const key = input.value.trim();
+        if (key) {
+          localStorage.setItem('orion_gemini_api_key', key);
+          alert('Đã lưu Gemini API Key thành công!');
+        } else {
+          localStorage.removeItem('orion_gemini_api_key');
+          alert('Đã xóa Gemini API Key.');
+        }
+        window.closeSettingsModal();
+      };
     </script>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-all duration-300 opacity-0">
+      <div class="glass-card w-full max-w-md rounded-3xl p-8 border border-white/10 shadow-[0_0_50px_rgba(99,102,241,0.3)] relative transform scale-95 transition-all duration-300">
+        <button onclick="closeSettingsModal()" class="absolute top-6 right-6 text-on-surface-variant hover:text-white transition-colors">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary">key</span>
+          </div>
+          <div class="text-left">
+            <h3 class="text-xl font-bold text-white">Cấu hình Gemini API</h3>
+            <p class="text-xs text-on-surface-variant">Lưu trữ trực tiếp và an toàn trên trình duyệt của bạn</p>
+          </div>
+        </div>
+        <div class="space-y-4 text-left">
+          <div>
+            <label for="gemini-key-input" class="block text-xs font-bold uppercase tracking-wider text-primary mb-2">Gemini API Key</label>
+            <input type="password" id="gemini-key-input" placeholder="AIzaSy..." class="w-full bg-surface-container-lowest border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all text-sm font-mono"/>
+          </div>
+          
+          <div class="bg-primary/5 border border-primary/20 rounded-2xl p-4 flex gap-3 text-xs leading-relaxed text-on-surface-variant">
+            <span class="material-symbols-outlined text-primary flex-shrink-0" style="font-variation-settings: 'FILL' 1;">info</span>
+            <div>
+              <p class="font-bold text-white mb-1">Bảo mật tối đa</p>
+              Key API được lưu tại <code class="bg-white/5 px-1 py-0.5 rounded font-mono">localStorage</code> máy khách của bạn và chỉ được gửi trực tiếp đến API Google Gemini để phân tích học thuật. Không đi qua máy chủ trung gian.
+            </div>
+          </div>
+          
+          <div class="flex gap-3 pt-2">
+            <button onclick="saveSettingsModalKey()" class="flex-1 py-3 rounded-xl bg-secondary text-on-secondary font-bold text-sm shadow-[0_0_15px_rgba(78,222,163,0.3)] hover:shadow-[0_0_25px_rgba(78,222,163,0.5)] transition-all hover:scale-[1.02] active:scale-95">Lưu cấu hình</button>
+            <button onclick="closeSettingsModal()" class="px-6 py-3 rounded-xl border border-white/10 hover:bg-white/5 text-white font-medium text-sm transition-all active:scale-95">Hủy</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </body></html>

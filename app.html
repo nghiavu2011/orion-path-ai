@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     
     <style>
         :root {
@@ -31,15 +32,197 @@
         }
 
         body {
-            background-color: var(--bg-main);
+            background-color: transparent;
             color: var(--text-main);
             font-family: var(--font-family);
             min-height: 100vh;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
-            background-attachment: fixed;
+        }
+
+        .starlit-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
+                        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 60%),
+                        #050811;
+            background-size: 200% 200%;
+            animation: nebulaShift 25s ease-in-out infinite alternate;
+        }
+        @keyframes nebulaShift {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        .stars-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: radial-gradient(rgba(255,255,255,0.85) 1.5px, transparent 1.5px),
+                              radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px),
+                              radial-gradient(rgba(255,255,255,0.4) 1.5px, transparent 1.5px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            opacity: 0.35;
+            animation: starsTwinkle 12s ease-in-out infinite;
+        }
+        @keyframes starsTwinkle {
+            0%, 100% { opacity: 0.25; }
+            50% { opacity: 0.45; }
+        }
+
+        .settings-gear-btn:hover {
+            background: rgba(255, 255, 255, 0.15) !important;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .modal-close:hover {
+            color: white;
+        }
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+        .modal-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(99, 102, 241, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        .modal-title {
+            text-align: left;
+        }
+        .modal-title h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+        .modal-title p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .form-control-modal {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: white;
+            font-family: monospace;
+            font-size: 14px;
+            outline: none;
+            margin-top: 8px;
+            transition: border-color 0.2s;
+        }
+        .form-control-modal:focus {
+            border-color: var(--primary);
+        }
+        .modal-info-box {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--text-muted);
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            text-align: left;
+        }
+        .modal-info-box strong {
+            color: white;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .modal-btn-save {
+            flex: 1;
+            background: var(--secondary);
+            color: #002113;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .modal-btn-save:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        .modal-btn-cancel {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         /* App Layout Container */
@@ -1310,6 +1493,8 @@
 </style>
 </head>
 <body>
+    <div class="starlit-bg"></div>
+    <div class="stars-overlay"></div>
 
     <!-- Logo Def Gradient -->
     <svg style="width:0;height:0;position:absolute;">
@@ -1322,15 +1507,20 @@
     <div class="app-container">
         
         <!-- Header -->
-        <header>
-            <div class="logo">
+        <header style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="logo" style="cursor: pointer;" onclick="window.location.href='index.html'">
                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 24px; height: 24px; filter: drop-shadow(0 0 4px rgba(192,193,255,0.6));">
                     <circle cx="50" cy="50" r="40" stroke="#c0c1ff" stroke-width="8" stroke-linecap="round"/>
                     <path d="M40 30 V70 M40 30 H60 C70 30 70 50 60 50 H40" stroke="#4edea3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 Orion Path AI
             </div>
-            <div class="badge-premium">Expert Edition v1.2</div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <button class="settings-gear-btn" onclick="openSettingsModal()" title="Cấu hình Gemini API Key" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;">
+                    <span class="material-symbols-outlined" style="font-size: 20px;">settings</span>
+                </button>
+                <div class="badge-premium">Expert Edition v1.2</div>
+            </div>
         </header>
 
         <!-- WIZARD STEP INDICATORS -->
@@ -3338,6 +3528,43 @@
                     </div>
                 </div>
             `;
+
+            // Trigger dynamic Gemini report generation if key is present
+            const localKey = localStorage.getItem('orion_gemini_api_key');
+            if (localKey) {
+                const gpa = parseFloat(document.getElementById('score-gpa').value) || 8.4;
+                generateDynamicAIReport(localKey, {
+                    fullname,
+                    nickname,
+                    dob,
+                    birthHour,
+                    gender,
+                    riasecScores,
+                    menhElement,
+                    cucData,
+                    cucName,
+                    canChi,
+                    napAmName,
+                    lifePathNum,
+                    missionNum,
+                    soulNum,
+                    birthdayNum,
+                    personalYearNum,
+                    graduationYear,
+                    math,
+                    lit,
+                    eng,
+                    gpa,
+                    primaryPersonality,
+                    secondaryPersonality,
+                    relationshipTitle,
+                    relationshipEssay,
+                    step1Interpretation,
+                    step2Interpretation,
+                    step3Interpretation,
+                    step4Interpretation
+                });
+            }
         }function handleChatKey(e) {
             if (e.key === 'Enter') {
                 sendMessage();
@@ -3559,6 +3786,292 @@
             populateStrengths();
             changeScreen(0);
         }
+
+        // Settings Modal and API Key Management
+        window.openSettingsModal = function() {
+            const modal = document.getElementById('settings-modal');
+            const input = document.getElementById('gemini-key-input');
+            const savedKey = localStorage.getItem('orion_gemini_api_key') || '';
+            input.value = savedKey;
+            
+            modal.classList.add('active');
+        };
+
+        window.closeSettingsModal = function() {
+            const modal = document.getElementById('settings-modal');
+            modal.classList.remove('active');
+        };
+
+        window.saveSettingsModalKey = function() {
+            const input = document.getElementById('gemini-key-input');
+            const key = input.value.trim();
+            if (key) {
+                localStorage.setItem('orion_gemini_api_key', key);
+                alert('Đã lưu Gemini API Key thành công!');
+            } else {
+                localStorage.removeItem('orion_gemini_api_key');
+                alert('Đã xóa Gemini API Key.');
+            }
+            window.closeSettingsModal();
+            
+            // If on results screen (screen 5), trigger dynamic report generation
+            if (typeof currentScreen !== 'undefined' && currentScreen === 5) {
+                buildDashboardResults();
+            }
+        };
+
+        // Dynamic Gemini API Report Generator
+        async function generateDynamicAIReport(localKey, profile) {
+            const essayTab = document.getElementById('mystical-inner-tab-content-essay');
+            const blueprintTab = document.getElementById('mystical-inner-tab-content-blueprint');
+            
+            if (!essayTab || !blueprintTab) return;
+            
+            const statusHtml = `
+                <div id="ai-status-badge" style="font-size:11.5px; color:var(--text-muted); background:rgba(255,255,255,0.03); border:1px solid var(--border-color); padding:8px 12px; border-radius:8px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                    <span class="material-symbols-outlined animate-spin text-primary" style="font-size:16px;">sync</span>
+                    <span>✨ Gemini AI đang cá nhân hóa chi tiết lá số Tử Vi & Thần Số Học...</span>
+                </div>
+            `;
+            
+            const originalEssayHTML = essayTab.innerHTML;
+            const originalBlueprintHTML = blueprintTab.innerHTML;
+            
+            // Prepend status to essay tab
+            essayTab.innerHTML = statusHtml + originalEssayHTML;
+            
+            try {
+                let prompt = 'Bạn là một chuyên gia tư vấn hướng nghiệp kết hợp chiêm tinh học học đường và thần số học Pythagoras tại Việt Nam.\\n' +
+                    'Hãy phân tích hồ sơ học sinh sau đây để đưa ra một bản luận giải chi tiết, mang tính chữa lành, động viên, giúp kết nối cha mẹ và học sinh, định hướng học tập lớp 10 một cách sáng suốt nhất.\\n\\n' +
+                    'Hồ sơ học sinh:\\n' +
+                    '- Họ tên: ' + profile.fullname + (profile.nickname ? ' (' + profile.nickname + ')' : '') + '\\n' +
+                    '- Giới tính: ' + profile.gender + '\\n' +
+                    '- Ngày sinh: ' + profile.dob.split('-').reverse().join('/') + ' (Giờ sinh: ' + profile.birthHour + ')\\n' +
+                    '- Điểm học thuật hiện tại: Toán: ' + profile.math + ', Văn: ' + profile.lit + ', Anh: ' + profile.eng + ', GPA: ' + profile.gpa + '\\n' +
+                    '- Kết quả RIASEC (Sở thích nghề nghiệp): Nhóm chính là ' + profile.primaryPersonality + ', Nhóm phụ là ' + profile.secondaryPersonality + ' (Chi tiết: ' + JSON.stringify(profile.riasecScores) + ')\\n' +
+                    '- Số Đường Đời (Life Path): ' + profile.lifePathNum + '\\n' +
+                    '- Số Sứ Mệnh (Mission): ' + profile.missionNum + '\\n' +
+                    '- Số Linh Hồn (Soul): ' + profile.soulNum + '\\n' +
+                    '- Năm cá nhân 2026: ' + profile.personalYearNum + '\\n' +
+                    '- Tử Vi Can-Chi: ' + profile.canChi + ' (Nạp âm bản mệnh: ' + profile.napAmName + ')\\n' +
+                    '- Lập cục: Mệnh ' + profile.menhElement.name + ' - Cục ' + profile.cucData.name + ' (' + profile.cucName + ')\\n\\n' +
+                    'Yêu cầu đầu ra:\\n' +
+                    'Trả về duy nhất một đối tượng JSON (không nằm trong thẻ Markdown, không ghi chữ ```json ở đầu và cuối, chỉ trả về chuỗi JSON thuần túy để parse được bằng JSON.parse trong Javascript).\\n' +
+                    'Đối tượng JSON phải có cấu trúc chính xác như sau:\\n' +
+                    '{\\n' +
+                    '  "relationshipTitle": "Tiêu đề viết in hoa đầy nghệ thuật và chiều sâu về mối quan hệ Mệnh và Cục (ví dụ: MỆNH KHẮC CỤC: KHÁT VỌNG CHINH PHỤC...). Không dài quá 80 ký tự.",\\n' +
+                    '  "relationshipEssay": "Một bài viết luận giải chi tiết (khoảng 300-400 từ) bằng tiếng Việt dưới dạng các đoạn văn HTML. Bài luận giải cần tập trung vào sự tương tác giữa Mệnh và Cục dưới góc nhìn tâm lý học đường, đưa ra lời khuyên thực tế về học tập và giải tỏa mâu thuẫn kỳ vọng với cha mẹ. Chia làm 2-3 đoạn văn rõ ràng.",\\n' +
+                    '  "step1Interpretation": "Luận giải về Khí Chất Gốc & Năng Lực Hành Động (Mệnh & Thân) dựa trên hành bản mệnh ' + profile.menhElement.name + ' và cung an Thân. Viết dạng một đoạn văn ngắn gọn, truyền cảm hứng.",\\n' +
+                    '  "step2Interpretation": "Luận giải về Tư Duy Chuyên Sâu & Xu Hướng Học Thuật của học sinh dựa trên số Đường Đời ' + profile.lifePathNum + ' và RIASEC. Viết dạng một đoạn văn định hướng học tập.",\\n' +
+                    '  "step3Interpretation": "Luận giải về Sức Khỏe Nội Tâm & Điểm Tựa Gia Đình (Phúc Đức). Đưa ra lời khuyên cách dung hòa và kết nối gia đình. Viết dạng một đoạn văn ấm áp.",\\n' +
+                    '  "step4Interpretation": "Luận giải về Thời Vận Thi Cử & Cột Mốc Đỗ Đạt hướng tới kỳ thi tốt nghiệp và đại học vào năm ' + profile.graduationYear + '. Viết dạng một đoạn văn động viên."\\n' +
+                    '}\\n\\n' +
+                    'BẮT BUỘC TUÂN THỦ:\\n' +
+                    '1. KHÔNG ĐƯỢC chứa bất kỳ thông tin nguồn đối chiếu hay ký hiệu kỹ thuật nào như \'📖 Nguồn đối chiếu: ...\' hay \'[Core] Can-Chi...\'.\\n' +
+                    '2. Ngôn ngữ tiếng Việt tự nhiên, ấm áp, sâu sắc, mang tính trị liệu tâm lý học đường cho tuổi dậy thì.\\n' +
+                    '3. Không trả về bất kỳ text nào ngoài JSON, không bọc JSON trong các ký tự khác ngoài dấu ngoặc nhọn.';
+
+                const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + localKey;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                role: 'user',
+                                parts: [{ text: prompt }]
+                            }
+                        ],
+                        generationConfig: {
+                            temperature: 0.75,
+                            maxOutputTokens: 2000,
+                            responseMimeType: "application/json"
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("API request failed with status " + response.status);
+                }
+
+                const data = await response.json();
+                let textResult = '';
+                if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+                    textResult = data.candidates[0].content.parts[0].text;
+                } else {
+                    throw new Error("Không nhận được phản hồi hợp lệ từ Gemini API.");
+                }
+
+                let cleanJsonStr = textResult.trim();
+                if (cleanJsonStr.startsWith('```json')) {
+                    cleanJsonStr = cleanJsonStr.substring(7);
+                } else if (cleanJsonStr.startsWith('```')) {
+                    cleanJsonStr = cleanJsonStr.substring(3);
+                }
+                if (cleanJsonStr.endsWith('```')) {
+                    cleanJsonStr = cleanJsonStr.substring(0, cleanJsonStr.length - 3);
+                }
+                cleanJsonStr = cleanJsonStr.trim();
+
+                const parsed = JSON.parse(cleanJsonStr);
+
+                const successBadgeHtml = `
+                    <div id="ai-status-badge" style="font-size:11px; color:#10b981; background:rgba(16, 185, 129, 0.05); border:1px solid rgba(16, 185, 129, 0.2); padding:6px 10px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-outlined" style="font-size:14px; font-variation-settings: 'FILL' 1;">check_circle</span>
+                        <span>Bản luận giải đã được cá nhân hóa bởi Gemini AI</span>
+                    </div>
+                `;
+
+                essayTab.innerHTML = `
+                    ${successBadgeHtml}
+                    <h4 style="color:var(--accent); font-weight:700; font-size:13.5px; margin-bottom:8px; border-bottom:1px dashed var(--border-color); padding-bottom:6px;">
+                        🧭 ${parsed.relationshipTitle || profile.relationshipTitle}
+                    </h4>
+                    ${parsed.relationshipEssay || profile.relationshipEssay}
+                    
+                    <div style="background: rgba(255, 255, 255, 0.025); border: 1px solid var(--border-color); padding: 12px 14px; border-radius: 8px; margin-top: 15px;">
+                        <h5 style="color:var(--accent); font-weight:700; font-size:12.5px; margin-bottom:8px; text-transform:uppercase;">
+                            🌌 Bản đồ tự nhận thức học thuật (3 Chỉ số năng lượng lõi)
+                        </h5>
+                        <div style="display:flex; flex-direction:column; gap:8px; font-size:11px; line-height:1.4;">
+                            <div style="background:rgba(255,255,255,0.01); border-left:3px solid var(--primary); padding:6px 8px;">
+                                <strong>1. Thế mạnh gốc (Đường đời ${profile.lifePathNum}):</strong> 
+                                Em có ưu thế tự nhiên khi làm việc với 
+                                <span style="color:var(--primary); font-weight:600;">
+                                    ${profile.lifePathNum === 1 || profile.lifePathNum === 8 || profile.lifePathNum === 22 ? 'Hệ thống, quản trị và các dự án lớn' :
+                                      profile.lifePathNum === 4 || profile.lifePathNum === 7 ? 'Con số, máy móc, cấu trúc dữ liệu và nghiên cứu chuyên sâu' :
+                                      profile.lifePathNum === 3 || profile.lifePathNum === 5 ? 'Ý tưởng sáng tạo, truyền thông và trải nghiệm đổi mới' :
+                                      'Con người, sự thấu cảm, kết nối và hỗ trợ cộng đồng'}
+                                </span>.
+                            </div>
+                            <div style="background:rgba(255,255,255,0.01); border-left:3px solid var(--secondary); padding:6px 8px;">
+                                <strong>2. Mục tiêu cuộc đời (Sứ mệnh ${profile.missionNum}):</strong> 
+                                Năng lượng hướng nghiệp định hướng em trở thành: 
+                                <span style="color:var(--secondary); font-weight:600;">
+                                    ${profile.missionNum === 1 || profile.missionNum === 8 || profile.missionNum === 22 ? 'Người dẫn dắt &amp; Điều hành định hướng' :
+                                      profile.missionNum === 3 || profile.missionNum === 4 || profile.missionNum === 5 || profile.missionNum === 7 ? 'Người kiến tạo &amp; Chuyên gia phát triển' :
+                                      'Người chữa lành &amp; Kết nối cộng đồng'}
+                                </span>.
+                            </div>
+                            <div style="background:rgba(255,255,255,0.01); border-left:3px solid var(--accent); padding:6px 8px;">
+                                <strong>3. Thời vận thi đấu (Năm cá nhân 2026: Số ${profile.personalYearNum}):</strong> 
+                                Năng lượng hỗ trợ tốt nhất cho việc: 
+                                <span style="color:var(--accent); font-weight:600;">
+                                    ${profile.personalYearNum === 4 || profile.personalYearNum === 7 ? 'Tập trung học gạo, cày cuốc học thuật và ôn luyện sâu sắc' :
+                                      profile.personalYearNum === 1 || profile.personalYearNum === 5 || profile.personalYearNum === 8 ? 'Bứt phá đi xa, đi du học hoặc chuyển sang môi trường hoàn toàn mới' :
+                                      'Học hỏi nhóm, làm hồ sơ kết hợp thầy cô mentor chỉ dẫn'}
+                                </span>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(78, 222, 163, 0.025); border: 1px solid var(--border-color); padding: 12px 14px; border-radius: 8px; margin-top: 12px;">
+                        <h5 style="color:var(--secondary); font-weight:700; font-size:12.5px; margin-bottom:8px; text-transform:uppercase;">
+                            🧠 Bản đồ Năng khiếu &amp; Trí thông minh đa năng
+                        </h5>
+                        <div style="font-size:11.5px; line-height:1.45; color:var(--text-main);">
+                            <p style="margin-bottom:6px; font-size:11px; color:var(--text-muted);">👉 <strong>Lựa chọn tiếp thu của em:</strong> "${userSocraticAnswers[3] ? userSocraticAnswers[3].answer : 'Tự học và chiêm nghiệm'}"</p>
+                            <div style="background:rgba(255,255,255,0.01); border-left:3px solid var(--secondary); padding:6px 8px; font-size:11px; color:var(--text-muted);">
+                                💡 <strong>Lời khuyên phương pháp học:</strong> Em thuộc nhóm có năng khiếu tự định hình cao. Hãy ưu tiên sử dụng sơ đồ tư duy trực quan (Mindmap) kết hợp thực tế đời sống để tiếp thu bài thi nhanh gấp 2 lần.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(192, 193, 255, 0.025); border: 1px solid var(--border-color); padding: 12px 14px; border-radius: 8px; margin-top: 12px;">
+                        <h5 style="color:var(--primary); font-weight:700; font-size:12.5px; margin-bottom:8px; text-transform:uppercase;">
+                            🎯 Chỉ số Tự tin Nghề nghiệp (SCCT Self-efficacy)
+                        </h5>
+                        <div style="font-size:11.5px; line-height:1.45; color:var(--text-main);">
+                            <p style="margin-bottom:6px; font-size:11px; color:var(--text-muted);">👉 <strong>Rào cản/Mối e ngại của em:</strong> "${userSocraticAnswers[2] ? userSocraticAnswers[2].answer : 'Lo lắng sự cạnh tranh học tập'}"</p>
+                            <div style="background:rgba(255,255,255,0.01); border-left:3px solid var(--primary); padding:6px 8px; font-size:11px; color:var(--text-muted);">
+                                🧭 <strong>Lời khuyên vượt rào cản tâm lý:</strong> Thuyết SCCT chỉ ra niềm tin tự chủ quyết định sự thành công. Hãy dùng bảng tính tài chính và dữ liệu hòa vốn ROI ở bên tab "Bản Đồ Học Đường" để thảo luận một cách khoa học nhất với cha mẹ.
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                blueprintTab.innerHTML = `
+                    ${successBadgeHtml}
+                    <h4 style="color:var(--text-main); font-weight:700; font-size:13px; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">
+                        Bản Đồ Học Đường - Luận Giải Số Mệnh Chi Tiết
+                    </h4>
+                    <div style="display:flex; flex-direction:column; gap:10px; font-size:11.5px; color:var(--text-main); line-height:1.5;">
+                        <div style="background:rgba(255,255,255,0.015); border:1px solid var(--border-color); padding:12px 14px; border-radius:8px;">
+                            <strong style="color:var(--primary); font-size:12.5px; display:flex; align-items:center; gap:6px;">☯️ Khí Chất Gốc & Năng Lực Hành Động (Mệnh & Thân)</strong>
+                            <p style="margin-top:6px; margin-bottom:0; color:var(--text-muted); line-height:1.45;">
+                                ${parsed.step1Interpretation || profile.step1Interpretation}
+                            </p>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.015); border:1px solid var(--border-color); padding:12px 14px; border-radius:8px;">
+                            <strong style="color:var(--secondary); font-size:12.5px; display:flex; align-items:center; gap:6px;">🧠 Tư Duy Chuyên Sâu & Xu Hướng Học Thuật</strong>
+                            <p style="margin-top:6px; margin-bottom:0; color:var(--text-muted); line-height:1.45;">
+                                ${parsed.step2Interpretation || profile.step2Interpretation}
+                            </p>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.015); border:1px solid var(--border-color); padding:12px 14px; border-radius:8px;">
+                            <strong style="color:var(--accent); font-size:12.5px; display:flex; align-items:center; gap:6px;">🏠 Sức Khỏe Nội Tâm & Điểm Tựa Gia Đình (Phúc Đức)</strong>
+                            <p style="margin-top:6px; margin-bottom:0; color:var(--text-muted); line-height:1.45;">
+                                ${parsed.step3Interpretation || profile.step3Interpretation}
+                            </p>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.015); border:1px solid var(--border-color); padding:12px 14px; border-radius:8px;">
+                            <strong style="color:var(--text-main); font-size:12.5px; display:flex; align-items:center; gap:6px;">📅 Thời Vận Thi Cử & Cột Mốc Đỗ Đạt</strong>
+                            <p style="margin-top:6px; margin-bottom:0; color:var(--text-muted); line-height:1.45;">
+                                ${parsed.step4Interpretation || profile.step4Interpretation}
+                            </p>
+                        </div>
+                    </div>
+                `;
+
+            } catch (err) {
+                console.error("Lỗi khi gọi Gemini API:", err);
+                const warningBadgeHtml = `
+                    <div id="ai-status-badge" style="font-size:11px; color:#ef4444; background:rgba(239, 68, 68, 0.05); border:1px solid rgba(239, 68, 68, 0.2); padding:6px 10px; border-radius:6px; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                        <span class="material-symbols-outlined" style="font-size:14px; font-variation-settings: 'FILL' 1;">warning</span>
+                        <span>Không thể cá nhân hóa bằng AI: ${err.message}. Đang hiển thị bản dự phòng ngoại tuyến.</span>
+                    </div>
+                `;
+                essayTab.innerHTML = warningBadgeHtml + originalEssayHTML;
+                blueprintTab.innerHTML = warningBadgeHtml + originalBlueprintHTML;
+            }
+        }
     </script>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button onclick="closeSettingsModal()" class="modal-close">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <span class="material-symbols-outlined">key</span>
+                </div>
+                <div class="modal-title">
+                    <h3>Cấu hình Gemini API</h3>
+                    <p>Lưu trữ trực tiếp và an toàn trên trình duyệt của bạn</p>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; text-align: left;">
+                <label for="gemini-key-input" style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--primary); letter-spacing: 0.5px;">Gemini API Key</label>
+                <input type="password" id="gemini-key-input" placeholder="AIzaSy..." class="form-control-modal"/>
+                
+                <div class="modal-info-box">
+                    <span class="material-symbols-outlined" style="color: var(--primary); font-size: 20px; flex-shrink: 0; font-variation-settings: 'FILL' 1;">info</span>
+                    <div>
+                        <strong style="display: block; margin-bottom: 4px;">Bảo mật tối đa</strong>
+                        Key API được lưu tại <code>localStorage</code> máy khách của bạn và chỉ được gửi trực tiếp đến API Google Gemini để phân tích học thuật. Không đi qua máy chủ trung gian.
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button onclick="saveSettingsModalKey()" class="modal-btn-save">Lưu cấu hình</button>
+                    <button onclick="closeSettingsModal()" class="modal-btn-cancel">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
