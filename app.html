@@ -2224,6 +2224,9 @@
 
         // Initialize App
         window.onload = function() {
+            if (typeof importApiKeyFromUrl === 'function') {
+                importApiKeyFromUrl();
+            }
             populateStrengths();
             // Initialize local API Key input if present
             const savedKey = localStorage.getItem('orion_gemini_api_key');
@@ -3787,6 +3790,31 @@
             changeScreen(0);
         }
 
+        // Auto-import API Key from URL if present (?key=... or ?k=Base64EncodedKey)
+        function importApiKeyFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let key = urlParams.get('key');
+            const kEncoded = urlParams.get('k');
+            
+            if (kEncoded) {
+                try {
+                    key = atob(kEncoded.trim());
+                } catch (e) {
+                    console.error("Failed to decode k parameter from Base64:", e);
+                }
+            }
+            
+            if (key && key.trim().startsWith('AIzaSy')) {
+                const cleanKey = key.trim();
+                localStorage.setItem('orion_gemini_api_key', cleanKey);
+                alert('Đã tự động nhập và cấu hình Gemini API Key từ liên kết thành công!');
+                
+                // Clean the URL query parameters so the key doesn't stay visible in the address bar
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.replaceState({ path: newUrl }, '', newUrl);
+            }
+        }
+
         // Settings Modal and API Key Management
         window.openSettingsModal = function() {
             const modal = document.getElementById('settings-modal');
@@ -4057,6 +4085,9 @@
             <div style="display: flex; flex-direction: column; text-align: left;">
                 <label for="gemini-key-input" style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--primary); letter-spacing: 0.5px;">Gemini API Key</label>
                 <input type="password" id="gemini-key-input" placeholder="AIzaSy..." class="form-control-modal"/>
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
+                    Chưa có API Key? <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: 700;">Lấy API Key miễn phí tại Google AI Studio</a>
+                </p>
                 
                 <div class="modal-info-box">
                     <span class="material-symbols-outlined" style="color: var(--primary); font-size: 20px; flex-shrink: 0; font-variation-settings: 'FILL' 1;">info</span>

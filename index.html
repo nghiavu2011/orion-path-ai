@@ -794,6 +794,32 @@
         startTimer();
       }
 
+      // Auto-import API Key from URL if present (?key=... or ?k=Base64EncodedKey)
+      function importApiKeyFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let key = urlParams.get('key');
+        const kEncoded = urlParams.get('k');
+        
+        if (kEncoded) {
+          try {
+            key = atob(kEncoded.trim());
+          } catch (e) {
+            console.error("Failed to decode k parameter from Base64:", e);
+          }
+        }
+        
+        if (key && key.trim().startsWith('AIzaSy')) {
+          const cleanKey = key.trim();
+          localStorage.setItem('orion_gemini_api_key', cleanKey);
+          alert('Đã tự động nhập và cấu hình Gemini API Key từ liên kết thành công!');
+          
+          // Clean the URL query parameters so the key doesn't stay visible in the address bar
+          const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+          window.history.replaceState({ path: newUrl }, '', newUrl);
+        }
+      }
+      importApiKeyFromUrl();
+
       window.openSettingsModal = function() {
         const modal = document.getElementById('settings-modal');
         const input = document.getElementById('gemini-key-input');
@@ -851,6 +877,9 @@
           <div>
             <label for="gemini-key-input" class="block text-xs font-bold uppercase tracking-wider text-primary mb-2">Gemini API Key</label>
             <input type="password" id="gemini-key-input" placeholder="AIzaSy..." class="w-full bg-surface-container-lowest border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all text-sm font-mono"/>
+            <p class="text-xs text-on-surface-variant mt-2 leading-relaxed">
+              Chưa có API Key? <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-primary hover:underline font-bold inline-flex items-center gap-0.5">Lấy API Key miễn phí tại Google AI Studio <span class="material-symbols-outlined text-[10px]">open_in_new</span></a>
+            </p>
           </div>
           
           <div class="bg-primary/5 border border-primary/20 rounded-2xl p-4 flex gap-3 text-xs leading-relaxed text-on-surface-variant">
