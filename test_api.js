@@ -38,16 +38,37 @@ async function runApiTests() {
   assert.strictEqual(res2.statusCode, 400);
   console.log('✓ API Test 2 Passed: 400 Bad Request on empty message.');
 
-  console.log('--- API TEST 3: Immediate Crisis Intervention Routing ---');
-  const res3 = createMockRes();
+  console.log('--- API TEST 3: Canonical 4-Tier Safety Classification & Interception ---');
+  const { classifySafety } = await import('./api/chat.js');
+  assert.strictEqual(classifySafety('Em muốn tự tử'), 'IMMEDIATE_DANGER');
+  assert.strictEqual(classifySafety('Em bị bạo hành gia đình'), 'HIGH_RISK');
+  assert.strictEqual(classifySafety('Em thấy rất áp lực và mệt mỏi'), 'DISTRESS');
+  assert.strictEqual(classifySafety('Em muốn tìm hiểu ngành AI'), 'NORMAL');
+  console.log('✓ API Test 3.1 Passed: classifySafety correctly identifies all 4 tiers.');
+
+  // Test IMMEDIATE_DANGER via handler
+  const resDanger = createMockRes();
   await handler({
     method: 'POST',
-    body: { message: 'Em quá áp lực và muốn tự tử' }
-  }, res3);
-  assert.strictEqual(res3.statusCode, 200);
-  assert.strictEqual(res3.body.safetyTriggered, true);
-  assert.strictEqual(res3.body.reply.includes('111'), true, 'Must include hotline 111');
-  console.log('✓ API Test 3 Passed: Crisis intercepted and hotline 111 returned safely.');
+    body: { message: 'Em muốn tự tử ngay bây giờ' }
+  }, resDanger);
+  assert.strictEqual(resDanger.statusCode, 200);
+  assert.strictEqual(resDanger.body.safetyTriggered, true);
+  assert.strictEqual(resDanger.body.safetyLevel, 'IMMEDIATE_DANGER');
+  assert.strictEqual(resDanger.body.reply.includes('111'), true);
+  assert.strictEqual(resDanger.body.reply.includes('Cục Bà mẹ và Trẻ em — Bộ Y tế'), true);
+
+  // Test HIGH_RISK via handler
+  const resHighRisk = createMockRes();
+  await handler({
+    method: 'POST',
+    body: { message: 'Em bị bạo hành và bị đánh đập' }
+  }, resHighRisk);
+  assert.strictEqual(resHighRisk.statusCode, 200);
+  assert.strictEqual(resHighRisk.body.safetyTriggered, true);
+  assert.strictEqual(resHighRisk.body.safetyLevel, 'HIGH_RISK');
+  assert.strictEqual(resHighRisk.body.reply.includes('111'), true);
+  console.log('✓ API Test 3.2 Passed: IMMEDIATE_DANGER and HIGH_RISK intercepted with 2026 authority.');
 
   console.log('--- API TEST 4: Graceful Handling when API Key is missing on server ---');
   const oldKey = process.env.GEMINI_API_KEY;

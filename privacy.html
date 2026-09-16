@@ -68,22 +68,43 @@
       </div>
 
       <div class="bg-surface/60 border border-border rounded-2xl p-6 md:p-8">
-        <h2 class="text-lg font-bold text-white mb-3">2. Tách Biệt Không Gian Riêng Tư và Chia Sẻ Gia Đình</h2>
-        <p class="text-slate-300 text-sm leading-relaxed mb-3">
-          Orion phân định rõ ba cấp độ hiển thị thông tin để bảo vệ tâm lý cởi mở của học sinh:
+        <h2 class="text-lg font-bold text-white mb-3">2. Cơ Chế Lưu Trữ & Xử Lý Dữ Liệu Thực Tế (Data Architecture)</h2>
+        <p class="text-slate-300 text-sm leading-relaxed mb-4">
+          Nhằm bảo vệ tối đa quyền riêng tư của học sinh mà vẫn đảm bảo tính tiện ích khi trải nghiệm, hệ thống phân định rõ ràng 5 cấp độ lưu trữ và xử lý dữ liệu:
         </p>
-        <ul class="space-y-2 text-sm text-slate-300 list-disc list-inside">
-          <li><strong>Không gian Riêng tư (Private):</strong> Các đoạn đối thoại chi tiết giữa học sinh và AI Career Coach không tự động xuất hiện trên giao diện báo cáo của cha mẹ. Học sinh có quyền tự do thổ lộ những e ngại học tập mà không sợ bị phán xét.</li>
-          <li><strong>Bản Tóm Tắt Chung (Shared Summary):</strong> Chỉ các mục tiêu nguyện vọng đã được học sinh xác nhận và bảng phân tích triển vọng nghề nghiệp khách quan mới được tổng hợp vào Cầu Nối Gia Đình (Family Bridge).</li>
-          <li><strong>Không tạo tài khoản giả lập:</strong> Ứng dụng trung thực lưu trữ phiên làm việc tạm thời trên bộ nhớ máy khách (Local State) và không thu thập số điện thoại/CCCD để bán lại cho bên thứ ba.</li>
-        </ul>
+        <div class="space-y-4 text-xs md:text-sm text-slate-300">
+          <div class="p-3.5 rounded-xl bg-white/5 border border-white/10">
+            <strong class="text-white block mb-1">① Trạng thái tạm thời trong phiên (Temporary State):</strong>
+            Dữ liệu bài làm trắc nghiệm RIASEC, điểm số học tập nhập liệu và lịch sử đối thoại hiện tại được lưu tạm trong bộ nhớ RAM trình duyệt. Khi đóng tab hoặc tải lại trang, các dữ liệu tạm thời chưa được lưu sẽ tự động giải phóng.
+          </div>
+          <div class="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+            <strong class="text-indigo-200 block mb-1">② Lưu trữ cục bộ trên trình duyệt (Local Browser Persistence via localStorage):</strong>
+            Để học sinh có thể tiếp tục thực hiện và theo dõi tiến độ các <em>Thử Nghiệm Nghề Nghiệp (Career Experiments)</em> cũng như xem lại tiến trình thay đổi (Living Career Profile) qua thời gian, hệ thống lưu trạng thái tiến độ thử nghiệm và ghi chú phản tư cá nhân vào <code>localStorage</code> trên thiết bị của học sinh (khóa: <code>orion_career_experiments_state</code>). Dữ liệu này nằm hoàn toàn trên thiết bị của bạn, không tải lên cơ sở dữ liệu bên ngoài, và bạn có thể xóa sạch bất kỳ lúc nào bằng tính năng "Xóa dữ liệu duyệt web" của trình duyệt.
+          </div>
+          <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
+            <strong class="text-amber-200 block mb-1">③ Dữ liệu gửi đến cổng AI (/api/chat):</strong>
+            Khi học sinh hoặc phụ huynh tương tác với AI Career Coach hoặc Cầu Nối Gia Đình, chỉ nội dung câu hỏi hiện tại kèm bối cảnh học tập cần thiết (kết quả nhóm RIASEC, điểm môn học, tên ngành quan tâm) được truyền qua kết nối mã hóa HTTPS đến endpoint máy chủ <code>/api/chat</code>. Dữ liệu từ phòng Chiêm nghiệm Văn hóa (Reflection Lab) hoàn toàn không bao giờ được gửi vào luồng tư vấn nghề nghiệp này.
+          </div>
+          <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+            <strong class="text-emerald-200 block mb-1">④ Xử lý phía máy chủ & Nhà cung cấp AI (Server / Provider Processing):</strong>
+            Cổng <code>/api/chat</code> vận hành trên hạ tầng máy chủ vô trạng thái (Stateless Serverless) của Vercel, gọi API Google Gemini với khóa bảo mật được bảo vệ ở tầng biến môi trường máy chủ. Máy chủ không lưu trữ bản ghi nhật ký định danh học sinh vào bất kỳ cơ sở dữ liệu người dùng nào.
+          </div>
+          <div class="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20">
+            <strong class="text-red-200 block mb-1">⑤ Dữ liệu TUYỆT ĐỐI KHÔNG thu thập (Data NOT Collected):</strong>
+            Orion không yêu cầu số Căn cước công dân (CCCD), họ tên đầy đủ có tính pháp lý, số điện thoại cá nhân, địa chỉ nhà riêng hay tài khoản ngân hàng. Orion cam kết không bán dữ liệu học sinh cho bất kỳ bên thứ ba, trung tâm luyện thi hay môi giới du học nào.
+          </div>
+        </div>
       </div>
 
       <div class="bg-surface/60 border border-border rounded-2xl p-6 md:p-8">
-        <h2 class="text-lg font-bold text-white mb-3">3. Cam Kết Đạo Đức Dữ Liệu Giáo Dục</h2>
-        <p class="text-slate-300 text-sm leading-relaxed">
-          Dữ liệu bài làm trắc nghiệm RIASEC và điểm số học tập của học sinh chỉ phục vụ duy nhất mục đích tính toán giả thiết nghề nghiệp trong phiên trải nghiệm. Orion không bán thông tin liên hệ của học sinh hay gia đình cho các trung tâm du học, cơ sở luyện thi hay môi giới giáo dục.
+        <h2 class="text-lg font-bold text-white mb-3">3. Tách Biệt Không Gian Riêng Tư Học Sinh & Chia Sẻ Gia Đình</h2>
+        <p class="text-slate-300 text-sm leading-relaxed mb-3">
+          Orion bảo vệ quyền tự chủ của học sinh:
         </p>
+        <ul class="space-y-2 text-sm text-slate-300 list-disc list-inside">
+          <li><strong>Không gian Riêng tư (Private):</strong> Các đoạn đối thoại tâm sự chi tiết giữa học sinh và AI Career Coach không tự động xuất hiện trên màn hình của cha mẹ. Học sinh có quyền tự do thổ lộ những băn khoăn, e ngại mà không sợ bị phán xét.</li>
+          <li><strong>Bản Tóm Tắt Chung (Shared Summary):</strong> Chỉ các mục tiêu nguyện vọng đã được học sinh chủ động xác nhận và bảng phân tích triển vọng nghề nghiệp khách quan mới được chia sẻ vào Cầu Nối Gia Đình (Family Bridge) để cùng cha mẹ đối thoại kiến tạo.</li>
+        </ul>
       </div>
     </section>
   </main>

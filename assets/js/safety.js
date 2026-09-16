@@ -20,7 +20,7 @@ const SAFETY_CONFIG = {
       number: "111",
       purpose: "Tiếp nhận thông tin, tố giác hành vi xâm hại và can thiệp bảo vệ khẩn cấp cho trẻ em, thanh thiếu niên",
       jurisdiction: "Toàn quốc (Việt Nam)",
-      source: "Cục Trẻ em — Bộ Lao động - Thương binh và Xã hội",
+      source: "Cục Bà mẹ và Trẻ em — Bộ Y tế",
       lastVerifiedAt: "2026-03"
     },
     {
@@ -83,13 +83,13 @@ function renderCrisisAlertModal() {
           <a href="tel:111" style="display: flex; justify-content: space-between; align-items: center; background: rgba(239,68,68,0.18); border: 1px solid rgba(239,68,68,0.5); padding: 12px 16px; border-radius: 10px; color: #fff; text-decoration: none;">
             <div>
               <div style="font-weight: 800; font-size: 14px; color: #fca5a5;">Tổng đài Quốc gia 111 (Miễn phí 24/7)</div>
-              <div style="font-size: 11px; color: #94a3b8;">Cục Trẻ em — Bộ Lao động - Thương binh và Xã hội</div>
+              <div style="font-size: 11px; color: #94a3b8;">Cục Bà mẹ và Trẻ em — Bộ Y tế</div>
             </div>
             <span style="background: #ef4444; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px;">Gọi 111</span>
           </a>
           <a href="tel:115" style="display: flex; justify-content: space-between; align-items: center; background: rgba(99,102,241,0.18); border: 1px solid rgba(99,102,241,0.5); padding: 12px 16px; border-radius: 10px; color: #fff; text-decoration: none;">
             <div>
-              <div style="font-weight: 800; font-size: 14px; color: #c7d2fe;">Cấp cứu Y tế Khẩn cấp 115 (Miễn phí 24/7)</div>
+              <div style="font-weight: 800; font-size: 14px; color: #c7d2fe;">Cấp cứu Y tế Khẩn cấp 115 (Trực cấp cứu toàn quốc)</div>
               <div style="font-size: 11px; color: #94a3b8;">Hệ thống Cấp cứu Y tế — Bộ Y tế Việt Nam</div>
             </div>
             <span style="background: #6366f1; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px;">Gọi 115</span>

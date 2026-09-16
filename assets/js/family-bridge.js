@@ -17,7 +17,7 @@ class FamilyBridgeFacilitator {
    */
   generateDialogueReport(params) {
     const {
-      topHypothesis = { name: "Công nghệ / Kỹ thuật", salary: { range: "15-30tr" } },
+      topHypothesis = { name: "Công nghệ / Kỹ thuật", salary: { range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu." } },
       academic = { math: 8, lit: 7.5, eng: 8 },
       studentVoice = "Em muốn học ngành mình đam mê, được tự do sáng tạo và làm việc trong môi trường năng động.",
       parentConcerns = "Gia đình mong muốn con có công việc ổn định, an toàn, thu nhập đủ trang trải cuộc sống và học phí vừa sức."

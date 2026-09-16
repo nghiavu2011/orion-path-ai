@@ -1,23 +1,28 @@
 // Vercel Serverless Function: Orion Path AI Secure AI Endpoint
 // Handles Career Coach, Family Facilitator, and Reflection Lab with strict separation and child-safety guards.
 
-const CRISIS_KEYWORDS = [
-  'tự tử', 'tu tu', 'suicide', 'tự hại', 'tu hai', 'self-harm',
-  'muốn chết', 'muon chet', 'kết liễu', 'ket lieu', 'cắt cổ tay', 'cat co tay',
+const IMMEDIATE_DANGER_KEYWORDS = [
+  'tự tử', 'tu tu', 'suicide', 'muốn chết', 'muon chet', 'cắt cổ tay', 'cat co tay', 'chết đi cho xong', 'chet di cho xong'
+];
+
+const HIGH_RISK_KEYWORDS = [
+  'tự hại', 'tu hai', 'self-harm', 'kết liễu', 'ket lieu',
   'bị bạo hành', 'bi bao hanh', 'bị đánh', 'bi danh', 'bị lạm dụng', 'bi lam dung',
   'bị xâm hại', 'bi xam hai', 'trầm cảm nặng', 'tram cam nang', 'tuyệt vọng', 'tuyet vong',
-  'muốn biến mất', 'muon bien mat', 'chết đi cho xong'
+  'muốn biến mất', 'muon bien mat', 'không muốn sống', 'khong muon song'
 ];
 
 const DISTRESS_KEYWORDS = [
   'quá kiệt sức', 'qua kiet suc', 'áp lực không chịu nổi', 'khóc suốt',
-  'mất ngủ triền miên', 'rất hoảng loạn', 'bế tắc hoàn toàn'
+  'mất ngủ triền miên', 'rất hoảng loạn', 'bế tắc hoàn toàn', 'muốn buông xuôi',
+  'áp lực', 'stress', 'lo lắng', 'mệt mỏi', 'bế tắc'
 ];
 
 function classifySafety(text) {
   if (!text || typeof text !== 'string') return 'NORMAL';
   const lower = text.toLowerCase();
-  if (CRISIS_KEYWORDS.some(k => lower.includes(k))) return 'HIGH_RISK';
+  if (IMMEDIATE_DANGER_KEYWORDS.some(k => lower.includes(k))) return 'IMMEDIATE_DANGER';
+  if (HIGH_RISK_KEYWORDS.some(k => lower.includes(k))) return 'HIGH_RISK';
   if (DISTRESS_KEYWORDS.some(k => lower.includes(k))) return 'DISTRESS';
   return 'NORMAL';
 }
@@ -26,10 +31,12 @@ const CRISIS_RESPONSE = `Chào em, Orion nhận thấy em có thể đang phải
 
 Orion là trợ lý định hướng học tập, không phải chuyên gia tâm lý hay bác sĩ y khoa. Em hãy dừng ngay việc tra cứu nghề nghiệp và liên hệ ngay với người lớn đáng tin cậy (cha mẹ, thầy cô, người thân) hoặc các kênh hỗ trợ khẩn cấp chính thức tại Việt Nam:
 
-☎️ Tổng đài Quốc gia Bảo vệ Trẻ em: 111 (Cục Trẻ em - Bộ LĐ-TB&XH, hoạt động 24/7, hoàn toàn miễn phí)
-🏥 Cấp cứu Y tế khẩn cấp: 115 hoặc trạm y tế / bệnh viện gần nhất
+☎️ Tổng đài Quốc gia Bảo vệ Trẻ em: 111 (Cục Bà mẹ và Trẻ em — Bộ Y tế, hoạt động 24/7, hoàn toàn miễn phí)
+🏥 Cấp cứu Y tế Khẩn cấp: 115 (Trực cấp cứu y tế toàn quốc) hoặc cơ sở y tế gần nhất
 
 Em không phải vượt qua điều này một mình. Hãy tìm kiếm sự hỗ trợ ngay em nhé!`;
+
+export { classifySafety };
 
 export default async function handler(req, res) {
   // Enforce POST method
@@ -50,13 +57,13 @@ export default async function handler(req, res) {
   // Enforce message length limit to prevent abuse
   const sanitizedMessage = message.trim().slice(0, 1000);
 
-  // Check child safety classification
+  // Check child safety classification (canonical 4-tier enum)
   const safetyLevel = classifySafety(sanitizedMessage);
-  if (safetyLevel === 'HIGH_RISK') {
+  if (safetyLevel === 'IMMEDIATE_DANGER' || safetyLevel === 'HIGH_RISK') {
     return res.status(200).json({
       reply: CRISIS_RESPONSE,
       safetyTriggered: true,
-      safetyLevel: 'HIGH_RISK'
+      safetyLevel: safetyLevel
     });
   }
 
@@ -130,6 +137,15 @@ NGUYÊN TẮC BẮT BUỘC:
 - Định hướng quan tâm: ${cp.targets ? (Array.isArray(cp.targets) ? cp.targets.join(', ') : cp.targets) : 'Đang tìm hiểu'}
 - Thử nghiệm đã trải nghiệm: ${cp.completedExperiments || 'Chưa có thử nghiệm nào'}`;
     }
+  }
+
+  // Prepend supportive boundary for DISTRESS tier (Section 4)
+  if (safetyLevel === 'DISTRESS') {
+    systemInstruction = `[LƯU Ý AN TOÀN TÂM LÝ - HỖ TRỢ CẢM XÚC (DISTRESS TIER)]
+Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt mỏi hoặc lo âu.
+1. Luôn phản hồi bằng sự thấu cảm nhẹ nhàng, thấu hiểu và động viên tích cực.
+2. TUYỆT ĐỐI KHÔNG chẩn đoán bệnh lý tâm thần (trầm cảm, lo âu...) hay đưa ra lời khuyên y khoa.
+3. Giảm nhẹ áp lực chọn nghề/học tập; khuyến khích học sinh nghỉ ngơi, chia nhỏ mục tiêu và chia sẻ với người thân đáng tin cậy.\n\n` + systemInstruction;
   }
 
   try {

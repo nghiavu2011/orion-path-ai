@@ -98,8 +98,11 @@ assert.strictEqual(classifySafetyTier('Em quá kiệt sức và bế tắc hoàn
 assert.strictEqual(classifySafetyTier('Em muốn tìm hiểu ngành thiết kế đồ họa'), 'NORMAL');
 assert.strictEqual(SAFETY_CONFIG.officialHotlines.length, 2);
 assert.strictEqual(SAFETY_CONFIG.officialHotlines[0].number, '111');
+assert.strictEqual(SAFETY_CONFIG.officialHotlines[0].source, 'Cục Bà mẹ và Trẻ em — Bộ Y tế');
+assert.strictEqual(SAFETY_CONFIG.officialHotlines[0].lastVerifiedAt, '2026-03');
 assert.strictEqual(SAFETY_CONFIG.officialHotlines[1].number, '115');
-console.log('✓ Test 7 Passed: Multi-tier child safety and verified official hotlines intact.');
+assert.strictEqual(SAFETY_CONFIG.officialHotlines[1].source, 'Bộ Y tế Việt Nam');
+console.log('✓ Test 7 Passed: Multi-tier child safety and verified official hotlines (Cục Bà mẹ và Trẻ em) intact.');
 
 console.log('--- TEST 8: Structured Career Hypotheses Validation & Fallback (Section 15 & 22) ---');
 const validHypothesis = [{
@@ -137,7 +140,28 @@ const completed = mgr.getCompletedList();
 assert.strictEqual(completed.some(c => c.id === 'exp_figma_app'), true);
 console.log('✓ Test 9 Passed: 4-stage experiment lifecycle works end-to-end.');
 
-console.log('\n=========================================');
-console.log('ALL 9 PRODUCTION ENGINE TESTS PASSED 100%');
-console.log('=========================================');
+console.log('--- TEST 10: Salary Transparency & RIASEC Claims Audit ---');
+const fs = require('fs');
+const careersCode = fs.readFileSync('./data/careers.js', 'utf8');
+assert.strictEqual(careersCode.includes('18 - 45 triệu VNĐ/tháng'), false, 'careers.js must not contain unsourced 18-45 salary');
+assert.strictEqual(careersCode.includes('Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp.'), true);
+
+const indexHtml = fs.readFileSync('./index.html', 'utf8');
+assert.strictEqual(indexHtml.includes('Khảo sát lương: 18 - 45 tr/tháng'), false, 'index.html must not contain unsourced 18-45 salary');
+assert.strictEqual(indexHtml.includes('mô hình Holland chuẩn xác'), false, 'Must not claim psychometric validation');
+assert.strictEqual(indexHtml.includes('Cục Bà mẹ và Trẻ em — Bộ Y tế'), true, 'Must use 2026 authority');
+console.log('✓ Test 10 Passed: Salary transparency disclaimer and RIASEC wording verified.');
+
+console.log('--- TEST 11: Privacy Policy Local Storage & 5 Data Tiers Audit ---');
+const privacyHtml = fs.readFileSync('./privacy.html', 'utf8');
+assert.strictEqual(privacyHtml.includes('orion_career_experiments_state'), true, 'Must document localStorage key');
+assert.strictEqual(privacyHtml.includes('Local Browser Persistence via localStorage'), true, 'Must describe local browser persistence');
+assert.strictEqual(privacyHtml.includes('Temporary State'), true, 'Must document temporary state');
+assert.strictEqual(privacyHtml.includes('/api/chat'), true, 'Must document data sent to /api/chat');
+assert.strictEqual(privacyHtml.includes('Data NOT Collected'), true, 'Must document data not collected');
+console.log('✓ Test 11 Passed: Privacy copy accurately reflects implementation.');
+
+console.log('\n==========================================');
+console.log('ALL 11 PRODUCTION ENGINE TESTS PASSED 100%');
+console.log('==========================================');
 

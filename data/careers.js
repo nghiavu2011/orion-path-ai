@@ -13,8 +13,8 @@ const CAREERS_DATABASE = [
       { type: "Cao đẳng / Chứng chỉ", name: "Lập trình viên Quốc tế / Chứng chỉ Kỹ sư Dữ liệu & AI (FPT Polytechnic, Aptech)" }
     ],
     salary: {
-      range: "18 - 45 triệu VNĐ/tháng (khởi điểm - 3 năm kinh nghiệm)",
-      source: "Báo cáo thị trường IT Việt Nam TopDev & VietnamWorks 2024-2025",
+      range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
+      source: "Báo cáo thị trường IT Việt Nam & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Nhu cầu tuyển dụng tăng trưởng cao (FPT, Viettel, VinAI, FDI)",
@@ -46,8 +46,8 @@ const CAREERS_DATABASE = [
       { type: "Cao đẳng / Đào tạo nghề cao", name: "Kỹ thuật Điện tử ứng dụng (CĐ Nghề Bách Khoa, CĐ Cao Thắng)" }
     ],
     salary: {
-      range: "15 - 40 triệu VNĐ/tháng (kỹ sư mới tốt nghiệp đến 3 năm)",
-      source: "Khảo sát Hiệp hội Bán dẫn Đông Nam Á (SEMI) & NIC Việt Nam 2024",
+      range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
+      source: "Khảo sát Ngành Bán dẫn & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Được Chính phủ Việt Nam ưu tiên chiến lược đến năm 2030 (hợp tác Intel, Synopsys, Marvell, Amkor)",
@@ -78,8 +78,8 @@ const CAREERS_DATABASE = [
       { type: "Đào tạo thực chiến / Khóa học nghề", name: "Học viện Thiết kế Thực hành (ColorME, Green Academy, Arena Multimedia)" }
     ],
     salary: {
-      range: "12 - 35 triệu VNĐ/tháng",
-      source: "Báo cáo tuyển dụng UX Việt Nam 2024 (VietnamWorks)",
+      range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
+      source: "Báo cáo tuyển dụng Công nghệ & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Khá cao trong các công ty công nghệ, ngân hàng số và thương mại điện tử",
@@ -110,8 +110,8 @@ const CAREERS_DATABASE = [
       { type: "Cao đẳng / Chứng chỉ thực tế", name: "Chứng chỉ Phân tích Dữ liệu chuyên nghiệp Google / Coursera / CĐ Kinh tế" }
     ],
     salary: {
-      range: "12 - 32 triệu VNĐ/tháng",
-      source: "Vietnam Salary Guide Adecco 2024",
+      range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
+      source: "Vietnam Salary Guide & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Ổn định và rộng khắp mọi ngành nghề (Bán lẻ, Ngân hàng, Y tế, Giáo dục)",
@@ -142,8 +142,8 @@ const CAREERS_DATABASE = [
       { type: "Du học / Học bổng", name: "Học bổng các nước Bắc Âu / Đức / Úc chuyên ngành Sustainability" }
     ],
     salary: {
-      range: "15 - 38 triệu VNĐ/tháng (vị trí doanh nghiệp xuất khẩu/FDI)",
-      source: "Khảo sát Xu hướng Việc làm Xanh PwC Việt Nam 2024",
+      range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
+      source: "Khảo sát Việc làm Xanh & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Tăng trưởng nhanh do yêu cầu kiểm toán carbon từ thị trường Mỹ và EU",
@@ -174,8 +174,8 @@ const CAREERS_DATABASE = [
       { type: "Cử nhân / Cao đẳng Y tế", name: "Điều dưỡng / Kỹ thuật Phục hồi chức năng (4 năm ĐH hoặc 3 năm Cao đẳng, cơ hội làm việc tại Nhật/Đức)" }
     ],
     salary: {
-      range: "12 - 50 triệu VNĐ/tháng (tùy tuyến bệnh viện, phòng khám tư nhân và thâm niên)",
-      source: "Báo cáo mức lương ngành Y tế Việt Nam 2024",
+      range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
+      source: "Báo cáo Khảo sát Y tế & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Nhu cầu vĩnh viễn, thiếu hụt điều dưỡng và bác sĩ chất lượng cao",

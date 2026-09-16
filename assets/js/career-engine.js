@@ -185,7 +185,7 @@ class OrionCareerEngine {
           experiment: experiments[0] || null,
           educationPaths,
           pathways: educationPaths,
-          salary: item.salary || { range: "Tùy vị trí", note: "Tham khảo khảo sát thị trường" }
+          salary: item.salary || { range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.", note: "Tham khảo khảo sát thị trường" }
         };
       });
 
