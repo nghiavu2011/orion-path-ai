@@ -1,5 +1,5 @@
 // Module Giao tiếp AI phía Client (ai-client.js)
-// Bảo mật tối đa: Không lưu API key ở trình duyệt, chỉ gọi qua Vercel Serverless Function (/api/chat).
+// Bảo mật máy chủ: Không lưu API key ở trình duyệt, chỉ gọi qua Vercel Serverless Function (/api/chat).
 // Đảm bảo không để lộ dữ liệu chiêm nghiệm văn hóa sang trợ lý hướng nghiệp.
 
 class OrionAIClient {

@@ -728,14 +728,18 @@
 
       container.innerHTML = hypotheses.map((h, index) => {
         let badgeClass = 'signal-medium';
-        if (h.signalLevel === 'Tín hiệu mạnh') badgeClass = 'signal-strong';
-        if (h.signalLevel === 'Đang khám phá') badgeClass = 'signal-exploring';
+        if (h.signalLevel === 'strong' || h.signalLevel === 'Tín hiệu mạnh') badgeClass = 'signal-strong';
+        if (h.signalLevel === 'exploratory' || h.signalLevel === 'Đang khám phá') badgeClass = 'signal-exploring';
+
+        const displayBadge = h.signalLevelLabel || (h.signalLevel === 'strong' ? 'Tín hiệu mạnh' : (h.signalLevel === 'moderate' ? 'Tín hiệu vừa' : 'Đang khám phá'));
+        const expId = h.experiment ? h.experiment.id : null;
+        const expStatus = expId && window.careerExperimentManager ? window.careerExperimentManager.getExperimentStatus(expId) : 'NOT STARTED';
 
         return `
           <div class="hypothesis-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
               <div>
-                <span class="signal-badge ${badgeClass}">${h.signalLevel}</span>
+                <span class="signal-badge ${badgeClass}">${displayBadge}</span>
                 <h4 style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">${index + 1}. ${h.name}</h4>
               </div>
               <span style="font-size: 12px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border-color);">
@@ -776,9 +780,17 @@
                   <span style="font-weight: 800; color: #FCD34D;">🔬 Thử nghiệm kiểm chứng đề xuất:</span>
                   <span style="color: #fff; margin-left: 4px;">${h.experiment.title} (${h.experiment.duration})</span>
                 </div>
-                <button onclick="openExperimentAction('${h.experiment.id}')" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11px;">
-                  Bắt đầu thử nghiệm
-                </button>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  ${expStatus === 'COMPLETED' ? `
+                    <span style="font-size:11px; color:#10b981; font-weight:700;">✓ Đã kiểm chứng</span>
+                    <button onclick="openExperimentAction('${expId}')" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11px;">Xem phản tư</button>
+                  ` : expStatus === 'IN PROGRESS' ? `
+                    <span style="font-size:11px; color:#f59e0b; font-weight:700;">⏳ Đang thực hiện</span>
+                    <button onclick="openExperimentAction('${expId}')" class="btn btn-primary" style="padding: 4px 10px; font-size: 11px;">Hoàn thành & Phản tư</button>
+                  ` : `
+                    <button onclick="startExperimentAction('${expId}')" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11px;">Bắt đầu thử nghiệm</button>
+                  `}
+                </div>
               </div>
             ` : ''}
           </div>
@@ -839,17 +851,19 @@
       `;
     }
 
-    // Render Experiments Tab
+    // Render Experiments Tab with 4-stage lifecycle (Section 17)
     function renderExperimentsTab() {
       const container = document.getElementById('experiments-list-box');
       if (!container || !window.EXPERIMENT_REPOSITORY) return;
 
       const expList = Object.values(window.EXPERIMENT_REPOSITORY);
       container.innerHTML = expList.map(exp => {
-        const status = window.careerExperimentManager ? window.careerExperimentManager.getExperimentStatus(exp.id) : 'not_started';
-        let statusBadge = '<span style="color:#94a3b8; font-size:11px;">Chưa thực hiện</span>';
-        if (status === 'in_progress') statusBadge = '<span style="color:#f59e0b; font-size:11px; font-weight:700;">Đang thực hiện</span>';
-        if (status === 'completed') statusBadge = '<span style="color:#10b981; font-size:11px; font-weight:700;">Đã hoàn thành ✓</span>';
+        const status = window.careerExperimentManager ? window.careerExperimentManager.getExperimentStatus(exp.id) : 'NOT STARTED';
+        
+        let statusBadge = '<span style="color:#94a3b8; font-size:11px; background:rgba(255,255,255,0.05); padding:3px 8px; border-radius:6px;">Chưa thực hiện (NOT STARTED)</span>';
+        if (status === 'IN PROGRESS') statusBadge = '<span style="color:#f59e0b; font-size:11px; font-weight:700; background:rgba(245,158,11,0.15); padding:3px 8px; border-radius:6px;">Đang thực hiện (IN PROGRESS)</span>';
+        if (status === 'REFLECTION') statusBadge = '<span style="color:#a855f7; font-size:11px; font-weight:700; background:rgba(168,85,247,0.15); padding:3px 8px; border-radius:6px;">Đang phản tư (REFLECTION)</span>';
+        if (status === 'COMPLETED') statusBadge = '<span style="color:#10b981; font-size:11px; font-weight:700; background:rgba(16,185,129,0.15); padding:3px 8px; border-radius:6px;">Đã hoàn thành (COMPLETED) ✓</span>';
 
         return `
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:12px; padding:16px; margin-bottom:12px;">
@@ -857,6 +871,7 @@
               <div>
                 <span style="font-size:11px; font-weight:700; color:var(--primary-light); text-transform:uppercase;">${exp.type} • ${exp.duration}</span>
                 <h4 style="font-size:15px; font-weight:800; color:#fff; margin-top:2px;">${exp.title}</h4>
+                <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Gắn với hướng: <strong>${exp.relatedCareerHypothesis}</strong></div>
               </div>
               <div>${statusBadge}</div>
             </div>
@@ -867,9 +882,19 @@
               ${exp.instructions.map(step => `<div style="margin-bottom:4px;">${step}</div>`).join('')}
             </div>
             <div style="display:flex; justify-content:flex-end; gap:8px;">
-              <button onclick="openExperimentAction('${exp.id}')" class="btn btn-secondary" style="font-size:11.5px; padding:6px 12px;">
-                ${status === 'completed' ? 'Xem lại phản tư' : 'Hoàn thành & Phản tư'}
-              </button>
+              ${status === 'NOT STARTED' ? `
+                <button onclick="startExperimentAction('${exp.id}')" class="btn btn-secondary" style="font-size:11.5px; padding:6px 14px;">
+                  <span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">play_arrow</span> Bắt đầu làm thử nghiệm
+                </button>
+              ` : status === 'IN PROGRESS' || status === 'REFLECTION' ? `
+                <button onclick="openExperimentAction('${exp.id}')" class="btn btn-primary" style="font-size:11.5px; padding:6px 14px;">
+                  <span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">rate_review</span> Hoàn thành & Viết phản tư
+                </button>
+              ` : `
+                <button onclick="openExperimentAction('${exp.id}')" class="btn btn-secondary" style="font-size:11.5px; padding:6px 14px;">
+                  <span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">visibility</span> Xem lại phản tư
+                </button>
+              `}
             </div>
           </div>
         `;
@@ -926,41 +951,109 @@
       `;
     }
 
-    // Render Living Profile Tab
+    // Render Living Profile Tab (Section 18: Hồ sơ hiện tại & Điều gì đã thay đổi?)
     function renderLivingProfileTab() {
       const completedList = window.careerExperimentManager ? window.careerExperimentManager.getCompletedList() : [];
       const box = document.getElementById('living-profile-box');
       if (!box) return;
 
+      const topCodes = window.orionCareerEngine ? window.orionCareerEngine.getTopRiasecCodes(computedRiasecScores) : ['I', 'R'];
+      const codeString = topCodes.slice(0, 3).join('');
+
       box.innerHTML = `
-        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:12px; padding:16px; margin-bottom:16px;">
-          <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:8px;">Hành trình kiểm chứng bằng chứng</div>
-          <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">
-            Học sinh: <strong>${globalStudentCareerProfile.name}</strong> • Điểm Toán: <strong>${globalStudentCareerProfile.math}</strong>, Văn: <strong>${globalStudentCareerProfile.lit}</strong>, Anh: <strong>${globalStudentCareerProfile.eng}</strong>
-          </p>
+        <!-- Section 18: Hồ sơ hiện tại -->
+        <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:12px; padding:18px; margin-bottom:18px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+            <h3 style="font-size:15px; font-weight:800; color:#fff; display:flex; align-items:center; gap:6px;">
+              <span class="material-symbols-outlined text-primary" style="font-size:20px;">badge</span>
+              Hồ sơ hiện tại (Current Career Profile)
+            </h3>
+            <span style="font-size:11px; background:rgba(99,102,241,0.15); color:#A5B4FC; padding:4px 10px; border-radius:6px; font-weight:700;">
+              Mã RIASEC: ${codeString}
+            </span>
+          </div>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; font-size:12px;">
+            <div style="background:rgba(0,0,0,0.2); padding:10px 12px; border-radius:8px;">
+              <div style="color:var(--text-muted); font-size:11px;">Học sinh</div>
+              <div style="font-weight:700; color:#fff; margin-top:2px;">${globalStudentCareerProfile.name || 'Học sinh'} (${globalStudentCareerProfile.grade || 'Lớp 10'})</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.2); padding:10px 12px; border-radius:8px;">
+              <div style="color:var(--text-muted); font-size:11px;">Điểm học lực nền tảng</div>
+              <div style="font-weight:700; color:#fff; margin-top:2px;">Toán ${globalStudentCareerProfile.math} • Văn ${globalStudentCareerProfile.lit} • Anh ${globalStudentCareerProfile.eng}</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.2); padding:10px 12px; border-radius:8px;">
+              <div style="color:var(--text-muted); font-size:11px;">Thử nghiệm đã hoàn thành</div>
+              <div style="font-weight:700; color:var(--secondary); margin-top:2px;">${completedList.length} trải nghiệm thực tế</div>
+            </div>
+          </div>
         </div>
 
-        <h4 style="font-size:13.5px; font-weight:700; color:#fff; margin-bottom:10px;">Nhật ký thử nghiệm đã hoàn thành (${completedList.length})</h4>
-        ${completedList.length === 0 ? `
-          <div style="font-size:12px; color:var(--text-muted); text-align:center; padding:24px; border:1px dashed var(--border-color); border-radius:10px;">
-            Chưa có thử nghiệm nào được ghi nhận. Hãy vào tab "Trải Nghiệm Thử" để bắt đầu mini-project đầu tiên!
-          </div>
-        ` : `
-          <div style="display:flex; flex-direction:column; gap:10px;">
-            ${completedList.map(item => `
-              <div style="background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.2); border-radius:10px; padding:12px;">
-                <div style="font-weight:700; color:#6EE7B7; font-size:13px;">✓ ${item.title}</div>
-                <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Hoàn thành lúc: ${new Date(item.completedAt).toLocaleDateString('vi-VN')}</div>
-                ${item.reflection ? `
-                  <div style="margin-top:6px; font-size:11.5px; color:#cbd5e1; line-height:1.4;">
-                    👉 <em>"${item.reflection.q3 || item.reflection.q1 || 'Đã ghi lại cảm xúc tích cực.'}"</em>
+        <!-- Section 18: Điều gì đã thay đổi? -->
+        <div style="background:rgba(16,185,129,0.03); border:1px solid rgba(16,185,129,0.2); border-radius:12px; padding:18px; margin-bottom:18px;">
+          <h3 style="font-size:15px; font-weight:800; color:#6EE7B7; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+            <span class="material-symbols-outlined" style="font-size:20px;">trending_up</span>
+            Điều gì đã thay đổi? (Evolving Insights Over Time)
+          </h3>
+          <p style="font-size:12.5px; color:#cbd5e1; line-height:1.5; margin-bottom:14px;">
+            Orion không đóng khung tính cách học sinh qua một lần trắc nghiệm ban đầu. Sau mỗi mini-project thực tế, nhận thức và sở thích của em sẽ tiến hóa dựa trên bằng chứng hành động:
+          </p>
+          ${completedList.length === 0 ? `
+            <div style="font-size:12px; color:var(--text-muted); text-align:center; padding:20px; border:1px dashed rgba(255,255,255,0.1); border-radius:10px;">
+              💡 <em>Chưa có thử nghiệm nào được hoàn thành. Hãy vào tab "Trải Nghiệm Thử" để bắt đầu thử sức và ghi nhận những thay đổi đầu tiên về sở thích!</em>
+            </div>
+          ` : `
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              ${completedList.map((item, idx) => `
+                <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                    <div style="font-weight:800; color:#fff; font-size:13px;">#${idx + 1}. ${item.title}</div>
+                    <span style="font-size:11px; color:#6EE7B7; font-weight:600;">✓ Hoàn thành: ${new Date(item.completedAt).toLocaleDateString('vi-VN')}</span>
                   </div>
-                ` : ''}
-              </div>
-            `).join('')}
-          </div>
-        `}
+                  <div style="font-size:11.5px; color:var(--primary-light); margin-top:2px;">Ngành kiểm chứng: ${item.relatedCareerHypothesis || item.careerName}</div>
+                  ${item.reflection ? `
+                    <div style="margin-top:10px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.05); font-size:12px; color:#cbd5e1; display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:8px;">
+                      <div><strong>Điểm thấy hứng thú:</strong> "${item.reflection.q3 || 'Tập trung cao độ'}"</div>
+                      <div><strong>Điểm thấy thử thách:</strong> "${item.reflection.q4 || 'Cần thêm thời gian gỡ lỗi'}"</div>
+                      <div><strong>Kỹ năng cần bổ sung:</strong> "${item.reflection.q6 || 'Toán học & ngoại ngữ'}"</div>
+                    </div>
+                  ` : ''}
+                </div>
+              `).join('')}
+            </div>
+          `}
+        </div>
       `;
+    }
+
+    // Start experiment action
+    function startExperimentAction(expId) {
+      if (window.careerExperimentManager) {
+        window.careerExperimentManager.startExperiment(expId);
+      }
+      renderExperimentsTab();
+      renderCareerHypotheses();
+      renderLivingProfileTab();
+      alert("Đã bắt đầu thử nghiệm! Em hãy làm theo 4 bước hướng dẫn. Khi làm xong, bấm 'Hoàn thành & Viết phản tư' để lưu kết quả vào hồ sơ nhé.");
+    }
+
+    // Experiment Reflection Modal Actions
+    function openExperimentAction(expId) {
+      currentActiveExpId = expId;
+      const exp = window.EXPERIMENT_REPOSITORY ? window.EXPERIMENT_REPOSITORY[expId] : null;
+      if (exp) {
+        document.getElementById('modal-exp-title').textContent = `Phản Tư: ${exp.title}`;
+      }
+
+      // Pre-fill existing reflection answers if available
+      const existing = window.careerExperimentManager && window.careerExperimentManager.state[expId] && window.careerExperimentManager.state[expId].reflection;
+      document.getElementById('ref-q1').value = existing ? existing.q1 || '' : '';
+      document.getElementById('ref-q2').value = existing ? existing.q2 || '' : '';
+      document.getElementById('ref-q3').value = existing ? existing.q3 || '' : '';
+      document.getElementById('ref-q4').value = existing ? existing.q4 || '' : '';
+      document.getElementById('ref-q5').value = existing ? existing.q5 || '' : '';
+      document.getElementById('ref-q6').value = existing ? existing.q6 || '' : '';
+
+      document.getElementById('experiment-reflection-modal').style.display = 'flex';
     }
 
     // Render Reflection Lab Tab (Isolated)

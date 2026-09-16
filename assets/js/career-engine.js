@@ -85,39 +85,118 @@ class OrionCareerEngine {
         evidenceList.push(`Điểm Tiếng Anh thuận lợi (${engScore}/10) để tiếp cận tài liệu chuẩn quốc tế.`);
       }
 
-      // Phân tầng tín hiệu
+      // Phân tầng tín hiệu chuẩn hóa (Section 15: strong | moderate | exploratory)
+      let signalKey = 'exploratory';
+      let signalLabel = 'Đang khám phá';
+
       if (matchCount >= 5) {
-        signalLevel = "Tín hiệu mạnh";
+        signalKey = 'strong';
+        signalLabel = 'Tín hiệu mạnh';
       } else if (matchCount >= 3) {
-        signalLevel = "Tín hiệu vừa";
-      } else {
-        signalLevel = "Đang khám phá";
+        signalKey = 'moderate';
+        signalLabel = 'Tín hiệu vừa';
       }
 
+      const finalEvidence = evidenceList.length > 0 ? evidenceList : [`Sở thích nghề nghiệp tương đồng với nhóm ${career.riasec.join('/')}`];
+      const finalUnknowns = career.unknownsToTest || [
+        "Mức độ hứng thú thực tế của em khi làm việc này liên tục mỗi ngày?",
+        "Khả năng thích ứng với môi trường làm việc đặc thù của ngành này?"
+      ];
+      const experimentsList = career.recommendedExperiment ? [career.recommendedExperiment] : [];
+      const educationPathsList = career.pathways || [];
+
       hypotheses.push({
+        id: career.id,
         careerId: career.id,
+        career: career.name,
         name: career.name,
+        field: career.field || "Công nghệ & Kỹ thuật",
         desc: career.desc,
-        signalLevel: signalLevel,
+        signalLevel: signalKey, // 'strong' | 'moderate' | 'exploratory'
+        signalLevelLabel: signalLabel, // 'Tín hiệu mạnh' | 'Tín hiệu vừa' | 'Đang khám phá'
         scoreRank: matchCount,
         whySuggested: `Sở thích nghề nghiệp RIASEC của em nổi trội ở nhóm ${primary} và ${secondary}. ${career.signalBase}`,
-        evidenceFor: evidenceList.length > 0 ? evidenceList : [`Sở thích nghề nghiệp tương đồng với nhóm ${career.riasec.join('/')}`],
+        supportingEvidence: finalEvidence,
+        evidenceFor: finalEvidence,
         conflicts: conflictList,
-        unknowns: career.unknownsToTest || [
-          "Mức độ hứng thú thực tế của em khi làm việc này liên tục mỗi ngày?",
-          "Khả năng thích ứng với môi trường làm việc đặc thù của ngành này?"
-        ],
-        pathways: career.pathways,
+        unknowns: finalUnknowns,
+        experiments: experimentsList,
+        experiment: career.recommendedExperiment,
+        educationPaths: educationPathsList,
+        pathways: educationPathsList,
         salary: career.salary,
         laborDemand: career.laborDemand,
-        aiAdaptability: career.aiAdaptability,
-        experiment: career.recommendedExperiment
+        aiAdaptability: career.aiAdaptability
       });
     });
 
     // Sắp xếp theo độ mạnh của tín hiệu và lấy top 4 giả thiết
     hypotheses.sort((a, b) => b.scoreRank - a.scoreRank);
     return hypotheses.slice(0, 4);
+  }
+
+  /**
+   * Xác thực và làm sạch phản hồi Giả thiết Nghề nghiệp có cấu trúc (Section 22)
+   * Ngăn ngừa sập UI khi dữ liệu AI bị lỗi định dạng
+   * @param {any} input 
+   * @param {object} fallbackParams 
+   */
+  validateCareerHypotheses(input, fallbackParams = null) {
+    try {
+      let parsed = input;
+      if (typeof input === 'string') {
+        parsed = JSON.parse(input);
+      }
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        throw new Error('Dữ liệu không phải là danh sách hợp lệ');
+      }
+
+      const validSignalLevels = ['strong', 'moderate', 'exploratory'];
+      const validated = parsed.slice(0, 5).map((item, idx) => {
+        const id = item.id || `hypo_${idx + 1}`;
+        const career = item.career || item.name || `Hướng nghề nghiệp ${idx + 1}`;
+        const field = item.field || 'Đa ngành';
+        let signalLevel = item.signalLevel;
+        if (!validSignalLevels.includes(signalLevel)) {
+          signalLevel = 'moderate';
+        }
+        const signalLevelLabel = signalLevel === 'strong' ? 'Tín hiệu mạnh' : (signalLevel === 'moderate' ? 'Tín hiệu vừa' : 'Đang khám phá');
+        const supportingEvidence = Array.isArray(item.supportingEvidence) ? item.supportingEvidence.slice(0, 5) : (Array.isArray(item.evidenceFor) ? item.evidenceFor.slice(0, 5) : ['Dữ liệu sở thích hiện tại']);
+        const conflicts = Array.isArray(item.conflicts) ? item.conflicts.slice(0, 5) : [];
+        const unknowns = Array.isArray(item.unknowns) ? item.unknowns.slice(0, 5) : ['Mức độ kiên trì thực tế'];
+        const experiments = Array.isArray(item.experiments) ? item.experiments.slice(0, 3) : (item.experiment ? [item.experiment] : []);
+        const educationPaths = Array.isArray(item.educationPaths) ? item.educationPaths.slice(0, 4) : (Array.isArray(item.pathways) ? item.pathways.slice(0, 4) : []);
+
+        return {
+          id,
+          careerId: id,
+          career,
+          name: career,
+          field,
+          desc: item.desc || '',
+          signalLevel,
+          signalLevelLabel,
+          whySuggested: item.whySuggested || 'Dựa trên phân tích năng lực và sở thích.',
+          supportingEvidence,
+          evidenceFor: supportingEvidence,
+          conflicts,
+          unknowns,
+          experiments,
+          experiment: experiments[0] || null,
+          educationPaths,
+          pathways: educationPaths,
+          salary: item.salary || { range: "Tùy vị trí", note: "Tham khảo khảo sát thị trường" }
+        };
+      });
+
+      return validated;
+    } catch (err) {
+      console.warn('Lỗi phân tích JSON giả thiết nghề nghiệp, sử dụng bộ sinh giả thiết chuẩn:', err.message);
+      if (fallbackParams) {
+        return this.generateCareerHypotheses(fallbackParams);
+      }
+      return this.generateCareerHypotheses({ riasecScores: { R: 2, I: 2, A: 2, S: 2, E: 2, C: 2 } });
+    }
   }
 
   /**

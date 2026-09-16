@@ -1,12 +1,15 @@
 // Hệ thống Thử nghiệm Nghề nghiệp Thực tế (career-experiments.js)
 // "Học qua trải nghiệm - Bằng chứng từ hành động thực tế có giá trị hơn bài trắc nghiệm ban đầu."
+// 4 giai đoạn vòng đời (Section 17): NOT STARTED -> IN PROGRESS -> COMPLETED -> REFLECTION
 
 const EXPERIMENT_REPOSITORY = {
   "exp_ai_chatbot": {
     id: "exp_ai_chatbot",
     careerName: "Kỹ sư Trí tuệ Nhân tạo (AI/ML Engineer)",
+    relatedCareerHypothesis: "Kỹ sư Trí tuệ Nhân tạo (AI/ML Engineer)",
     title: "Xây dựng Trợ lý ảo Mini bằng Python trong 90 phút",
     duration: "90 phút",
+    estimatedDuration: "90 phút",
     type: "Mini Project",
     objective: "Tự tay viết mã nguồn, gọi API trí tuệ nhân tạo và xử lý logic hội thoại đơn giản.",
     instructions: [
@@ -19,8 +22,10 @@ const EXPERIMENT_REPOSITORY = {
   "exp_logic_gate": {
     id: "exp_logic_gate",
     careerName: "Kỹ sư Thiết kế Vi mạch & Bán dẫn (IC Design)",
+    relatedCareerHypothesis: "Kỹ sư Thiết kế Vi mạch & Bán dẫn (IC Design)",
     title: "Mô phỏng cổng logic và mạch cộng số trên Tinkercad",
     duration: "60 phút",
+    estimatedDuration: "60 phút",
     type: "Mô phỏng thực hành",
     objective: "Hiểu nguyên lý cấu tạo phần cứng bán dẫn và bảng chân trị logic (AND, OR, NOT).",
     instructions: [
@@ -33,8 +38,10 @@ const EXPERIMENT_REPOSITORY = {
   "exp_figma_app": {
     id: "exp_figma_app",
     careerName: "Chuyên viên Thiết kế Trải nghiệm (UI/UX Designer)",
+    relatedCareerHypothesis: "Chuyên viên Thiết kế Trải nghiệm (UI/UX Designer)",
     title: "Thiết kế lại màn hình ứng dụng yêu thích trên Figma",
     duration: "60 phút",
+    estimatedDuration: "60 phút",
     type: "Portfolio Challenge",
     objective: "Làm quen với tư duy bố cục, phân cấp thị giác (visual hierarchy) và sự thấu cảm người dùng.",
     instructions: [
@@ -47,8 +54,10 @@ const EXPERIMENT_REPOSITORY = {
   "exp_data_sheet": {
     id: "exp_data_sheet",
     careerName: "Chuyên viên Phân tích Dữ liệu (Data Analyst)",
+    relatedCareerHypothesis: "Chuyên viên Phân tích Dữ liệu (Data Analyst)",
     title: "Phân tích xu hướng âm nhạc Spotify bằng Google Sheets",
     duration: "60 phút",
+    estimatedDuration: "60 phút",
     type: "Mini Project",
     objective: "Làm quen với thao tác lọc dữ liệu, tính giá trị trung bình và vẽ biểu đồ kết luận xu hướng.",
     instructions: [
@@ -61,8 +70,10 @@ const EXPERIMENT_REPOSITORY = {
   "exp_carbon_audit": {
     id: "exp_carbon_audit",
     careerName: "Chuyên viên Kinh tế Xanh & Bền vững (ESG Specialist)",
+    relatedCareerHypothesis: "Chuyên viên Kinh tế Xanh & Bền vững (ESG Specialist)",
     title: "Kiểm toán 'Dấu chân Carbon' của gia đình em trong 1 tuần",
     duration: "75 phút",
+    estimatedDuration: "75 phút",
     type: "Dự án thực tế",
     objective: "Đo lường mức độ phát thải gián tiếp và lập kế hoạch giảm tiêu thụ năng lượng.",
     instructions: [
@@ -75,8 +86,10 @@ const EXPERIMENT_REPOSITORY = {
   "exp_first_aid": {
     id: "exp_first_aid",
     careerName: "Bác sĩ / Chuyên viên Y tế Chăm sóc Sức khỏe",
+    relatedCareerHypothesis: "Bác sĩ / Chuyên viên Y tế Chăm sóc Sức khỏe",
     title: "Học và thực hành Kỹ năng Sơ cấp cứu CPR cơ bản",
     duration: "90 phút",
+    estimatedDuration: "90 phút",
     type: "Kỹ năng thực hành",
     objective: "Kiểm tra phản ứng tâm lý khi đối diện với tình huống cấp cứu và chăm sóc sức khỏe.",
     instructions: [
@@ -89,8 +102,10 @@ const EXPERIMENT_REPOSITORY = {
   "exp_interview_pro": {
     id: "exp_interview_pro",
     careerName: "Trải nghiệm chung cho mọi ngành nghề",
+    relatedCareerHypothesis: "Trải nghiệm chung cho mọi ngành nghề",
     title: "Phỏng vấn 1 người đi trước trong ngành (Informational Interview)",
     duration: "60 phút",
+    estimatedDuration: "60 phút",
     type: "Phỏng vấn thực địa",
     objective: "Hiểu thực tế một ngày làm việc điển hình và những khó khăn không có trong sách vở.",
     instructions: [
@@ -110,6 +125,7 @@ class CareerExperimentManager {
 
   loadState() {
     try {
+      if (typeof localStorage === 'undefined') return {};
       const raw = localStorage.getItem(this.storageKey);
       return raw ? JSON.parse(raw) : {};
     } catch (e) {
@@ -119,6 +135,7 @@ class CareerExperimentManager {
 
   saveState() {
     try {
+      if (typeof localStorage === 'undefined') return;
       localStorage.setItem(this.storageKey, JSON.stringify(this.state));
     } catch (e) {
       console.warn("Could not persist experiments state", e);
@@ -129,33 +146,90 @@ class CareerExperimentManager {
     return EXPERIMENT_REPOSITORY[id] || null;
   }
 
+  /**
+   * Trả về trạng thái chuẩn hóa: 'NOT STARTED' | 'IN PROGRESS' | 'COMPLETED' | 'REFLECTION'
+   * @param {string} id 
+   */
   getExperimentStatus(id) {
-    return this.state[id] ? this.state[id].status : 'not_started';
+    if (!this.state[id]) return 'NOT STARTED';
+    const s = this.state[id].status;
+    if (s === 'in_progress' || s === 'IN PROGRESS') return 'IN PROGRESS';
+    if (s === 'reflection' || s === 'REFLECTION') return 'REFLECTION';
+    if (s === 'completed' || s === 'COMPLETED') return 'COMPLETED';
+    return 'NOT STARTED';
   }
 
+  /**
+   * Chuyển trạng thái sang IN PROGRESS (Section 17)
+   * @param {string} id 
+   */
   startExperiment(id) {
     if (!this.state[id]) {
-      this.state[id] = { status: 'in_progress', startedAt: new Date().toISOString(), reflection: null };
+      this.state[id] = {
+        id,
+        status: 'IN PROGRESS',
+        startedAt: new Date().toISOString(),
+        reflection: null,
+        completedAt: null,
+        completionDate: null
+      };
     } else {
-      this.state[id].status = 'in_progress';
+      this.state[id].status = 'IN PROGRESS';
+      if (!this.state[id].startedAt) {
+        this.state[id].startedAt = new Date().toISOString();
+      }
     }
     this.saveState();
   }
 
-  saveReflection(id, reflectionAnswers) {
+  /**
+   * Đặt trạng thái sang REFLECTION (đang điền phản tư)
+   * @param {string} id 
+   */
+  openReflectionStage(id) {
     if (!this.state[id]) {
-      this.state[id] = {};
+      this.startExperiment(id);
     }
-    this.state[id].status = 'completed';
-    this.state[id].completedAt = new Date().toISOString();
+    this.state[id].status = 'REFLECTION';
+    this.saveState();
+  }
+
+  /**
+   * Lưu 6 câu hỏi phản tư và đánh dấu COMPLETED (Section 17)
+   * @param {string} id 
+   * @param {object} reflectionAnswers 
+   */
+  saveReflection(id, reflectionAnswers) {
+    const now = new Date().toISOString();
+    if (!this.state[id]) {
+      this.state[id] = { id, startedAt: now };
+    }
+    this.state[id].status = 'COMPLETED';
+    this.state[id].completedAt = now;
+    this.state[id].completionDate = now.split('T')[0];
     this.state[id].reflection = reflectionAnswers;
     this.saveState();
+  }
+
+  /**
+   * Lấy chi tiết thử nghiệm đầy đủ bao gồm định nghĩa + trạng thái
+   * @param {string} id 
+   */
+  getExperimentFull(id) {
+    const base = this.getExperiment(id);
+    if (!base) return null;
+    const userState = this.state[id] || { status: 'NOT STARTED', reflection: null, completedAt: null };
+    return {
+      ...base,
+      ...userState,
+      status: this.getExperimentStatus(id)
+    };
   }
 
   getCompletedList() {
     const list = [];
     for (const id in this.state) {
-      if (this.state[id].status === 'completed') {
+      if (this.getExperimentStatus(id) === 'COMPLETED') {
         const exp = this.getExperiment(id);
         if (exp) {
           list.push({ ...exp, ...this.state[id] });
@@ -168,9 +242,11 @@ class CareerExperimentManager {
 
 if (typeof window !== 'undefined') {
   window.EXPERIMENT_REPOSITORY = EXPERIMENT_REPOSITORY;
+  window.CareerExperimentManager = CareerExperimentManager;
   window.careerExperimentManager = new CareerExperimentManager();
 }
 if (typeof global !== 'undefined') {
   global.EXPERIMENT_REPOSITORY = EXPERIMENT_REPOSITORY;
+  global.CareerExperimentManager = CareerExperimentManager;
   global.careerExperimentManager = new CareerExperimentManager();
 }

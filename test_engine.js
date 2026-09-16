@@ -84,13 +84,60 @@ assert.strictEqual(serialized.includes('Con đúng'), false, 'Must not claim Con
 assert.strictEqual(serialized.includes('Cha mẹ đúng'), false, 'Must not claim Cha mẹ đúng');
 console.log('✓ Test 5 Passed: Family Bridge acts as objective facilitator.');
 
-console.log('--- TEST 6: Career Experiments Tracking & Reflection ---');
+console.log('--- TEST 6: Career Experiments Tracking & Repository ---');
 const exp = EXPERIMENT_REPOSITORY['exp_ai_chatbot'];
 assert.ok(exp);
 assert.strictEqual(exp.instructions.length, 4);
 assert.strictEqual(exp.duration, '90 phút');
 console.log('✓ Test 6 Passed: Career experiments repository intact.');
 
+console.log('--- TEST 7: Multi-Tier Child Safety & Official Hotlines (Section 23 & 24) ---');
+assert.strictEqual(classifySafetyTier('Em muốn tự tử'), 'IMMEDIATE_DANGER');
+assert.strictEqual(classifySafetyTier('Em bị bạo hành gia đình'), 'HIGH_RISK');
+assert.strictEqual(classifySafetyTier('Em quá kiệt sức và bế tắc hoàn toàn'), 'DISTRESS');
+assert.strictEqual(classifySafetyTier('Em muốn tìm hiểu ngành thiết kế đồ họa'), 'NORMAL');
+assert.strictEqual(SAFETY_CONFIG.officialHotlines.length, 2);
+assert.strictEqual(SAFETY_CONFIG.officialHotlines[0].number, '111');
+assert.strictEqual(SAFETY_CONFIG.officialHotlines[1].number, '115');
+console.log('✓ Test 7 Passed: Multi-tier child safety and verified official hotlines intact.');
+
+console.log('--- TEST 8: Structured Career Hypotheses Validation & Fallback (Section 15 & 22) ---');
+const validHypothesis = [{
+  id: 'test_1',
+  career: 'Kỹ sư AI',
+  field: 'Công nghệ',
+  signalLevel: 'strong',
+  supportingEvidence: ['Toán 9.0'],
+  conflicts: ['Học nhiều'],
+  unknowns: ['Kiên trì'],
+  experiments: [{ id: 'exp_test', title: 'Thử nghiệm test' }],
+  educationPaths: [{ type: 'Đại học' }]
+}];
+const validated = engine.validateCareerHypotheses(validHypothesis);
+assert.strictEqual(validated.length, 1);
+assert.strictEqual(validated[0].signalLevel, 'strong');
+assert.strictEqual(validated[0].signalLevelLabel, 'Tín hiệu mạnh');
+
+// Malformed input must not throw and must return valid fallback
+const malformedFallback = engine.validateCareerHypotheses("invalid json {", { riasecScores: scores });
+assert.ok(Array.isArray(malformedFallback));
+assert.strictEqual(malformedFallback.length >= 3, true);
+console.log('✓ Test 8 Passed: Structured hypotheses validated and gracefully handled when malformed.');
+
+console.log('--- TEST 9: 4-Stage Career Experiment Lifecycle (Section 17) ---');
+const mgr = new CareerExperimentManager();
+assert.strictEqual(mgr.getExperimentStatus('exp_figma_app'), 'NOT STARTED');
+mgr.startExperiment('exp_figma_app');
+assert.strictEqual(mgr.getExperimentStatus('exp_figma_app'), 'IN PROGRESS');
+mgr.openReflectionStage('exp_figma_app');
+assert.strictEqual(mgr.getExperimentStatus('exp_figma_app'), 'REFLECTION');
+mgr.saveReflection('exp_figma_app', { q1: 'Rất vui', q2: 'Có', q3: 'Vẽ UI', q4: 'Không', q5: 'Có', q6: 'Màu sắc' });
+assert.strictEqual(mgr.getExperimentStatus('exp_figma_app'), 'COMPLETED');
+const completed = mgr.getCompletedList();
+assert.strictEqual(completed.some(c => c.id === 'exp_figma_app'), true);
+console.log('✓ Test 9 Passed: 4-stage experiment lifecycle works end-to-end.');
+
 console.log('\n=========================================');
-console.log('ALL 6 PRODUCTION ENGINE TESTS PASSED 100%');
+console.log('ALL 9 PRODUCTION ENGINE TESTS PASSED 100%');
 console.log('=========================================');
+

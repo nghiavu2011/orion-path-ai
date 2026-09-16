@@ -5,22 +5,29 @@ const CRISIS_KEYWORDS = [
   'tự tử', 'tu tu', 'suicide', 'tự hại', 'tu hai', 'self-harm',
   'muốn chết', 'muon chet', 'kết liễu', 'ket lieu', 'cắt cổ tay', 'cat co tay',
   'bị bạo hành', 'bi bao hanh', 'bị đánh', 'bi danh', 'bị lạm dụng', 'bi lam dung',
-  'bị xâm hại', 'bi xam hai', 'trầm cảm nặng', 'tram cam nang', 'tuyệt vọng', 'tuyet vong'
+  'bị xâm hại', 'bi xam hai', 'trầm cảm nặng', 'tram cam nang', 'tuyệt vọng', 'tuyet vong',
+  'muốn biến mất', 'muon bien mat', 'chết đi cho xong'
 ];
 
-function checkCrisisContent(text) {
-  if (!text || typeof text !== 'string') return false;
+const DISTRESS_KEYWORDS = [
+  'quá kiệt sức', 'qua kiet suc', 'áp lực không chịu nổi', 'khóc suốt',
+  'mất ngủ triền miên', 'rất hoảng loạn', 'bế tắc hoàn toàn'
+];
+
+function classifySafety(text) {
+  if (!text || typeof text !== 'string') return 'NORMAL';
   const lower = text.toLowerCase();
-  return CRISIS_KEYWORDS.some(keyword => lower.includes(keyword));
+  if (CRISIS_KEYWORDS.some(k => lower.includes(k))) return 'HIGH_RISK';
+  if (DISTRESS_KEYWORDS.some(k => lower.includes(k))) return 'DISTRESS';
+  return 'NORMAL';
 }
 
 const CRISIS_RESPONSE = `Chào em, Orion nhận thấy em có thể đang phải trải qua những cảm xúc rất nặng nề hoặc tình huống khó khăn. Sự an toàn và sức khỏe tâm lý của em luôn quan trọng hơn bất kỳ kế hoạch nghề nghiệp hay học tập nào.
 
-Orion là trợ lý định hướng học tập, không phải chuyên gia tâm lý hay bác sĩ y khoa. Em hãy dừng ngay việc tra cứu nghề nghiệp và liên hệ ngay với người lớn đáng tin cậy (cha mẹ, thầy cô, người thân) hoặc các kênh hỗ trợ khẩn cấp miễn phí:
+Orion là trợ lý định hướng học tập, không phải chuyên gia tâm lý hay bác sĩ y khoa. Em hãy dừng ngay việc tra cứu nghề nghiệp và liên hệ ngay với người lớn đáng tin cậy (cha mẹ, thầy cô, người thân) hoặc các kênh hỗ trợ khẩn cấp chính thức tại Việt Nam:
 
-☎️ Tổng đài Quốc gia Bảo vệ Trẻ em: 111 (hoạt động 24/7, hoàn toàn miễn phí)
-☎️ Đường dây nóng Hỗ trợ Tâm lý Ngày Mai: 096 306 1414
-🏥 Nếu trong tình huống nguy cấp, em hãy đến ngay cơ sở y tế hoặc trạm y tế gần nhất.
+☎️ Tổng đài Quốc gia Bảo vệ Trẻ em: 111 (Cục Trẻ em - Bộ LĐ-TB&XH, hoạt động 24/7, hoàn toàn miễn phí)
+🏥 Cấp cứu Y tế khẩn cấp: 115 hoặc trạm y tế / bệnh viện gần nhất
 
 Em không phải vượt qua điều này một mình. Hãy tìm kiếm sự hỗ trợ ngay em nhé!`;
 
@@ -30,7 +37,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Chỉ chấp nhận phương thức POST (Method Not Allowed)' });
   }
 
-  // Set secure headers (same-origin / controlled)
+  // Set secure headers
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
@@ -43,11 +50,13 @@ export default async function handler(req, res) {
   // Enforce message length limit to prevent abuse
   const sanitizedMessage = message.trim().slice(0, 1000);
 
-  // Check child safety & crisis keywords
-  if (checkCrisisContent(sanitizedMessage)) {
+  // Check child safety classification
+  const safetyLevel = classifySafety(sanitizedMessage);
+  if (safetyLevel === 'HIGH_RISK') {
     return res.status(200).json({
       reply: CRISIS_RESPONSE,
-      safetyTriggered: true
+      safetyTriggered: true,
+      safetyLevel: 'HIGH_RISK'
     });
   }
 
@@ -58,7 +67,7 @@ export default async function handler(req, res) {
     });
   }
 
-  // Build isolated system prompt based on mode
+  // Build isolated system instruction based on mode
   let systemInstruction = '';
 
   if (mode === 'family_facilitator') {
@@ -101,10 +110,14 @@ NGUYÊN TẮC BẮT BUỘC:
 2. Orion KHÔNG PHẢI là nhà tiên tri (Oracle). KHÔNG BAO GIỜ nói "Em sinh ra để làm nghề X" hay đưa ra các tỷ lệ % phù hợp ảo.
 3. Luôn đưa ra các GIẢ THIẾT NGHỀ NGHIỆP (Career Hypotheses): nêu rõ bằng chứng hiện có ủng hộ điều gì, mâu thuẫn cần lưu ý, và "Orion chưa biết điều gì về em".
 4. Khuyến khích học sinh tiến hành "Trải nghiệm thử" (Career Experiments: mini-project, phỏng vấn người đi trước, học thử khóa học ngắn) để kiểm chứng giả thiết.
-5. Cập nhật chính sách giáo dục Việt Nam chính xác: Dùng thuật ngữ "Kỳ thi tốt nghiệp THPT" (KHÔNG dùng từ cũ THPT Quốc Gia), nắm rõ các tổ hợp môn mới, các phương thức xét tuyển (học bạ, thi ĐGNL/TSA, chứng chỉ quốc tế, điểm thi tốt nghiệp).
-6. Tôn trọng mọi lộ trình: Đại học, Cao đẳng, Học nghề, Chương trình liên kết, Du học. Không thiên vị chỉ mỗi "đại học danh tiếng".
-7. AN TOÀN TRẺ EM: Bạn KHÔNG PHẢI là bác sĩ tâm lý hay chuyên gia trị liệu. Nếu học sinh có dấu hiệu stress cực độ, hãy khuyên học sinh chia sẻ với người lớn tin cậy hoặc gọi tổng đài 111.
+5. Cập nhật chính sách giáo dục Việt Nam chính xác: Dùng thuật ngữ "Kỳ thi tốt nghiệp THPT" (KHÔNG dùng từ cũ THPT Quốc Gia), nắm rõ các tổ hợp môn mới theo Chương trình GDPT 2018, các phương thức xét tuyển (học bạ, thi ĐGNL HSA/APT, thi Đánh giá tư duy TSA Bách Khoa, chứng chỉ quốc tế, điểm thi tốt nghiệp).
+6. Tôn trọng mọi lộ trình: Đại học, Cao đẳng thực hành, Học nghề, Chương trình liên kết, Du học. Không thiên vị chỉ mỗi "đại học danh tiếng".
+7. AN TOÀN TRẺ EM: Bạn KHÔNG PHẢI là bác sĩ tâm lý hay chuyên gia trị liệu. Nếu học sinh có dấu hiệu stress nặng, hãy khuyên học sinh chia sẻ với người lớn tin cậy hoặc gọi tổng đài 111.
 8. TUYỆT ĐỐI KHÔNG SỬ DỤNG Tử Vi, Nạp Âm, Thần Số Học, Cung Hoàng Đạo trong tư vấn nghề nghiệp.`;
+
+    if (safetyLevel === 'DISTRESS') {
+      systemInstruction += `\n\n[LƯU Ý ĐẶC BIỆT]: Học sinh đang bày tỏ cảm xúc lo âu/căng thẳng học tập. Hãy phản hồi với sự thấu cảm cao nhất, động viên tinh thần trước khi bàn về việc học, nhắc nhở em giữ gìn sức khỏe.`;
+    }
 
     if (profile) {
       // Only extract career-related evidence fields (strict isolation from reflection fields)
@@ -122,7 +135,7 @@ NGUYÊN TẮC BẮT BUỘC:
   try {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     
-    // Call Gemini API with timeout protection
+    // Call Gemini API with timeout protection and native system_instruction
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
 
@@ -133,10 +146,13 @@ NGUYÊN TẮC BẮT BUỘC:
       },
       signal: controller.signal,
       body: JSON.stringify({
+        system_instruction: {
+          parts: [{ text: systemInstruction }]
+        },
         contents: [
           {
             role: 'user',
-            parts: [{ text: `${systemInstruction}\n\nCâu hỏi của học sinh: "${sanitizedMessage}"` }]
+            parts: [{ text: sanitizedMessage }]
           }
         ],
         generationConfig: {
@@ -161,7 +177,8 @@ NGUYÊN TẮC BẮT BUỘC:
       const text = data.candidates[0].content.parts[0].text;
       return res.status(200).json({
         reply: text,
-        mode: mode
+        mode: mode,
+        safetyLevel: safetyLevel
       });
     } else {
       return res.status(502).json({
