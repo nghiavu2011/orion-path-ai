@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phương Pháp Luận Hướng Nghiệp — Orion Path AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            background: '#040714',
+            surface: '#0a0f26',
+            primary: '#818cf8',
+            secondary: '#4edea3',
+            accent: '#f59e0b',
+            border: 'rgba(255, 255, 255, 0.1)'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-slate-100 font-sans min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <header class="border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 text-primary font-display text-xl font-bold">
+        <svg class="w-7 h-7 text-primary" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+          <path d="M40 30 V70 M40 30 H60 C70 30 70 50 60 50 H40" stroke="#4edea3" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="50" cy="38" r="3" fill="#fff"/>
+          <circle cx="50" cy="50" r="3" fill="#fff"/>
+          <circle cx="50" cy="62" r="3" fill="#fff"/>
+        </svg>
+        <span>Orion Path AI</span>
+      </a>
+      <nav class="flex items-center gap-6 text-sm">
+        <a href="index.html" class="text-slate-300 hover:text-white transition-colors">Trang chủ</a>
+        <a href="app.html" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-semibold transition-all">Vào ứng dụng</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12">
+    <div class="mb-10 text-center md:text-left">
+      <span class="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">Phương pháp luận chuẩn hóa</span>
+      <h1 class="text-3xl md:text-4xl font-display font-extrabold text-white mt-4 mb-4">Mô Hình Hướng Nghiệp Dựa Trên Bằng Chứng (Evidence-Informed)</h1>
+      <p class="text-slate-400 text-base leading-relaxed">
+        Orion Path AI định vị là nền tảng hỗ trợ ra quyết định giáo dục và nghề nghiệp, <strong>không đóng vai trò nhà tiên tri (Oracle)</strong> hay phán định số phận người học.
+      </p>
+    </div>
+
+    <!-- Section 1 -->
+    <section class="mb-12 bg-surface/60 border border-border rounded-2xl p-6 md:p-8">
+      <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary">psychology</span>
+        1. Sàng Lọc Sở Thích Nghề Nghiệp (Mô hình RIASEC)
+      </h2>
+      <p class="text-slate-300 text-sm leading-relaxed mb-4">
+        Orion sử dụng bài sàng lọc dựa trên lý thuyết Holland RIASEC để đo lường <strong>sở thích nghề nghiệp (vocational interests)</strong> tại thời điểm hiện tại của học sinh, bao gồm 6 nhóm: Kỹ thuật (R), Nghiên cứu (I), Nghệ thuật (A), Xã hội (S), Quản lý (E), và Quy củ (C).
+      </p>
+      <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-xs text-amber-200 leading-relaxed">
+        <strong>Lưu ý quan trọng:</strong> Điểm số RIASEC không phải là thước đo trí thông minh, năng khiếu bẩm sinh hay chẩn đoán tâm thần học. Sở thích của học sinh lứa tuổi 14-18 hoàn toàn có thể phát triển và mở rộng khi các em được tiếp xúc với những trải nghiệm sống mới.
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="mb-12 bg-surface/60 border border-border rounded-2xl p-6 md:p-8">
+      <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">hypothesis</span>
+        2. Giả Thiết Nghề Nghiệp (Career Hypotheses) Thay Vì Phán Quyết Cố Định
+      </h2>
+      <p class="text-slate-300 text-sm leading-relaxed mb-4">
+        Thay vì khẳng định "Em sinh ra để làm nghề X" hay các con số phần trăm phù hợp ảo tưởng, hệ thống xuất ra <strong>3 đến 5 Giả thiết nghề nghiệp đáng khám phá</strong>. Mỗi giả thiết minh bạch:
+      </p>
+      <ul class="space-y-2 text-sm text-slate-300 list-disc list-inside mb-4">
+        <li><strong>Bằng chứng hiện có:</strong> Môn học nào em đang học tốt, nhóm sở thích nào thể hiện qua bài khảo sát.</li>
+        <li><strong>Điểm mâu thuẫn & Thử thách:</strong> Những rào cản cần lưu ý (thời gian đào tạo kéo dài, áp lực chuyên môn).</li>
+        <li><strong>Điều Orion chưa biết về em:</strong> Những khía cạnh chưa thể đo qua bảng hỏi (sự kiên trì, khả năng làm việc nhóm thực tế).</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="mb-12 bg-surface/60 border border-border rounded-2xl p-6 md:p-8">
+      <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary">science</span>
+        3. Vòng Lặp Trải Nghiệm Thực Tế (Career Experiments)
+      </h2>
+      <p class="text-slate-300 text-sm leading-relaxed">
+        Bằng chứng mạnh mẽ nhất không đến từ bảng câu hỏi trắc nghiệm, mà đến từ hành động thực tế. Mỗi giả thiết nghề nghiệp được gắn liền với các mini-project 60-90 phút hoặc phỏng vấn người đi trước. Sau trải nghiệm, học sinh trả lời 6 câu hỏi phản tư (sự tò mò, cảm giác khó chịu, điều cần học thêm) để tự cập nhật hồ sơ hướng nghiệp sống (Living Career Profile).
+      </p>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="mb-12 bg-surface/60 border border-border rounded-2xl p-6 md:p-8">
+      <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-accent">flare</span>
+        4. Tách Biệt Hoàn Toàn Reflection Lab Văn Hóa
+      </h2>
+      <p class="text-slate-300 text-sm leading-relaxed">
+        Các yếu tố Thần số học Pythagoras hay Can-Chi Tử Vi chỉ nằm trong khu vực <strong>Reflection Lab tùy chọn</strong>, phục vụ nhu cầu chiêm nghiệm văn hóa dân gian. Hệ thống thiết lập ranh giới kỹ thuật nghiêm ngặt: dữ liệu này <strong>tuyệt đối không can thiệp</strong> vào điểm RIASEC, bảng xếp hạng nghề nghiệp, lộ trình học thuật hay gợi ý của AI Career Coach.
+      </p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-border bg-surface/40 py-8 px-6 text-center text-xs text-slate-400">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>© 2026 Orion Path AI. Đơn vị chủ quản: NM STUDIO.</div>
+      <div class="flex gap-6">
+        <a href="methodology.html" class="hover:text-white transition-colors text-primary font-bold">Phương pháp</a>
+        <a href="privacy.html" class="hover:text-white transition-colors">Bảo mật</a>
+        <a href="terms.html" class="hover:text-white transition-colors">Điều khoản</a>
+        <a href="child-safety.html" class="hover:text-white transition-colors">An toàn trẻ em</a>
+        <a href="data-sources.html" class="hover:text-white transition-colors">Nguồn dữ liệu</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
