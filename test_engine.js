@@ -153,6 +153,7 @@ assert.strictEqual(indexHtml.includes('Cục Bà mẹ và Trẻ em — Bộ Y t�
 assert.strictEqual(indexHtml.includes('Thước Đo Đồng Điệu'), false, 'Must not use obsolete Thước Đo Đồng Điệu in index.html');
 assert.strictEqual(indexHtml.includes('tổ hợp môn THPT'), false, 'Must not confuse high school elective subjects with college admission combos');
 assert.strictEqual(indexHtml.includes('Bản Đồ Góc Nhìn Gia Đình'), true, 'Must use Bản Đồ Góc Nhìn Gia Đình in index.html');
+assert.strictEqual(indexHtml.includes('The Future of Jobs Report 2025 (WEF)'), true, 'Must cite WEF 2025 report in index.html');
 console.log('✓ Test 10 Passed: Salary transparency disclaimer, RIASEC wording, and taxonomy verified.');
 
 console.log('--- TEST 11: Privacy Policy Local Storage & 5 Data Tiers Audit ---');
@@ -222,8 +223,114 @@ generatedHypotheses.forEach(h => {
 });
 console.log('✓ Test 13 Passed: AI Resilience Index properties verified in database and generated hypotheses.');
 
+console.log('--- TEST 14: Deterministic Next Action State Resolver (8 States - Section 5) ---');
+// State 1: Profile incomplete
+const s1 = engine.resolveNextActionState({ profile: null, riasecScores: null });
+assert.strictEqual(s1.stateIndex, 1);
+assert.strictEqual(s1.ctaText, 'Tiếp tục hồ sơ');
+assert.strictEqual(s1.ctaActionType, 'GO_SCREEN_1');
+
+// State 2: RIASEC incomplete
+const fullProfile = { name: 'Nguyễn Minh An', grade: 'Lớp 11', math: 8.5, lit: 7.5, eng: 8.0, coreValues: ['Sáng tạo'], workPreferences: ['Độc lập'] };
+const s2 = engine.resolveNextActionState({ profile: fullProfile, riasecScores: { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 } });
+assert.strictEqual(s2.stateIndex, 2);
+assert.strictEqual(s2.ctaText, 'Bắt đầu RIASEC');
+assert.strictEqual(s2.ctaActionType, 'GO_SCREEN_2');
+
+// State 3: Socratic incomplete
+const riasecScoresValid = { R: 4, I: 5, A: 1, S: 2, E: 1, C: 0 };
+const s3 = engine.resolveNextActionState({
+  profile: fullProfile,
+  riasecScores: riasecScoresValid,
+  socratic: { completed: false, q1: '', q2: '', q3: '' }
+});
+assert.strictEqual(s3.stateIndex, 3);
+assert.strictEqual(s3.ctaText, 'Tiếp tục khám phá');
+assert.strictEqual(s3.ctaActionType, 'GO_SCREEN_3');
+
+// State 4: No hypotheses yet
+const s4 = engine.resolveNextActionState({
+  profile: fullProfile,
+  riasecScores: riasecScoresValid,
+  socratic: { completed: true, q1: 'Thích code' },
+  hypotheses: []
+});
+assert.strictEqual(s4.stateIndex, 4);
+assert.strictEqual(s4.ctaText, 'Xem các hướng phù hợp để khám phá');
+assert.strictEqual(s4.ctaActionType, 'GENERATE_HYPOTHESES');
+
+// State 5: Hypotheses exist, no experiment started
+const sampleHypo = [{
+  id: 'hypo_ai',
+  name: 'Kỹ sư AI/ML',
+  experiment: { id: 'exp_ai_chatbot', title: 'Xây dựng Trợ lý ảo Mini', duration: '90 phút' }
+}, {
+  id: 'hypo_ic',
+  name: 'Kỹ sư Vi mạch & Bán dẫn',
+  experiment: { id: 'exp_logic_gate', title: 'Mô phỏng cổng logic', duration: '60 phút' }
+}];
+const s5 = engine.resolveNextActionState({
+  profile: fullProfile,
+  riasecScores: riasecScoresValid,
+  socratic: { completed: true, q1: 'Thích code' },
+  hypotheses: sampleHypo,
+  experimentsState: {}
+});
+assert.strictEqual(s5.stateIndex, 5);
+assert.strictEqual(s5.ctaText, 'Bắt đầu thử nghiệm');
+assert.strictEqual(s5.ctaActionType, 'START_EXPERIMENT');
+assert.strictEqual(s5.targetId, 'exp_ai_chatbot');
+assert.strictEqual(s5.availableEvidence.some(e => e.includes('Toán')), true, 'Shows real math score from state');
+assert.strictEqual(s5.availableEvidence.some(e => e.includes('Nguyễn Minh An')), false, 'Does not leak name into evidence block');
+
+// State 6: Experiment active (IN PROGRESS)
+const s6 = engine.resolveNextActionState({
+  profile: fullProfile,
+  riasecScores: riasecScoresValid,
+  socratic: { completed: true, q1: 'Thích code' },
+  hypotheses: sampleHypo,
+  experimentsState: {
+    exp_ai_chatbot: { id: 'exp_ai_chatbot', status: 'IN PROGRESS', startedAt: new Date().toISOString() }
+  }
+});
+assert.strictEqual(s6.stateIndex, 6);
+assert.strictEqual(s6.ctaText, 'Tiếp tục thử nghiệm');
+assert.strictEqual(s6.ctaActionType, 'RESUME_EXPERIMENT');
+assert.strictEqual(s6.targetId, 'exp_ai_chatbot');
+
+// State 7: Experiment completed but reflection missing (PRIORITIZED BEFORE NEW EXPERIMENT)
+const s7 = engine.resolveNextActionState({
+  profile: fullProfile,
+  riasecScores: riasecScoresValid,
+  socratic: { completed: true, q1: 'Thích code' },
+  hypotheses: sampleHypo,
+  experimentsState: {
+    exp_ai_chatbot: { id: 'exp_ai_chatbot', status: 'REFLECTION', reflection: null }
+  }
+});
+assert.strictEqual(s7.stateIndex, 7);
+assert.strictEqual(s7.ctaText, 'Bắt đầu phản tư');
+assert.strictEqual(s7.ctaActionType, 'OPEN_REFLECTION');
+assert.strictEqual(s7.targetId, 'exp_ai_chatbot');
+
+// State 8: Experiment + reflection complete
+const s8 = engine.resolveNextActionState({
+  profile: fullProfile,
+  riasecScores: riasecScoresValid,
+  socratic: { completed: true, q1: 'Thích code' },
+  hypotheses: sampleHypo,
+  experimentsState: {
+    exp_ai_chatbot: { id: 'exp_ai_chatbot', status: 'COMPLETED', reflection: { q1: 'Thích' } }
+  }
+});
+assert.strictEqual(s8.stateIndex, 8);
+assert.strictEqual(s8.ctaText, 'Khám phá thử nghiệm tiếp theo');
+assert.strictEqual(s8.ctaActionType, 'NEXT_EXPERIMENT');
+console.log('✓ Test 14 Passed: All 8 deterministic next action states resolved with accurate CTAs & zero fabricated evidence.');
+
 console.log('\n==========================================');
-console.log('ALL 13 PRODUCTION ENGINE TESTS PASSED 100%');
+console.log('ALL 14 PRODUCTION ENGINE TESTS PASSED 100%');
 console.log('==========================================');
+
 
 

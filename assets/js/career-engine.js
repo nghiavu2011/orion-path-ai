@@ -274,6 +274,264 @@ class OrionCareerEngine {
       ]
     };
   }
+
+  /**
+   * Bộ giải quyết hành động tiếp theo tất định (Deterministic 8-State Next Action Resolver - Section 5)
+   * Tuyệt đối không bịa đặt bằng chứng; chỉ hiển thị dữ liệu thực tế từ trạng thái người dùng.
+   * @param {object} params
+   */
+  resolveNextActionState(params = {}) {
+    const {
+      profile = null,
+      riasecScores = null,
+      socratic = null,
+      hypotheses = [],
+      experimentsState = {},
+      isFastTrack = false
+    } = params;
+
+    // Helper: Định dạng mã RIASEC
+    const topRiasecCodes = riasecScores ? this.getTopRiasecCodes(riasecScores).slice(0, 3).join('-') : '';
+
+    // 1. STATE 1: Profile incomplete
+    const hasValidName = profile && profile.name && profile.name.trim() !== '' && profile.name.trim() !== 'Học sinh';
+    const hasValidGrade = profile && profile.grade && profile.grade.trim() !== '';
+    const hasValues = profile && Array.isArray(profile.coreValues) && profile.coreValues.length > 0;
+    const hasWorkPrefs = profile && Array.isArray(profile.workPreferences) && profile.workPreferences.length > 0;
+    const hasAcademic = profile && (profile.math !== null && profile.math !== undefined && !isNaN(profile.math));
+    
+    const isProfileComplete = isFastTrack
+      ? Boolean(hasValidName && hasValidGrade)
+      : Boolean(hasValidName && hasValidGrade && (hasValues || hasWorkPrefs || hasAcademic));
+
+    if (!profile || !isProfileComplete) {
+      const availableEvidence = [];
+      if (profile && profile.name && profile.name.trim() !== 'Học sinh') availableEvidence.push(`Họ và tên: ${profile.name}`);
+      if (profile && profile.grade) availableEvidence.push(`Khối lớp: ${profile.grade}`);
+
+      return {
+        stateIndex: 1,
+        stage: 'Hồ sơ học tập & định hướng cá nhân chưa hoàn thiện',
+        availableEvidence,
+        missingEvidence: [
+          'Thông tin nền tảng về học lực, giá trị cốt lõi và môi trường làm việc mong muốn'
+        ],
+        nextAction: 'Hoàn thiện thông tin hồ sơ học tập và định hướng cá nhân cơ bản.',
+        ctaText: 'Tiếp tục hồ sơ',
+        ctaActionType: 'GO_SCREEN_1',
+        targetId: null,
+        targetName: null
+      };
+    }
+
+    // 2. STATE 2: RIASEC incomplete (< 12 questions answered or scores empty)
+    const hasRiasec = riasecScores && typeof riasecScores === 'object' && Object.values(riasecScores).some(v => typeof v === 'number' && v > 0);
+    if (!hasRiasec) {
+      const availableEvidence = [
+        `Hồ sơ học sinh: ${profile.name} (${profile.grade})`
+      ];
+      if (hasValues) availableEvidence.push(`Giá trị ưu tiên: ${profile.coreValues.join(', ')}`);
+      if (hasWorkPrefs) availableEvidence.push(`Phong cách làm việc: ${profile.workPreferences.join(', ')}`);
+
+      return {
+        stateIndex: 2,
+        stage: 'Chưa hoàn thành khảo sát sở thích RIASEC',
+        availableEvidence,
+        missingEvidence: [
+          'Điểm thiên hướng sở thích 6 nhóm RIASEC (R-I-A-S-E-C)'
+        ],
+        nextAction: 'Thực hiện bài sàng lọc sở thích nghề nghiệp RIASEC để nhận diện thiên hướng tự nhiên.',
+        ctaText: 'Bắt đầu RIASEC',
+        ctaActionType: isFastTrack ? 'GO_SCREEN_1' : 'GO_SCREEN_2',
+        targetId: null,
+        targetName: null
+      };
+    }
+
+    // 3. STATE 3: Socratic / exploration step incomplete
+    const hasSocratic = isFastTrack || Boolean(
+      socratic && (
+        socratic.completed === true ||
+        (socratic.q1 && socratic.q1.trim().length > 0) ||
+        (socratic.q2 && socratic.q2.trim().length > 0) ||
+        (socratic.q3 && socratic.q3.trim().length > 0)
+      )
+    );
+
+    if (!hasSocratic) {
+      return {
+        stateIndex: 3,
+        stage: 'Hoàn thiện bước khảo sát sâu Socratic',
+        availableEvidence: [
+          `Điểm sở thích RIASEC: ${topRiasecCodes}`,
+          `Hồ sơ học sinh: ${profile.name} (${profile.grade})`
+        ],
+        missingEvidence: [
+          'Góc nhìn tự nhận thức cá nhân và mong đợi gia đình qua 3 câu hỏi Socratic gợi mở'
+        ],
+        nextAction: 'Trả lời 3 câu hỏi Socratic để làm rõ mong muốn cá nhân và bối cảnh gia đình.',
+        ctaText: 'Tiếp tục khám phá',
+        ctaActionType: 'GO_SCREEN_3',
+        targetId: null,
+        targetName: null
+      };
+    }
+
+    // 4. STATE 4: No Career Hypothesis yet
+    if (!hypotheses || !Array.isArray(hypotheses) || hypotheses.length === 0) {
+      return {
+        stateIndex: 4,
+        stage: 'Xây dựng các giả thiết nghề nghiệp đầu tiên',
+        availableEvidence: [
+          `Hồ sơ học tập & điểm sở thích RIASEC (${topRiasecCodes}) đã hoàn thành`
+        ],
+        missingEvidence: [
+          'Danh sách các giả thiết nghề nghiệp cụ thể để bắt đầu kiểm chứng'
+        ],
+        nextAction: 'Tổng hợp bằng chứng để khởi tạo các giả thiết nghề nghiệp phù hợp với em.',
+        ctaText: 'Xem các hướng phù hợp để khám phá',
+        ctaActionType: 'GENERATE_HYPOTHESES',
+        targetId: null,
+        targetName: null
+      };
+    }
+
+    // Lấy thông tin kho thử nghiệm nếu có
+    const expRepo = (typeof window !== 'undefined' && window.EXPERIMENT_REPOSITORY) ||
+                    (typeof global !== 'undefined' && global.EXPERIMENT_REPOSITORY) || {};
+
+    const expValues = Object.values(experimentsState || {});
+
+    // 5. STATE 7: Experiment completed but reflection missing (PRIORITIZED BEFORE NEW EXPERIMENT)
+    const refExp = expValues.find(e => e.status === 'REFLECTION' || (e.status === 'COMPLETED' && (!e.reflection || Object.keys(e.reflection).length === 0)));
+    if (refExp) {
+      const expDef = expRepo[refExp.id] || refExp;
+      const expTitle = expDef.title || refExp.id;
+      return {
+        stateIndex: 7,
+        stage: 'Phản tư về trải nghiệm vừa hoàn thành',
+        availableEvidence: [
+          `Đã hoàn thành các bước thực hành của thử nghiệm: "${expTitle}"`
+        ],
+        missingEvidence: [
+          '6 câu hỏi phản tư đúc kết cảm xúc, mức độ yêu thích và độ vừa sức thực tế'
+        ],
+        nextAction: 'Hoàn thành 6 câu hỏi phản tư để chuyển hóa trải nghiệm thành bằng chứng hướng nghiệp.',
+        ctaText: 'Bắt đầu phản tư',
+        ctaActionType: 'OPEN_REFLECTION',
+        targetId: refExp.id,
+        targetName: expTitle
+      };
+    }
+
+    // 6. STATE 6: Experiment active but unfinished (IN PROGRESS)
+    const activeExp = expValues.find(e => e.status === 'IN PROGRESS');
+    if (activeExp) {
+      const expDef = expRepo[activeExp.id] || activeExp;
+      const expTitle = expDef.title || activeExp.id;
+      const careerName = expDef.careerName || expDef.relatedCareerHypothesis || null;
+
+      const availableEvidence = [`Đang làm thử nghiệm thực tế: "${expTitle}"`];
+      if (careerName) availableEvidence.push(`Hướng nghề liên quan: ${careerName}`);
+
+      return {
+        stateIndex: 6,
+        stage: `Đang thực hiện thử nghiệm: ${expTitle}`,
+        availableEvidence,
+        missingEvidence: [
+          'Chưa hoàn thành 4 bước thực hành và chưa ghi nhận phản tư cá nhân'
+        ],
+        nextAction: 'Tiếp tục hoàn thành thử nghiệm và chuẩn bị đúc kết cảm nhận.',
+        ctaText: 'Tiếp tục thử nghiệm',
+        ctaActionType: 'RESUME_EXPERIMENT',
+        targetId: activeExp.id,
+        targetName: expTitle
+      };
+    }
+
+    // 7. STATE 8: Experiment + reflection complete (COMPLETED with reflection)
+    const completedExps = expValues.filter(e => e.status === 'COMPLETED' && e.reflection && Object.keys(e.reflection).length > 0);
+    if (completedExps.length > 0) {
+      const lastExp = completedExps[completedExps.length - 1];
+      const expDef = expRepo[lastExp.id] || lastExp;
+      const completedTitle = expDef.title || lastExp.id;
+
+      // Tìm giả thiết tiếp theo chưa có thử nghiệm
+      const nextHypo = hypotheses.find(h => {
+        const hExpId = h.experiment ? h.experiment.id : (h.experiments && h.experiments[0] ? h.experiments[0].id : null);
+        return !hExpId || !experimentsState[hExpId] || experimentsState[hExpId].status === 'NOT STARTED';
+      });
+
+      const nextAction = nextHypo
+        ? `Khám phá thử nghiệm thực tế tiếp theo cho hướng "${nextHypo.name}" hoặc đối chiếu góc nhìn gia đình.`
+        : `So sánh các giả thiết nghề nghiệp và đối chiếu lộ trình học tập THPT / Đại học.`;
+
+      const ctaText = nextHypo ? 'Khám phá thử nghiệm tiếp theo' : 'So sánh các giả thiết';
+      const ctaActionType = nextHypo ? 'NEXT_EXPERIMENT' : 'COMPARE_HYPOTHESES';
+      const targetExpId = nextHypo && nextHypo.experiment ? nextHypo.experiment.id : null;
+
+      return {
+        stateIndex: 8,
+        stage: 'Đã hoàn thành thử nghiệm & phản tư thực tế',
+        availableEvidence: [
+          `Đã có bằng chứng thực tế từ thử nghiệm: "${completedTitle}"`,
+          'Đã ghi nhận phản tư cá nhân về mức độ phù hợp thực tế'
+        ],
+        missingEvidence: [
+          'Đối chiếu đa chiều với các giả thiết nghề nghiệp khác hoặc chọn thử nghiệm mở rộng'
+        ],
+        nextAction,
+        ctaText,
+        ctaActionType,
+        targetId: targetExpId,
+        targetName: nextHypo ? nextHypo.name : null
+      };
+    }
+
+    // 8. STATE 5: Hypothesis exists but no Career Experiment completed/started
+    const topHypothesis = hypotheses[0];
+    const expObj = topHypothesis.experiment || (topHypothesis.experiments && topHypothesis.experiments[0]) || {
+      id: 'exp_ai_chatbot',
+      title: 'Xây dựng Trợ lý ảo Mini',
+      duration: '90 phút'
+    };
+
+    const expTitle = expObj.title || 'Dự án thực tế ngắn hạn';
+    const expDuration = expObj.duration || '60–90 phút';
+    const expId = expObj.id || 'exp_ai_chatbot';
+
+    // Xây dựng bằng chứng hiện có strictly từ state (không bịa đặt)
+    const availableEvidence = [];
+    if (topRiasecCodes) availableEvidence.push(`RIASEC: ${topRiasecCodes}`);
+    if (profile.math !== null && profile.math !== undefined && !isNaN(profile.math)) {
+      if (profile.math >= 8.0) availableEvidence.push(`Toán là tín hiệu học tập nổi bật (${profile.math}/10)`);
+      else availableEvidence.push(`Điểm Toán: ${profile.math}/10`);
+    }
+    if (profile.lit !== null && profile.lit !== undefined && !isNaN(profile.lit)) {
+      if (profile.lit >= 8.0) availableEvidence.push(`Ngữ văn là tín hiệu học tập nổi bật (${profile.lit}/10)`);
+      else availableEvidence.push(`Điểm Ngữ văn: ${profile.lit}/10`);
+    }
+    if (profile.eng !== null && profile.eng !== undefined && !isNaN(profile.eng)) {
+      if (profile.eng >= 8.0) availableEvidence.push(`Tiếng Anh là tín hiệu học tập nổi bật (${profile.eng}/10)`);
+      else availableEvidence.push(`Điểm Tiếng Anh: ${profile.eng}/10`);
+    }
+    if (hasValues) availableEvidence.push(`Ưu tiên giá trị: ${profile.coreValues.slice(0, 2).join(' & ')}`);
+    if (hasWorkPrefs) availableEvidence.push(`Phong cách làm việc: ${profile.workPreferences.slice(0, 2).join(', ')}`);
+
+    return {
+      stateIndex: 5,
+      stage: `Em đang khám phá: ${topHypothesis.name}`,
+      availableEvidence,
+      missingEvidence: [
+        'Chưa có trải nghiệm thực tế với công việc này'
+      ],
+      nextAction: `Thử mini-project "${expTitle}" (${expDuration}) để kiểm chứng cảm xúc thật khi thao tác.`,
+      ctaText: 'Bắt đầu thử nghiệm',
+      ctaActionType: 'START_EXPERIMENT',
+      targetId: expId,
+      targetName: topHypothesis.name
+    };
+  }
 }
 
 if (typeof window !== 'undefined') {

@@ -1054,6 +1054,10 @@
           }
         }
       }
+
+      if (screenNumber === 5) {
+        renderDashboardNextAction();
+      }
     }
 
     function toggleReflectionInput() {
@@ -1119,167 +1123,148 @@
       const container = document.getElementById('dashboard-next-action-card');
       if (!container) return;
 
-      const hasScores = Object.values(computedRiasecScores).some(v => v > 0);
-      const hasProfile = globalStudentCareerProfile && (globalStudentCareerProfile.name || globalStudentCareerProfile.math);
+      const profile = globalStudentCareerProfile;
+      const riasecScores = computedRiasecScores;
+      const socratic = profile ? profile.socratic : null;
 
-      if (!hasScores && !hasProfile) {
-        container.innerHTML = `
-          <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(16, 185, 129, 0.08)); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 14px; padding: 18px 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="material-symbols-outlined text-accent" style="font-size: 22px;">flag</span>
-                <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #FCD34D; letter-spacing: 0.5px;">BƯỚC TIẾP THEO CỦA EM • KHỞI ĐỘNG HÀNH TRÌNH HƯỚNG NGHIỆP</span>
-              </div>
-              <span style="font-size: 11px; background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 6px; color: #cbd5e1;">
-                Trạng thái: <strong>Chưa có dữ liệu</strong>
-              </span>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px;">
-              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #64748B;">
-                <div style="font-size: 11px; font-weight: 800; color: #94A3B8; margin-bottom: 4px;">🔍 Đang tìm hiểu</div>
-                <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">Chưa xác lập giả thiết nghề nghiệp đầu tiên.</p>
-              </div>
-              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #10B981;">
-                <div style="font-size: 11px; font-weight: 800; color: #6EE7B7; margin-bottom: 4px;">🟢 Bằng chứng đã có</div>
-                <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">Chưa hoàn thành khảo sát sở thích RIASEC hoặc điểm học lực.</p>
-              </div>
-              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #F59E0B;">
-                <div style="font-size: 11px; font-weight: 800; color: #FCD34D; margin-bottom: 4px;">🔵 Bằng chứng còn thiếu</div>
-                <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">Toàn bộ dữ liệu sở thích, học lực và giá trị cá nhân.</p>
-              </div>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-              <div style="font-size: 12px; color: #cbd5e1;">
-                👉 Hãy hoàn thành bài sàng lọc sở thích nghề nghiệp RIASEC (12–30 câu) để mở khóa kế hoạch hành động.
-              </div>
-              <button type="button" onclick="goToScreen(1)" class="btn btn-primary" style="font-size: 12px; padding: 8px 18px;">
-                <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span>
-                Làm bài khảo sát RIASEC ngay
-              </button>
-            </div>
-          </div>
-        `;
-        return;
+      let hypotheses = [];
+      if (window.orionCareerEngine && riasecScores && Object.values(riasecScores).some(v => v > 0)) {
+        try {
+          hypotheses = window.orionCareerEngine.generateCareerHypotheses({
+            riasecScores,
+            academic: {
+              math: profile ? profile.math : null,
+              lit: profile ? profile.lit : null,
+              eng: profile ? profile.eng : null
+            },
+            targets: profile ? profile.targets : []
+          });
+        } catch (e) {
+          console.warn("Could not generate hypotheses for next-action", e);
+        }
       }
 
-      const hypotheses = window.orionCareerEngine ? window.orionCareerEngine.generateCareerHypotheses({
-        riasecScores: computedRiasecScores,
-        academic: {
-          math: globalStudentCareerProfile.math,
-          lit: globalStudentCareerProfile.lit,
-          eng: globalStudentCareerProfile.eng
-        },
-        targets: globalStudentCareerProfile.targets
-      }) : [];
+      const experimentsState = window.careerExperimentManager ? window.careerExperimentManager.state : {};
 
-      const topHypothesis = hypotheses[0] || {
-        name: 'Kỹ sư Vi mạch & Bán dẫn',
-        signalLevelLabel: 'Tín hiệu vừa',
-        supportingEvidence: ['Điểm Toán khá, tư duy phân tích'],
-        unknowns: ['Cảm giác xúc cảm thật khi kiểm thử mạch thực tế'],
-        experiment: { id: 'exp_semiconductor_01', title: 'Thực nghiệm thiết kế mạch logic số căn bản', duration: '75 phút' }
-      };
+      const stateResult = window.orionCareerEngine ? window.orionCareerEngine.resolveNextActionState({
+        profile,
+        riasecScores,
+        socratic,
+        hypotheses,
+        experimentsState,
+        isFastTrack: isFastTrackMode
+      }) : null;
 
-      const currentExploration = topHypothesis.name;
-      const signalLabel = topHypothesis.signalLevelLabel || 'Tín hiệu khám phá';
-      const availableEvidence = (topHypothesis.supportingEvidence && topHypothesis.supportingEvidence.length > 0)
-        ? topHypothesis.supportingEvidence.slice(0, 2).join('; ')
-        : 'Tín hiệu sở thích nghề nghiệp RIASEC phù hợp';
-      const missingEvidence = (topHypothesis.unknowns && topHypothesis.unknowns.length > 0)
-        ? topHypothesis.unknowns.slice(0, 2).join('; ')
-        : 'Cảm nhận thực tế khi làm việc và mức độ kiên trì với chuyên ngành';
+      if (!stateResult) return;
 
-      const expTitle = (topHypothesis.experiment && topHypothesis.experiment.title) || '1 mini-project trải nghiệm thực tế';
-      const expDuration = (topHypothesis.experiment && topHypothesis.experiment.duration) || '60–90 phút';
-      const expId = (topHypothesis.experiment && topHypothesis.experiment.id) || 'exp_semiconductor_01';
+      let ctaOnClick = '';
+      let ctaIcon = 'arrow_forward';
 
-      const topRiasec = window.orionCareerEngine ? window.orionCareerEngine.getTopRiasecCodes(computedRiasecScores)[0] || 'I' : 'I';
-      const combo = window.orionCareerEngine ? window.orionCareerEngine.recommendCombination(topRiasec, {
-        math: globalStudentCareerProfile.math,
-        eng: globalStudentCareerProfile.eng
-      }) : { primaryCombo: 'A01' };
+      switch (stateResult.ctaActionType) {
+        case 'GO_SCREEN_1':
+          ctaOnClick = 'goToScreen(1)';
+          ctaIcon = 'edit_note';
+          break;
+        case 'GO_SCREEN_2':
+          ctaOnClick = isFastTrackMode ? 'goToScreen(1)' : 'goToScreen(2)';
+          ctaIcon = 'psychology';
+          break;
+        case 'GO_SCREEN_3':
+          ctaOnClick = 'goToScreen(3)';
+          ctaIcon = 'forum';
+          break;
+        case 'GENERATE_HYPOTHESES':
+          ctaOnClick = 'switchDashboardTab("hypotheses")';
+          ctaIcon = 'explore';
+          break;
+        case 'START_EXPERIMENT':
+          ctaOnClick = `startExperimentAction('${stateResult.targetId || "exp_ai_chatbot"}'); switchDashboardTab('experiments');`;
+          ctaIcon = 'play_arrow';
+          break;
+        case 'RESUME_EXPERIMENT':
+          ctaOnClick = `switchDashboardTab('experiments');`;
+          ctaIcon = 'play_arrow';
+          break;
+        case 'OPEN_REFLECTION':
+          ctaOnClick = `openExperimentAction('${stateResult.targetId}')`;
+          ctaIcon = 'rate_review';
+          break;
+        case 'NEXT_EXPERIMENT':
+          ctaOnClick = `switchDashboardTab('experiments');`;
+          ctaIcon = 'science';
+          break;
+        case 'COMPARE_HYPOTHESES':
+          ctaOnClick = `switchDashboardTab('hypotheses');`;
+          ctaIcon = 'compare_arrows';
+          break;
+        default:
+          ctaOnClick = 'switchDashboardTab("hypotheses")';
+      }
+
+      const hasEvidence = stateResult.availableEvidence && stateResult.availableEvidence.length > 0;
+      const hasMissing = stateResult.missingEvidence && stateResult.missingEvidence.length > 0;
+
+      let evidenceSectionHtml = '';
+      if (hasEvidence || hasMissing) {
+        evidenceSectionHtml = `
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 14px;">
+            ${hasEvidence ? `
+              <div style="background: rgba(0,0,0,0.22); border-radius: 10px; padding: 12px; border-left: 3px solid var(--secondary);">
+                <div style="font-size: 11px; font-weight: 800; color: #6EE7B7; margin-bottom: 6px; display: flex; align-items: center; gap: 5px;">
+                  <span class="material-symbols-outlined" style="font-size: 15px;">check_circle</span>
+                  Bằng chứng hiện có
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 12px; color: #E2E8F0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px;">
+                  ${stateResult.availableEvidence.map(item => `<li>• ${item}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+            ${hasMissing ? `
+              <div style="background: rgba(0,0,0,0.22); border-radius: 10px; padding: 12px; border-left: 3px solid var(--accent);">
+                <div style="font-size: 11px; font-weight: 800; color: #FCD34D; margin-bottom: 6px; display: flex; align-items: center; gap: 5px;">
+                  <span class="material-symbols-outlined" style="font-size: 15px;">help</span>
+                  Bằng chứng còn thiếu
+                </div>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 12px; color: #E2E8F0; line-height: 1.5; display: flex; flex-direction: column; gap: 4px;">
+                  ${stateResult.missingEvidence.map(item => `<li>• ${item}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
 
       container.innerHTML = `
-        <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(16, 185, 129, 0.08)); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 14px; padding: 18px 20px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+        <div class="card-box" style="margin-bottom: 0; padding: 18px 20px; border-left: 4px solid var(--primary); background: rgba(17, 24, 39, 0.85); border-color: rgba(99, 102, 241, 0.25);">
+          <!-- Card Header -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span class="material-symbols-outlined text-accent" style="font-size: 22px;">flag</span>
-              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #FCD34D; letter-spacing: 0.5px;">BƯỚC TIẾP THEO CỦA EM • BẢN ĐỒ TIẾN TRÌNH HÀNH ĐỘNG</span>
+              <span class="material-symbols-outlined text-accent" style="font-size: 20px;">bolt</span>
+              <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: #FCD34D; letter-spacing: 0.6px;">BƯỚC TIẾP THEO CỦA EM</span>
             </div>
-            <span style="font-size: 11px; background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 6px; color: #cbd5e1;">
-              Đang tìm hiểu: <strong style="color: #6EE7B7;">${currentExploration}</strong> (${signalLabel})
+            <span style="font-size: 11px; background: rgba(255,255,255,0.06); padding: 3px 9px; border-radius: 6px; color: #94A3B8;">
+              Ưu tiên ${stateResult.stateIndex}/8
             </span>
           </div>
 
-          <!-- Evidence Overview (Current State) -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 14px;">
-            <div style="background: rgba(0,0,0,0.22); border-radius: 10px; padding: 12px; border-left: 3px solid #10B981;">
-              <div style="font-size: 11px; font-weight: 800; color: #6EE7B7; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
-                <span class="material-symbols-outlined" style="font-size: 15px;">check_circle</span>
-                🟢 Bằng chứng đã có (Available Evidence)
-              </div>
-              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
-                ${availableEvidence}
-              </p>
-            </div>
-
-            <div style="background: rgba(0,0,0,0.22); border-radius: 10px; padding: 12px; border-left: 3px solid #F59E0B;">
-              <div style="font-size: 11px; font-weight: 800; color: #FCD34D; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
-                <span class="material-symbols-outlined" style="font-size: 15px;">help</span>
-                🔵 Bằng chứng còn thiếu (Missing Evidence)
-              </div>
-              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
-                ${missingEvidence}
-              </p>
-            </div>
+          <!-- Current Stage -->
+          <div style="margin-bottom: 14px;">
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 3px;">Em đang ở:</div>
+            <div style="font-size: 16px; font-weight: 800; color: #fff; line-height: 1.4;">${stateResult.stage}</div>
           </div>
 
-          <!-- 3 Recommended Actions -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px;">
-            <!-- Action 1: Experiment -->
-            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #6EE7B7;">
-              <div style="font-size: 11px; font-weight: 800; color: #6EE7B7; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
-                <span class="material-symbols-outlined" style="font-size: 15px;">science</span>
-                1 Hành động tuần này (Thử nghiệm thực tế)
-              </div>
-              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
-                Làm mini-project <strong>"${expTitle}"</strong> (${expDuration}) để kiểm chứng cảm xúc thật khi thao tác.
-              </p>
-            </div>
+          <!-- Evidence Overview (Only non-empty sections) -->
+          ${evidenceSectionHtml}
 
-            <!-- Action 2: Family -->
-            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #6366F1;">
-              <div style="font-size: 11px; font-weight: 800; color: #C7D2FE; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
-                <span class="material-symbols-outlined" style="font-size: 15px;">forum</span>
-                1 Câu hỏi gợi mở cùng Ba Mẹ
-              </div>
-              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
-                <em>"Ba Mẹ thấy sao nếu con dành 60 phút làm thử một dự án nhỏ về ${currentExploration} để cùng kiểm chứng năng khiếu?"</em>
-              </p>
+          <!-- Next Action & Action CTA -->
+          <div style="background: rgba(99, 102, 241, 0.08); border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border: 1px solid rgba(99, 102, 241, 0.2);">
+            <div style="flex: 1; min-width: 220px;">
+              <div style="font-size: 11px; font-weight: 800; color: #A5B4FC; margin-bottom: 2px;">VIỆC NÊN LÀM TIẾP</div>
+              <div style="font-size: 13px; color: #fff; font-weight: 600; line-height: 1.4;">${stateResult.nextAction}</div>
             </div>
-
-            <!-- Action 3: Academic -->
-            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #38BDF8;">
-              <div style="font-size: 11px; font-weight: 800; color: #7DD3FC; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
-                <span class="material-symbols-outlined" style="font-size: 15px;">school</span>
-                1 Điểm tựa học thuật
-              </div>
-              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
-                Tập trung củng cố kiến thức các môn trong tổ hợp xét tuyển ĐH <strong>${combo.primaryCombo}</strong> để chuẩn bị lộ trình tốt nhất.
-              </p>
-            </div>
-          </div>
-
-          <div style="display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap;">
-            <button type="button" onclick="switchDashboardTab('family')" class="btn btn-secondary" style="font-size: 12px; padding: 8px 16px;">
-              <span class="material-symbols-outlined" style="font-size: 16px;">escalator_warning</span>
-              Bản đồ góc nhìn gia đình
-            </button>
-            <button type="button" onclick="switchDashboardTab('experiments'); startExperimentAction('${expId}');" class="btn btn-primary" style="font-size: 12px; padding: 8px 18px;">
-              <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span>
-              Bắt đầu thử nghiệm ngay
+            <button type="button" onclick="${ctaOnClick}" class="btn btn-primary" style="font-size: 13px; padding: 9px 20px; white-space: nowrap; flex-shrink: 0;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">${ctaIcon}</span>
+              ${stateResult.ctaText}
             </button>
           </div>
         </div>
@@ -1310,7 +1295,13 @@
         riasec: Object.entries(computedRiasecScores).sort((a,b)=>b[1]-a[1]).map(e=>`${e[0]}: ${e[1]}`).join(', '),
         targets: checkedTargets,
         coreValues: checkedValues,
-        workPreferences: checkedWorkPrefs
+        workPreferences: checkedWorkPrefs,
+        socratic: {
+          q1: (document.getElementById('socratic-q1') && document.getElementById('socratic-q1').value) || '',
+          q2: (document.getElementById('socratic-q2') && document.getElementById('socratic-q2').value) || '',
+          q3: (document.getElementById('socratic-q3') && document.getElementById('socratic-q3').value) || '',
+          completed: true
+        }
       };
 
       // Reflection Profile is strictly on-demand (isolated)
@@ -2003,6 +1994,7 @@
       if (window.careerExperimentManager) {
         window.careerExperimentManager.startExperiment(expId);
       }
+      renderDashboardNextAction();
       renderExperimentsTab();
       renderCareerHypotheses();
       renderLivingProfileTab();
@@ -2012,6 +2004,10 @@
     // Experiment Reflection Modal Actions
     function openExperimentAction(expId) {
       currentActiveExpId = expId;
+      if (window.careerExperimentManager && window.careerExperimentManager.getExperimentStatus(expId) === 'IN PROGRESS') {
+        window.careerExperimentManager.openReflectionStage(expId);
+      }
+      renderDashboardNextAction();
       const exp = window.EXPERIMENT_REPOSITORY ? window.EXPERIMENT_REPOSITORY[expId] : null;
       if (exp) {
         document.getElementById('modal-exp-title').textContent = `Phản Tư: ${exp.title}`;
@@ -2099,6 +2095,7 @@
       }
 
       closeReflectionModal();
+      renderDashboardNextAction();
       renderExperimentsTab();
       renderLivingProfileTab();
       alert("Đã lưu kết quả phản tư vào Hồ Sơ Hướng Nghiệp Của Tôi thành công!");
