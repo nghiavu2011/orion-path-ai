@@ -55,136 +55,304 @@
     <!-- ==================== SCREEN 1: PROFILE & ACADEMIC INPUT ==================== -->
     <section class="screen active" id="screen-1">
       <div class="card-box" style="max-width: 780px; margin: 0 auto;">
-        <div style="margin-bottom: 24px;">
-          <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: var(--primary-light); letter-spacing: 0.5px;">Bước 1 trên 4</span>
-          <h2 style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">Hồ Sơ Học Thuật & Mục Tiêu Tuyển Sinh</h2>
-          <p style="font-size: 13.5px; color: var(--text-muted); margin-top: 6px; line-height: 1.5;">
-            Orion sử dụng thông tin học thuật thực tế để xây dựng các giả thiết nghề nghiệp phù hợp, không dựa trên suy đoán ngẫu nhiên.
-          </p>
+        
+        <!-- LocalStorage Cache Restore Notification -->
+        <div id="local-cache-restore-alert" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #A7F3D0;">
+            <span class="material-symbols-outlined" style="font-size: 20px; color: #34d399;">history</span>
+            <span>Tìm thấy hồ sơ đã lưu trước đó của <strong><span id="cached-student-name">Học sinh</span></strong>.</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" onclick="loadCachedProfileAndGoDashboard()" class="btn btn-primary" style="padding: 6px 14px; font-size: 12px;">Xem kết quả ngay</button>
+            <button type="button" onclick="dismissCacheAlert()" class="btn btn-secondary" style="padding: 6px 10px; font-size: 12px;">Bỏ qua</button>
+          </div>
         </div>
 
-        <form id="student-profile-form" onsubmit="event.preventDefault(); goToScreen(2);">
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-            <div class="form-group">
-              <label class="form-label" for="user-fullname">Họ và tên học sinh</label>
-              <input type="text" id="user-fullname" required class="form-control" placeholder="Ví dụ: Nguyễn Minh An" value="Nguyễn Minh An">
-            </div>
+        <!-- Mode Toggle (Benchmark PHHS: Fast-Track 3 mins vs Deep-Dive 15 mins) -->
+        <div style="display: flex; gap: 8px; margin-bottom: 24px; background: rgba(0,0,0,0.35); padding: 5px; border-radius: 14px; border: 1px solid var(--border-color);">
+          <button type="button" id="mode-btn-fast" class="sub-tab-btn" onclick="switchScreen1Mode('fast')" style="flex: 1; text-align: center; justify-content: center; padding: 11px 16px; font-size: 13.5px; border-radius: 10px;">
+            ⚡ Khảo sát Nhanh (3 phút)
+          </button>
+          <button type="button" id="mode-btn-deep" class="sub-tab-btn active" onclick="switchScreen1Mode('deep')" style="flex: 1; text-align: center; justify-content: center; padding: 11px 16px; font-size: 13.5px; border-radius: 10px;">
+            🎯 Đánh giá Chuyên sâu (15 phút)
+          </button>
+        </div>
 
-            <div class="form-group">
-              <label class="form-label" for="user-gender">Giới tính</label>
-              <select id="user-gender" class="form-control">
-                <option value="Nam">Nam</option>
-                <option value="Nữ">Nữ</option>
-                <option value="Khác">Khác</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="user-grade">Khối lớp hiện tại</label>
-              <select id="user-grade" class="form-control">
-                <option value="Lớp 9">Lớp 9 (Chuẩn bị vào lớp 10)</option>
-                <option value="Lớp 10" selected>Lớp 10 (Bắt đầu chọn tổ hợp môn)</option>
-                <option value="Lớp 11">Lớp 11 (Chuẩn bị chứng chỉ & ĐGNL)</option>
-                <option value="Lớp 12">Lớp 12 (Xét tuyển tốt nghiệp & Đại học)</option>
-              </select>
-            </div>
+        <!-- FAST-TRACK CONTAINER (3-MINUTE ONBOARDING) -->
+        <div id="fast-track-container" style="display: none;">
+          <div style="margin-bottom: 20px;">
+            <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: var(--accent); letter-spacing: 0.5px;">Chế độ Nhanh • 5 Phản xạ Tình huống</span>
+            <h2 style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">Khám Phá Thiên Hướng & Bản Đồ Sơ Bộ</h2>
+            <p style="font-size: 13px; color: var(--text-muted); margin-top: 6px; line-height: 1.5;">
+              Dành cho học sinh và phụ huynh muốn nhận diện nhanh nhóm thiên hướng nổi trội mà không cần nhập bảng điểm chi tiết.
+            </p>
           </div>
 
-          <!-- Academic Scores Grid -->
-          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin: 16px 0;">
-            <div style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-              <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">grade</span>
-              Điểm số trung bình gần nhất (Thang điểm 10)
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+          <form id="fast-track-form" onsubmit="event.preventDefault(); submitFastTrack();">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 20px;">
               <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" for="score-math">Toán</label>
-                <input type="number" id="score-math" min="1" max="10" step="0.1" class="form-control" value="8.5" required>
+                <label class="form-label" for="fast-fullname">Họ và tên học sinh</label>
+                <input type="text" id="fast-fullname" required class="form-control" placeholder="Ví dụ: Nguyễn Minh An" value="Nguyễn Minh An">
               </div>
               <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" for="score-literature">Ngữ văn</label>
-                <input type="number" id="score-literature" min="1" max="10" step="0.1" class="form-control" value="7.5" required>
-              </div>
-              <div class="form-group" style="margin-bottom: 0;">
-                <label class="form-label" for="score-english">Tiếng Anh</label>
-                <input type="number" id="score-english" min="1" max="10" step="0.1" class="form-control" value="8.0" required>
+                <label class="form-label" for="fast-grade">Khối lớp hiện tại</label>
+                <select id="fast-grade" class="form-control">
+                  <option value="Lớp 9">Lớp 9 (Chuẩn bị vào lớp 10)</option>
+                  <option value="Lớp 10" selected>Lớp 10 (Bắt đầu chọn tổ hợp môn)</option>
+                  <option value="Lớp 11">Lớp 11 (Chuẩn bị chứng chỉ & ĐGNL)</option>
+                  <option value="Lớp 12">Lớp 12 (Xét tuyển tốt nghiệp & Đại học)</option>
+                </select>
               </div>
             </div>
-          </div>
 
-          <!-- Target Orientations -->
-          <div class="form-group">
-            <label class="form-label">Mục tiêu & Hướng đi em quan tâm nhất</label>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-top: 6px;">
-              <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                <input type="checkbox" name="target_orientations" value="tech" checked> Công nghệ & Trí tuệ nhân tạo
-              </label>
-              <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                <input type="checkbox" name="target_orientations" value="semiconductor"> Vi mạch & Bán dẫn
-              </label>
-              <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                <input type="checkbox" name="target_orientations" value="business"> Kinh tế & Phân tích Dữ liệu
-              </label>
-              <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                <input type="checkbox" name="target_orientations" value="health"> Sức khỏe & Y sinh
-              </label>
-              <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                <input type="checkbox" name="target_orientations" value="design"> Nghệ thuật số & UI/UX
-              </label>
-              <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                <input type="checkbox" name="target_orientations" value="abroad"> Du học / Học bổng quốc tế
-              </label>
-            </div>
-          </div>
-
-          <!-- OPTIONAL: Cultural Reflection Lab Details -->
-          <div style="margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 16px;">
-            <div onclick="toggleReflectionInput()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: rgba(99, 102, 241, 0.05); padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(99, 102, 241, 0.2);">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="material-symbols-outlined text-primary" style="font-size: 20px;">flare</span>
-                <span style="font-size: 13px; font-weight: 700; color: #C7D2FE;">Reflection Lab: Chiêm nghiệm văn hóa dân gian (Tùy chọn)</span>
-              </div>
-              <span class="material-symbols-outlined" id="reflection-arrow">expand_more</span>
-            </div>
-
-            <div id="reflection-input-box" style="display: none; padding: 14px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 10px 10px;">
-              <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
-                *Lưu ý: Nội dung chiêm nghiệm văn hóa, không phải đánh giá tâm lý, năng lực hay công cụ dự đoán nghề nghiệp. Bạn có thể bỏ qua nếu không có nhu cầu.
-              </p>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label class="form-label" for="user-dob">Ngày sinh (Dương lịch)</label>
-                  <input type="date" id="user-dob" class="form-control" value="2010-06-15">
+            <!-- 5 Scenario Reflex Questions -->
+            <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+              <!-- Q1: Logic -->
+              <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px;">
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px;">
+                  <span style="color: var(--primary-light); font-weight: 800; margin-right: 6px;">1. [Logic & Phân tích]</span> Khi gặp một bài toán hóc búa hoặc sự cố kỹ thuật chưa từng thấy, phản xạ tự nhiên của em là:
                 </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                  <label class="form-label" for="user-birth-hour">Khung giờ sinh (Tùy chọn)</label>
-                  <select id="user-birth-hour" class="form-control">
-                    <option value="Chưa rõ">Chưa rõ</option>
-                    <option value="Tý (23h-01h)">Tý (23h-01h)</option>
-                    <option value="Sửu (01h-03h)">Sửu (01h-03h)</option>
-                    <option value="Dần (03h-05h)">Dần (03h-05h)</option>
-                    <option value="Mão (05h-07h)">Mão (05h-07h)</option>
-                    <option value="Thìn (07h-09h)">Thìn (07h-09h)</option>
-                    <option value="Tỵ (09h-11h)">Tỵ (09h-11h)</option>
-                    <option value="Ngọ (11h-13h)" selected>Ngọ (11h-13h)</option>
-                    <option value="Mùi (13h-15h)">Mùi (13h-15h)</option>
-                    <option value="Thân (15h-17h)">Thân (15h-17h)</option>
-                    <option value="Dậu (17h-19h)">Dậu (17h-19h)</option>
-                    <option value="Tuất (19h-21h)">Tuất (19h-21h)</option>
-                    <option value="Hợi (21h-23h)">Hợi (21h-23h)</option>
-                  </select>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q1" value="I" checked>
+                    <span>Tự tìm kiếm tài liệu, giải mã nguyên lý để hiểu sâu bản chất vấn đề.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q1" value="R">
+                    <span>Bắt tay vào thực hành thử sai trực tiếp trên thiết bị/mô hình thực tế.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q1" value="E">
+                    <span>Tập hợp nhóm, trao đổi với người có kinh nghiệm để tìm giải pháp nhanh nhất.</span>
+                  </label>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div style="margin-top: 24px; display: flex; justify-content: flex-end;">
-            <button type="submit" class="btn btn-primary">
-              Tiếp tục: Sàng lọc RIASEC
-              <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+              <!-- Q2: Sáng tạo -->
+              <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px;">
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px;">
+                  <span style="color: var(--accent); font-weight: 800; margin-right: 6px;">2. [Sáng tạo & Thẩm mỹ]</span> Khi cần truyền tải một ý tưởng hoặc giải pháp mới đến mọi người, em ưu tiên:
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q2" value="A" checked>
+                    <span>Thiết kế hình ảnh, video trực quan, phối màu và bố cục ấn tượng.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q2" value="C">
+                    <span>Lập bảng biểu chi tiết, số liệu minh chứng và cấu trúc logic rõ ràng.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q2" value="E">
+                    <span>Thuyết trình truyền cảm hứng, nêu bật giá trị ứng dụng và thuyết phục người nghe.</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Q3: Công nghệ & AI -->
+              <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px;">
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px;">
+                  <span style="color: var(--secondary); font-weight: 800; margin-right: 6px;">3. [Công nghệ & AI]</span> Trước sự phát triển nhanh của các công cụ AI và tự động hóa hiện nay, em thấy mình:
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q3" value="R" checked>
+                    <span>Hào hứng dùng AI để viết mã lệnh, thiết kế kỹ thuật hoặc giải quyết tác vụ tự động.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q3" value="I">
+                    <span>Tò mò về cách thuật toán AI học hỏi và muốn nghiên cứu sâu về mô hình dữ liệu.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q3" value="S">
+                    <span>Quan tâm tới việc AI sẽ tác động thế nào đến con người, xã hội và công bằng giáo dục.</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Q4: Giao tiếp & Làm việc nhóm -->
+              <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px;">
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px;">
+                  <span style="color: #60A5FA; font-weight: 800; margin-right: 6px;">4. [Giao tiếp & Làm việc nhóm]</span> Trong một dự án tập thể hoặc hoạt động chung, vai trò em thấy tự nhiên nhất là:
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q4" value="S" checked>
+                    <span>Lắng nghe, quan tâm, kết nối các thành viên và hòa giải mâu thuẫn.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q4" value="E">
+                    <span>Định hướng mục tiêu chung, thúc đẩy tiến độ và đại diện nhóm báo cáo.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q4" value="C">
+                    <span>Theo dõi kế hoạch, ghi chép biên bản và đảm bảo tính chuẩn xác từng khâu.</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Q5: Ứng phó áp lực & Kiên trì -->
+              <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px;">
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px;">
+                  <span style="color: #F472B6; font-weight: 800; margin-right: 6px;">5. [Ứng phó áp lực & Kiên trì]</span> Khi kết quả học tập không đạt như kỳ vọng hoặc kế hoạch bị gián đoạn, em thường:
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px;">
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q5" value="I" checked>
+                    <span>Bình tĩnh phân tích nguyên nhân gốc rễ và lập lại kế hoạch cải thiện từng bước.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q5" value="R">
+                    <span>Tập trung vào hành động thực tế, giải thêm bài tập và thực hành để vượt qua điểm nghẽn.</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 10px 14px; border-radius: 8px; cursor: pointer;">
+                    <input type="radio" name="fast_q5" value="S">
+                    <span>Tâm sự với bạn bè hoặc người thân để được lắng nghe và lấy lại động lực tinh thần.</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 14px; font-size: 14.5px;">
+              ⚡ Xem Ngay Bản Đồ Hướng Nghiệp Nhanh (Fast-Track)
+              <span class="material-symbols-outlined" style="font-size: 20px;">arrow_forward</span>
             </button>
+          </form>
+        </div>
+
+        <!-- DEEP DIVE CONTAINER (15-MINUTE COMPREHENSIVE) -->
+        <div id="deep-dive-container">
+          <div style="margin-bottom: 24px;">
+            <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: var(--primary-light); letter-spacing: 0.5px;">Bước 1 trên 4 • Đánh giá Chuyên sâu</span>
+            <h2 style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">Hồ Sơ Học Thuật & Mục Tiêu Tuyển Sinh</h2>
+            <p style="font-size: 13.5px; color: var(--text-muted); margin-top: 6px; line-height: 1.5;">
+              Orion sử dụng thông tin học thuật thực tế để xây dựng các giả thiết nghề nghiệp phù hợp, không dựa trên suy đoán ngẫu nhiên.
+            </p>
           </div>
-        </form>
+
+          <form id="student-profile-form" onsubmit="event.preventDefault(); goToScreen(2);">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+              <div class="form-group">
+                <label class="form-label" for="user-fullname">Họ và tên học sinh</label>
+                <input type="text" id="user-fullname" required class="form-control" placeholder="Ví dụ: Nguyễn Minh An" value="Nguyễn Minh An">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="user-gender">Giới tính</label>
+                <select id="user-gender" class="form-control">
+                  <option value="Nam">Nam</option>
+                  <option value="Nữ">Nữ</option>
+                  <option value="Khác">Khác</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="user-grade">Khối lớp hiện tại</label>
+                <select id="user-grade" class="form-control">
+                  <option value="Lớp 9">Lớp 9 (Chuẩn bị vào lớp 10)</option>
+                  <option value="Lớp 10" selected>Lớp 10 (Bắt đầu chọn tổ hợp môn)</option>
+                  <option value="Lớp 11">Lớp 11 (Chuẩn bị chứng chỉ & ĐGNL)</option>
+                  <option value="Lớp 12">Lớp 12 (Xét tuyển tốt nghiệp & Đại học)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Academic Scores Grid -->
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin: 16px 0;">
+              <div style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">grade</span>
+                Điểm số trung bình gần nhất (Thang điểm 10)
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="score-math">Toán</label>
+                  <input type="number" id="score-math" min="1" max="10" step="0.1" class="form-control" value="8.5" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="score-literature">Ngữ văn</label>
+                  <input type="number" id="score-literature" min="1" max="10" step="0.1" class="form-control" value="7.5" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="score-english">Tiếng Anh</label>
+                  <input type="number" id="score-english" min="1" max="10" step="0.1" class="form-control" value="8.0" required>
+                </div>
+              </div>
+            </div>
+
+            <!-- Target Orientations -->
+            <div class="form-group">
+              <label class="form-label">Mục tiêu & Hướng đi em quan tâm nhất</label>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-top: 6px;">
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
+                  <input type="checkbox" name="target_orientations" value="tech" checked> Công nghệ & Trí tuệ nhân tạo
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
+                  <input type="checkbox" name="target_orientations" value="semiconductor"> Vi mạch & Bán dẫn
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
+                  <input type="checkbox" name="target_orientations" value="business"> Kinh tế & Phân tích Dữ liệu
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
+                  <input type="checkbox" name="target_orientations" value="health"> Sức khỏe & Y sinh
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
+                  <input type="checkbox" name="target_orientations" value="design"> Nghệ thuật số & UI/UX
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
+                  <input type="checkbox" name="target_orientations" value="abroad"> Du học / Học bổng quốc tế
+                </label>
+              </div>
+            </div>
+
+            <!-- OPTIONAL: Cultural Reflection Lab Details -->
+            <div style="margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 16px;">
+              <div onclick="toggleReflectionInput()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: rgba(99, 102, 241, 0.05); padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(99, 102, 241, 0.2);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span class="material-symbols-outlined text-primary" style="font-size: 20px;">flare</span>
+                  <span style="font-size: 13px; font-weight: 700; color: #C7D2FE;">Reflection Lab: Chiêm nghiệm văn hóa dân gian (Tùy chọn)</span>
+                </div>
+                <span class="material-symbols-outlined" id="reflection-arrow">expand_more</span>
+              </div>
+
+              <div id="reflection-input-box" style="display: none; padding: 14px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 10px 10px;">
+                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
+                  *Lưu ý: Nội dung chiêm nghiệm văn hóa, không phải đánh giá tâm lý, năng lực hay công cụ dự đoán nghề nghiệp. Bạn có thể bỏ qua nếu không có nhu cầu.
+                </p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="user-dob">Ngày sinh (Dương lịch)</label>
+                    <input type="date" id="user-dob" class="form-control" value="2010-06-15">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="user-birth-hour">Khung giờ sinh (Tùy chọn)</label>
+                    <select id="user-birth-hour" class="form-control">
+                      <option value="Chưa rõ">Chưa rõ</option>
+                      <option value="Tý (23h-01h)">Tý (23h-01h)</option>
+                      <option value="Sửu (01h-03h)">Sửu (01h-03h)</option>
+                      <option value="Dần (03h-05h)">Dần (03h-05h)</option>
+                      <option value="Mão (05h-07h)">Mão (05h-07h)</option>
+                      <option value="Thìn (07h-09h)">Thìn (07h-09h)</option>
+                      <option value="Tỵ (09h-11h)">Tỵ (09h-11h)</option>
+                      <option value="Ngọ (11h-13h)" selected>Ngọ (11h-13h)</option>
+                      <option value="Mùi (13h-15h)">Mùi (13h-15h)</option>
+                      <option value="Thân (15h-17h)">Thân (15h-17h)</option>
+                      <option value="Dậu (17h-19h)">Dậu (17h-19h)</option>
+                      <option value="Tuất (19h-21h)">Tuất (19h-21h)</option>
+                      <option value="Hợi (21h-23h)">Hợi (21h-23h)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn btn-primary">
+                Tiếp tục: Sàng lọc RIASEC
+                <span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </section>
 
@@ -285,6 +453,22 @@
           <button onclick="goToScreen(1)" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12px;">Cập nhật hồ sơ</button>
           <button onclick="window.print()" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12px;">In báo cáo</button>
         </div>
+      </div>
+
+      <!-- Fast-Track Upgrade Banner (Visible only when in Fast-Track mode) -->
+      <div id="fast-track-upgrade-banner" style="display: none; background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(99, 102, 241, 0.15)); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 14px; padding: 14px 18px; margin-bottom: 18px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span class="material-symbols-outlined text-accent" style="font-size: 28px;">bolt</span>
+          <div>
+            <div style="font-size: 14px; font-weight: 800; color: #fff;">Bạn đang xem Bản đồ sơ bộ từ Chế độ Nhanh (3 phút)</div>
+            <div style="font-size: 12px; color: #cbd5e1; margin-top: 2px;">
+              Bạn muốn kết quả chính xác 100% với điểm thi thực tế và tổ hợp môn GDPT 2018? → Bổ sung điểm số học tập ngay.
+            </div>
+          </div>
+        </div>
+        <button onclick="switchToDeepDiveFromDashboard()" class="btn btn-primary" style="font-size: 12.5px; padding: 8px 18px; white-space: nowrap;">
+          🎯 Bổ sung điểm số & Chuyên sâu ngay
+        </button>
       </div>
 
       <!-- Dashboard Main Layout -->
@@ -462,6 +646,33 @@
           </div>
         </div>
       </div>
+
+      <!-- Value-First Save & Share Card (Bottom of Screen 5) -->
+      <div class="card-box" style="margin-top: 24px; border: 1px solid rgba(16, 185, 129, 0.35); background: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(99, 102, 241, 0.06));">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+          <div style="max-width: 600px;">
+            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #6EE7B7; letter-spacing: 0.5px;">✨ Giá trị trao trước • Không cần mật khẩu</span>
+            <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin-top: 4px;">Lưu & Chia Sẻ Bản Đồ Hướng Nghiệp Cho Gia Đình</h3>
+            <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.5;">
+              Hồ sơ của em đã được tự động lưu an toàn trong trình duyệt này. Em có thể sao chép nhanh bản tóm tắt hoặc chia sẻ cho Ba Mẹ qua Zalo mà không phải qua bước đăng ký phức tạp.
+            </p>
+            <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+              <input type="text" id="share-phone" class="form-control" placeholder="Số điện thoại (tùy chọn để đồng bộ)" style="max-width: 260px; font-size: 12.5px; padding: 8px 12px;">
+              <button onclick="saveContactSync()" class="btn btn-secondary" style="font-size: 12px; padding: 8px 14px;">Lưu ghi nhớ</button>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <button onclick="copyCareerSummaryToClipboard()" class="btn btn-secondary" style="font-size: 12.5px; padding: 10px 16px;">
+              <span class="material-symbols-outlined" style="font-size: 18px;">content_copy</span>
+              Sao chép tóm tắt
+            </button>
+            <button onclick="shareViaZalo()" class="btn btn-primary" style="font-size: 12.5px; padding: 10px 18px; background: linear-gradient(135deg, #0284c7, #0369a1);">
+              <span class="material-symbols-outlined" style="font-size: 18px;">share</span>
+              Chia sẻ qua Zalo
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Experiment Reflection Modal -->
@@ -506,6 +717,113 @@
             <button type="submit" class="btn btn-primary" style="font-size:12px; padding:8px 16px;">Lưu vào Hồ Sơ Của Tôi</button>
           </div>
         </form>
+    </div>
+
+    <!-- Parent Evaluation Modal (Section 2 & 2-Way Facilitator) -->
+    <div id="parent-evaluation-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; padding:16px;">
+      <div style="background:#0f173d; border:1px solid var(--border-color); border-radius:16px; max-width:620px; width:100%; padding:24px; color:#fff; max-height:90vh; overflow-y:auto;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div>
+            <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--secondary); letter-spacing:0.5px;">Dành riêng cho Phụ huynh (60 giây)</span>
+            <h3 style="font-size:17px; font-weight:800; margin-top:2px;">Khảo Sát Nhanh Quan Sát Của Ba Mẹ Về Con</h3>
+          </div>
+          <button onclick="closeParentEvaluationModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:20px;">✕</button>
+        </div>
+        <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:18px; line-height:1.5;">
+          Khảo sát hoàn toàn khách quan, giúp nhận diện sự đồng điệu giữa mong muốn của cha mẹ và thiên hướng tự nhiên của con.
+        </p>
+
+        <form id="parent-evaluation-form" onsubmit="event.preventDefault(); submitParentEvaluation();" style="display:flex; flex-direction:column; gap:16px; font-size:13px;">
+          <!-- Q1 -->
+          <div>
+            <label style="font-weight:700; color:#C7D2FE; display:block; margin-bottom:8px;">
+              1. Quan sát sở thích: Ba Mẹ thấy con say mê và chủ động nhất khi làm việc gì?
+            </label>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q1" value="R">
+                <span>Kỹ thuật, máy móc, sửa chữa hoặc tháo lắp thiết bị thực tế</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q1" value="I" checked>
+                <span>Tìm tòi, nghiên cứu tài liệu, giải quyết câu hỏi khoa học/nguyên lý</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q1" value="A">
+                <span>Vẽ tranh, thiết kế, sáng tạo nội dung, âm nhạc hoặc nghệ thuật</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q1" value="S">
+                <span>Trò chuyện, kết nối, lắng nghe và giúp đỡ mọi người xung quanh</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q1" value="E">
+                <span>Kinh doanh, tổ chức hoạt động, thuyết phục và lãnh đạo nhóm</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q1" value="C">
+                <span>Ngăn nắp, sắp xếp kế hoạch, quản lý số liệu và chu toàn việc nhỏ</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q2 -->
+          <div>
+            <label style="font-weight:700; color:#C7D2FE; display:block; margin-bottom:8px;">
+              2. Quan sát phản ứng: Khi con gặp một bài toán khó hoặc thử thách, con thường:
+            </label>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q2" value="self_solve" checked>
+                <span>Tự mày mò, kiên trì suy nghĩ tìm cách khắc phục đến cùng</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q2" value="ai_tools">
+                <span>Chủ động tìm kiếm tài liệu trên mạng, dùng AI hoặc công cụ hỗ trợ</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q2" value="ask_adult">
+                <span>Hỏi ý kiến cha mẹ, thầy cô hoặc người lớn để được chỉ dẫn</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q2" value="hesitant">
+                <span>Dễ nản lòng, căng thẳng và cần có người đồng hành khích lệ</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Q3 -->
+          <div>
+            <label style="font-weight:700; color:#C7D2FE; display:block; margin-bottom:8px;">
+              3. Ưu tiên của gia đình: Kỳ vọng lớn nhất của Ba Mẹ cho tương lai của con là:
+            </label>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q3" value="passion" checked>
+                <span>Con được sống đúng đam mê và phát huy tối đa thế mạnh tự nhiên</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q3" value="financial_safety">
+                <span>An toàn tài chính, công việc ổn định và ít rủi ro biến động</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q3" value="global">
+                <span>Có cơ hội hội nhập quốc tế, du học hoặc làm việc toàn cầu</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.25); padding:8px 12px; border-radius:8px; cursor:pointer;">
+                <input type="radio" name="parent_q3" value="independence">
+                <span>Tự lập, có kỹ năng thích ứng linh hoạt với mọi thay đổi xã hội</span>
+              </label>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+            <button type="button" onclick="closeParentEvaluationModal()" class="btn btn-secondary" style="font-size:12px; padding:8px 16px;">Hủy</button>
+            <button type="submit" class="btn btn-primary" style="font-size:12.5px; padding:8px 20px;">
+              Lưu & Xem Thước Đo Đồng Điệu
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -527,6 +845,60 @@
     let globalStudentCareerProfile = {};
     let globalReflectionProfile = null;
     let computedRiasecScores = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+    let currentMode = 'deep';
+    let isFastTrackMode = false;
+    let globalParentAnswers = null;
+
+    // Mode Switcher (Fast-Track 3-min vs Deep-Dive 15-min)
+    function switchScreen1Mode(mode) {
+      currentMode = mode;
+      const fastBtn = document.getElementById('mode-btn-fast');
+      const deepBtn = document.getElementById('mode-btn-deep');
+      const fastContainer = document.getElementById('fast-track-container');
+      const deepContainer = document.getElementById('deep-dive-container');
+
+      if (mode === 'fast') {
+        if (fastBtn) fastBtn.classList.add('active');
+        if (deepBtn) deepBtn.classList.remove('active');
+        if (fastContainer) fastContainer.style.display = 'block';
+        if (deepContainer) deepContainer.style.display = 'none';
+      } else {
+        if (deepBtn) deepBtn.classList.add('active');
+        if (fastBtn) fastBtn.classList.remove('active');
+        if (deepContainer) deepContainer.style.display = 'block';
+        if (fastContainer) fastContainer.style.display = 'none';
+      }
+    }
+
+    // Fast-Track Submission (3-minute reflex questions)
+    function submitFastTrack() {
+      isFastTrackMode = true;
+      const name = document.getElementById('fast-fullname').value || 'Học sinh';
+      const grade = document.getElementById('fast-grade').value || 'Lớp 10';
+
+      // Sync into Deep Dive inputs
+      const userFullname = document.getElementById('user-fullname');
+      if (userFullname) userFullname.value = name;
+      const userGrade = document.getElementById('user-grade');
+      if (userGrade) userGrade.value = grade;
+
+      // Calculate RIASEC scores from 5 scenario questions
+      computedRiasecScores = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+      for (let i = 1; i <= 5; i++) {
+        const selected = document.querySelector(`input[name="fast_q${i}"]:checked`);
+        if (selected && selected.value && computedRiasecScores[selected.value] !== undefined) {
+          computedRiasecScores[selected.value] += 2;
+        }
+      }
+
+      processResultsAndShowDashboard();
+    }
+
+    function switchToDeepDiveFromDashboard() {
+      isFastTrackMode = false;
+      switchScreen1Mode('deep');
+      goToScreen(1);
+    }
 
     // Screen Management
     function goToScreen(screenNumber) {
@@ -640,6 +1012,12 @@
       document.getElementById('badge-student-name').textContent = name;
       document.getElementById('dashboard-title-name').textContent = `Báo Cáo Hướng Nghiệp: ${name} (${grade})`;
 
+      // Toggle Fast-Track upgrade banner
+      const upgradeBanner = document.getElementById('fast-track-upgrade-banner');
+      if (upgradeBanner) {
+        upgradeBanner.style.display = isFastTrackMode ? 'flex' : 'none';
+      }
+
       // Render Dashboard Parts
       renderRiasecRadarAndBars();
       renderCareerHypotheses();
@@ -648,6 +1026,9 @@
       renderFamilyBridgeTab();
       renderLivingProfileTab();
       renderReflectionTab();
+
+      // Auto-save to LocalStorage (Value-First persistence)
+      saveProfileToLocalStorage();
     }
 
     // Render RIASEC SVG Radar & Horizontal Bars
@@ -748,6 +1129,25 @@
             </div>
 
             <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">${h.desc}</p>
+
+            <!-- AI Resilience Index (Chỉ số Sẵn sàng Kỷ nguyên AI) -->
+            <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                <div style="font-size: 12px; font-weight: 800; color: #C7D2FE; display: flex; align-items: center; gap: 5px;">
+                  <span class="material-symbols-outlined" style="font-size: 16px; color: #818CF8;">smart_toy</span>
+                  Chỉ số Sẵn sàng Kỷ nguyên AI (AI Resilience)
+                </div>
+                <span style="font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 700; background: ${h.aiReplacementRisk === 'Rất thấp' || h.aiReplacementRisk === 'Thấp' ? 'rgba(16, 185, 129, 0.15); color: #34d399;' : 'rgba(245, 158, 11, 0.15); color: #fbbf24;'}">
+                  Nguy cơ thay thế bởi AI: ${h.aiReplacementRisk || 'Thấp'}
+                </span>
+              </div>
+              <div style="font-size: 12px; color: var(--text-main); margin-bottom: 4px; line-height: 1.4;">
+                ✨ <strong>Kỹ năng con người cốt lõi:</strong> ${h.humanCoreSkill || 'Tư duy phản biện & giải quyết vấn đề phức tạp'}
+              </div>
+              <div style="font-size: 11.5px; color: #cbd5e1; background: rgba(0,0,0,0.2); padding: 6px 10px; border-radius: 6px; line-height: 1.4;">
+                🤝 <strong>Chỉ số AI Synergy (Cách cộng hưởng):</strong> ${h.aiSynergyTip || 'Sử dụng AI như cộng sự khuếch đại năng suất thay vì sợ hãi'}
+              </div>
+            </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 14px;">
               <!-- Evidence For -->
@@ -910,11 +1310,96 @@
           lit: globalStudentCareerProfile.lit,
           eng: globalStudentCareerProfile.eng
         },
-        studentVoice: document.getElementById('socratic-q1').value,
-        parentConcerns: document.getElementById('socratic-q3').value
+        studentVoice: (document.getElementById('socratic-q1') && document.getElementById('socratic-q1').value) || "Em muốn học lập trình và công nghệ",
+        parentConcerns: (document.getElementById('socratic-q3') && document.getElementById('socratic-q3').value) || "Mong muốn an toàn và ổn định"
       });
 
+      let scorecardHtml = '';
+      if (!globalParentAnswers) {
+        scorecardHtml = `
+          <div style="background: rgba(99, 102, 241, 0.08); border: 1px dashed rgba(99, 102, 241, 0.35); border-radius: 14px; padding: 20px; margin-bottom: 20px; text-align: center;">
+            <span class="material-symbols-outlined text-primary" style="font-size: 32px; margin-bottom: 8px;">escalator_warning</span>
+            <h4 style="font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 6px;">
+              Mời Ba/Mẹ Đánh Giá Nhanh 3 Câu Để Mở Khóa "Thước Đo Đồng Điệu"
+            </h4>
+            <p style="font-size: 12.5px; color: var(--text-muted); max-width: 620px; margin: 0 auto 16px; line-height: 1.5;">
+              Phụ huynh không còn đứng ngoài cuộc. Chỉ mất 60 giây để Ba/Mẹ chia sẻ quan sát về con, giúp Orion đo lường mức độ đồng điệu quan điểm và gợi ý 3 chủ đề trò chuyện gắn kết gia đình.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+              <button onclick="openParentEvaluationModal()" class="btn btn-primary" style="font-size: 12.5px; padding: 8px 18px;">
+                <span class="material-symbols-outlined" style="font-size: 16px;">edit_note</span>
+                Ba/Mẹ trả lời ngay trên máy này (60s)
+              </button>
+              <button onclick="copyParentInviteLink()" class="btn btn-secondary" style="font-size: 12.5px; padding: 8px 18px;">
+                <span class="material-symbols-outlined" style="font-size: 16px;">content_copy</span>
+                Sao chép link gửi Ba/Mẹ qua Zalo/SMS
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        const topCodes = window.orionCareerEngine ? window.orionCareerEngine.getTopRiasecCodes(computedRiasecScores) : ['I', 'R'];
+        const scorecard = window.familyBridgeFacilitator.calculateAlignmentScorecard({
+          topCodes: topCodes,
+          ...globalStudentCareerProfile
+        }, globalParentAnswers);
+
+        scorecardHtml = `
+          <div style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 14px; padding: 18px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #6EE7B7; letter-spacing: 0.5px;">The Alignment Scorecard</span>
+                <h4 style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 2px;">Thước Đo Đồng Điệu Giữa Ba Mẹ & Con</h4>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 18px; font-weight: 800; color: #10B981;">${scorecard.score}% Đồng điệu</span>
+                <button onclick="openParentEvaluationModal()" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px;">
+                  <span class="material-symbols-outlined" style="font-size: 14px;">tune</span> Làm lại
+                </button>
+              </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div style="height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-bottom: 14px;">
+              <div style="height: 100%; width: ${scorecard.score}%; background: linear-gradient(90deg, #10B981, #6366F1); border-radius: 4px; transition: width 0.6s ease;"></div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 14px;">
+              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px;">
+                <div style="font-size: 12px; font-weight: 700; color: #6EE7B7; margin-bottom: 4px;">🤝 Điểm chung lớn nhất</div>
+                <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin: 0;">${scorecard.sharedStrengths}</p>
+              </div>
+              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px;">
+                <div style="font-size: 12px; font-weight: 700; color: #FCD34D; margin-bottom: 4px;">💡 Khoảng lệch nhận thức cần lắng nghe</div>
+                <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin: 0;">${scorecard.perceptualGap}</p>
+              </div>
+            </div>
+
+            <div style="margin-top: 14px;">
+              <div style="font-size: 12.5px; font-weight: 700; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">forum</span>
+                3 Thẻ Gợi Ý Khởi Đầu Đối Thoại (Conversation Starter Cards)
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
+                ${scorecard.conversationStarters.map((starter, i) => `
+                  <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="font-size: 11px; font-weight: 800; color: var(--primary-light); text-transform: uppercase; margin-bottom: 6px;">
+                      Thẻ ${i+1}: ${starter.tag}
+                    </div>
+                    <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; font-style: italic; margin: 0;">
+                      ${starter.question}
+                    </p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
       document.getElementById('family-bridge-content-box').innerHTML = `
+        ${scorecardHtml}
+
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 16px;">
           <!-- Student Side -->
           <div style="background: rgba(99, 102, 241, 0.04); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 12px; padding: 16px;">
@@ -1184,9 +1669,193 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
+    // ==================== PARENT-CHILD ALIGNMENT CONTROLLER ====================
+    function openParentEvaluationModal() {
+      const modal = document.getElementById('parent-evaluation-modal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeParentEvaluationModal() {
+      const modal = document.getElementById('parent-evaluation-modal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function submitParentEvaluation() {
+      const q1 = document.querySelector('input[name="parent_q1"]:checked')?.value || 'I';
+      const q2 = document.querySelector('input[name="parent_q2"]:checked')?.value || 'self_solve';
+      const q3 = document.querySelector('input[name="parent_q3"]:checked')?.value || 'passion';
+
+      globalParentAnswers = {
+        q1_interest: q1,
+        q2_reaction: q2,
+        q3_priority: q3
+      };
+
+      saveProfileToLocalStorage();
+      closeParentEvaluationModal();
+      renderFamilyBridgeTab();
+      alert("Đã ghi nhận góc nhìn của Ba Mẹ! Thước Đo Đồng Điệu đã được mở khóa thành công.");
+    }
+
+    function copyParentInviteLink() {
+      const url = window.location.origin + window.location.pathname + `?parent_mode=true&ref=family`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+          alert("Đã sao chép liên kết dành cho Phụ huynh: " + url + "\nBa Mẹ mở link này sẽ vào thẳng mục đánh giá 60 giây.");
+        }).catch(() => {
+          prompt("Sao chép link gửi Ba Mẹ:", url);
+        });
+      } else {
+        prompt("Sao chép link gửi Ba Mẹ:", url);
+      }
+    }
+
+    // ==================== VALUE-FIRST SAVE & PERSISTENCE CONTROLLER ====================
+    function saveProfileToLocalStorage() {
+      try {
+        const payload = {
+          profile: globalStudentCareerProfile,
+          riasecScores: computedRiasecScores,
+          isFastTrack: isFastTrackMode,
+          parentAnswers: globalParentAnswers,
+          updatedAt: new Date().toISOString()
+        };
+        localStorage.setItem('orion_profile_cache_v1', JSON.stringify(payload));
+      } catch (e) {
+        console.warn('Cannot save to localStorage:', e);
+      }
+    }
+
+    function checkLocalStorageCache() {
+      try {
+        const saved = localStorage.getItem('orion_profile_cache_v1');
+        if (!saved) return;
+        const data = JSON.parse(saved);
+        if (data && data.profile && data.profile.name) {
+          const alertBox = document.getElementById('local-cache-restore-alert');
+          const nameSpan = document.getElementById('cached-student-name');
+          if (alertBox && nameSpan) {
+            nameSpan.textContent = `${data.profile.name} (${data.profile.grade || 'Lớp 10'})`;
+            alertBox.style.display = 'flex';
+          }
+        }
+      } catch (e) {
+        console.warn('Cannot check localStorage cache:', e);
+      }
+    }
+
+    function dismissCacheAlert() {
+      const alertBox = document.getElementById('local-cache-restore-alert');
+      if (alertBox) alertBox.style.display = 'none';
+    }
+
+    function loadCachedProfileAndGoDashboard() {
+      try {
+        const saved = localStorage.getItem('orion_profile_cache_v1');
+        if (!saved) return;
+        const data = JSON.parse(saved);
+        if (data.profile) globalStudentCareerProfile = data.profile;
+        if (data.riasecScores) computedRiasecScores = data.riasecScores;
+        if (typeof data.isFastTrack !== 'undefined') isFastTrackMode = data.isFastTrack;
+        if (data.parentAnswers) globalParentAnswers = data.parentAnswers;
+
+        if (globalStudentCareerProfile.name) {
+          const fn = document.getElementById('user-fullname');
+          const ffn = document.getElementById('fast-fullname');
+          if (fn) fn.value = globalStudentCareerProfile.name;
+          if (ffn) ffn.value = globalStudentCareerProfile.name;
+        }
+        if (globalStudentCareerProfile.grade) {
+          const gr = document.getElementById('user-grade');
+          const fgr = document.getElementById('fast-grade');
+          if (gr) gr.value = globalStudentCareerProfile.grade;
+          if (fgr) fgr.value = globalStudentCareerProfile.grade;
+        }
+
+        collectProfilesAndRenderDashboard();
+        goToScreen(5);
+      } catch (e) {
+        console.warn('Error loading cached profile:', e);
+      }
+    }
+
+    function copyCareerSummaryToClipboard() {
+      const name = globalStudentCareerProfile.name || 'Học sinh';
+      const grade = globalStudentCareerProfile.grade || 'Lớp 10';
+      const topCodes = window.orionCareerEngine ? window.orionCareerEngine.getTopRiasecCodes(computedRiasecScores).slice(0, 3).join('') : 'IR';
+      
+      const hypotheses = window.orionCareerEngine ? window.orionCareerEngine.generateCareerHypotheses({
+        riasecScores: computedRiasecScores,
+        academic: {
+          math: globalStudentCareerProfile.math,
+          lit: globalStudentCareerProfile.lit,
+          eng: globalStudentCareerProfile.eng
+        },
+        targets: globalStudentCareerProfile.targets
+      }) : [];
+
+      const topCareers = hypotheses.slice(0, 3).map((h, i) => `${i + 1}. ${h.name} (${h.signalLevelLabel || 'Tín hiệu tốt'})`).join('\n');
+      const shareUrl = window.location.origin + window.location.pathname + `?ref=share`;
+
+      const summary = `🌟 BẢN ĐỒ HƯỚNG NGHIỆP — ORION PATH AI\n` +
+        `👤 Học sinh: ${name} (${grade})\n` +
+        `📊 Mã thiên hướng RIASEC: ${topCodes}\n` +
+        `💼 Top giả thiết nghề nghiệp phù hợp:\n${topCareers}\n` +
+        `🔗 Xem chi tiết tại: ${shareUrl}`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(summary).then(() => {
+          alert("Đã sao chép tóm tắt định hướng vào bộ nhớ tạm! Em có thể dán (Paste) để gửi cho Ba Mẹ.");
+        }).catch(() => {
+          prompt("Sao chép tóm tắt dưới đây:", summary);
+        });
+      } else {
+        prompt("Sao chép tóm tắt dưới đây:", summary);
+      }
+    }
+
+    function shareViaZalo() {
+      const shareUrl = window.location.origin + window.location.pathname + `?ref=zalo`;
+      window.open(`https://zalo.me/share?url=${encodeURIComponent(shareUrl)}`, '_blank');
+    }
+
+    function saveContactSync() {
+      const phone = document.getElementById('share-phone')?.value;
+      if (!phone) {
+        alert("Vui lòng nhập số điện thoại để đồng bộ hồ sơ.");
+        return;
+      }
+      saveProfileToLocalStorage();
+      alert(`Đã lưu số điện thoại ${phone} để đồng bộ hồ sơ định hướng.`);
+    }
+
     // On Load
     window.addEventListener('DOMContentLoaded', () => {
       initRiasecScreen();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('parent_mode') === 'true') {
+        try {
+          const saved = localStorage.getItem('orion_profile_cache_v1');
+          if (saved) {
+            const data = JSON.parse(saved);
+            if (data.profile) globalStudentCareerProfile = data.profile;
+            if (data.riasecScores) computedRiasecScores = data.riasecScores;
+            if (data.parentAnswers) globalParentAnswers = data.parentAnswers;
+          }
+        } catch (e) {}
+
+        collectProfilesAndRenderDashboard();
+        goToScreen(5);
+        switchDashboardTab('family');
+        if (!globalParentAnswers) {
+          setTimeout(() => {
+            openParentEvaluationModal();
+          }, 500);
+        }
+      } else {
+        checkLocalStorageCache();
+      }
     });
   </script>
 </body>

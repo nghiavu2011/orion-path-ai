@@ -126,7 +126,10 @@ class OrionCareerEngine {
         pathways: educationPathsList,
         salary: career.salary,
         laborDemand: career.laborDemand,
-        aiAdaptability: career.aiAdaptability
+        aiAdaptability: career.aiAdaptability,
+        aiReplacementRisk: career.aiReplacementRisk || 'Thấp',
+        humanCoreSkill: career.humanCoreSkill || 'Tư duy logic & Sáng tạo',
+        aiSynergyTip: career.aiSynergyTip || 'Ứng dụng AI như trợ lý tăng tốc độ công việc'
       });
     });
 
@@ -185,7 +188,10 @@ class OrionCareerEngine {
           experiment: experiments[0] || null,
           educationPaths,
           pathways: educationPaths,
-          salary: item.salary || { range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.", note: "Tham khảo khảo sát thị trường" }
+          salary: item.salary || { range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.", note: "Tham khảo khảo sát thị trường" },
+          aiReplacementRisk: item.aiReplacementRisk || 'Thấp',
+          humanCoreSkill: item.humanCoreSkill || 'Tư duy logic & Sáng tạo',
+          aiSynergyTip: item.aiSynergyTip || 'Ứng dụng AI như trợ lý tăng tốc độ công việc'
         };
       });
 

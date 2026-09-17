@@ -161,7 +161,51 @@ assert.strictEqual(privacyHtml.includes('/api/chat'), true, 'Must document data 
 assert.strictEqual(privacyHtml.includes('Data NOT Collected'), true, 'Must document data not collected');
 console.log('✓ Test 11 Passed: Privacy copy accurately reflects implementation.');
 
+console.log('--- TEST 12: Parent-Child Alignment Scorecard (Section 2 Benchmark) ---');
+const scorecard1 = facilitator.calculateAlignmentScorecard(
+  { topCodes: ['I', 'R'] },
+  { q1_interest: 'I', q2_reaction: 'self_solve', q3_priority: 'passion' }
+);
+assert.ok(scorecard1.score >= 60 && scorecard1.score <= 96, 'Alignment score between 60% and 96%');
+assert.ok(typeof scorecard1.sharedStrengths === 'string' && scorecard1.sharedStrengths.length > 10);
+assert.ok(typeof scorecard1.perceptualGap === 'string' && scorecard1.perceptualGap.length > 10);
+assert.strictEqual(Array.isArray(scorecard1.conversationStarters), true);
+assert.strictEqual(scorecard1.conversationStarters.length, 3, 'Must provide 3 conversation starters');
+scorecard1.conversationStarters.forEach(cs => {
+  assert.ok(cs.tag, 'Starter must have tag');
+  assert.ok(cs.question, 'Starter must have question');
+});
+
+const scorecard2 = facilitator.calculateAlignmentScorecard(
+  { topCodes: ['I', 'R'] },
+  { q1_interest: 'A', q2_reaction: 'hesitant', q3_priority: 'financial_safety' }
+);
+assert.ok(scorecard2.score < scorecard1.score, 'Mismatch scenario should have lower alignment score');
+assert.ok(scorecard2.perceptualGap.includes('an toàn tài chính'));
+console.log('✓ Test 12 Passed: Parent-Child Alignment Scorecard and 3 conversation starter cards verified.');
+
+console.log('--- TEST 13: AI Resilience Index in Careers Database & Hypotheses (Section 21) ---');
+Object.values(CAREERS_DATABASE).forEach(career => {
+  assert.ok(career.aiReplacementRisk, `Career ${career.id} must have aiReplacementRisk`);
+  assert.ok(['Rất thấp', 'Thấp', 'Trung bình', 'Cao'].includes(career.aiReplacementRisk), `Career ${career.id} risk valid`);
+  assert.ok(career.humanCoreSkill, `Career ${career.id} must have humanCoreSkill`);
+  assert.ok(career.aiSynergyTip, `Career ${career.id} must have aiSynergyTip`);
+});
+
+const generatedHypotheses = engine.generateCareerHypotheses({
+  riasecScores: { R: 4, I: 4, A: 0, S: 1, E: 1, C: 1 },
+  academic: { math: 9.0, lit: 7.0, eng: 8.5 },
+  targets: ['tech']
+});
+generatedHypotheses.forEach(h => {
+  assert.ok(h.aiReplacementRisk, 'Generated hypothesis must have aiReplacementRisk');
+  assert.ok(h.humanCoreSkill, 'Generated hypothesis must have humanCoreSkill');
+  assert.ok(h.aiSynergyTip, 'Generated hypothesis must have aiSynergyTip');
+});
+console.log('✓ Test 13 Passed: AI Resilience Index properties verified in database and generated hypotheses.');
+
 console.log('\n==========================================');
-console.log('ALL 11 PRODUCTION ENGINE TESTS PASSED 100%');
+console.log('ALL 13 PRODUCTION ENGINE TESTS PASSED 100%');
 console.log('==========================================');
+
 

@@ -79,6 +79,92 @@ class FamilyBridgeFacilitator {
       }
     };
   }
+
+  /**
+   * Tính toán Thước đo Đồng điệu giữa Phụ huynh và Học sinh (Parent-Child Alignment Scorecard)
+   * @param {object} studentData { name, topCodes: ['I', 'R'], targets: ['tech'] }
+   * @param {object} parentAnswers { q1_interest: 'R', q2_reaction: 'self_solve', q3_priority: 'passion' }
+   * @returns {object} { score: number, sharedStrengths: string, perceptualGap: string, conversationStarters: Array }
+   */
+  calculateAlignmentScorecard(studentData = {}, parentAnswers = {}) {
+    const studentCodes = studentData.topCodes || ['I', 'R'];
+    const pInterest = parentAnswers.q1_interest || 'I';
+    const pReaction = parentAnswers.q2_reaction || 'self_solve';
+    const pPriority = parentAnswers.q3_priority || 'passion';
+
+    let score = 40;
+
+    const riasecNames = {
+      R: 'Kỹ thuật / Thực hành',
+      I: 'Nghiên cứu / Phân tích',
+      A: 'Sáng tạo / Nghệ thuật',
+      S: 'Xã hội / Giúp đỡ',
+      E: 'Quản lý / Kinh doanh',
+      C: 'Quy chuẩn / Tổ chức'
+    };
+
+    let interestMatched = false;
+    if (studentCodes[0] === pInterest) {
+      score += 35;
+      interestMatched = true;
+    } else if (studentCodes.includes(pInterest)) {
+      score += 28;
+      interestMatched = true;
+    } else {
+      score += 18;
+    }
+
+    if (pReaction === 'self_solve' || pReaction === 'ai_tools') {
+      score += 15;
+    } else if (pReaction === 'ask_adult') {
+      score += 12;
+    } else {
+      score += 8;
+    }
+
+    if (pPriority === 'passion' || pPriority === 'independence') {
+      score += 10;
+    } else {
+      score += 8;
+    }
+
+    score = Math.min(Math.max(score, 60), 96);
+
+    const pInterestName = riasecNames[pInterest] || pInterest;
+    const sInterestName = riasecNames[studentCodes[0]] || studentCodes[0];
+
+    const sharedStrengths = interestMatched
+      ? `Cả Ba Mẹ và con đều nhận thấy thế mạnh nổi trội ở nhóm ${pInterestName}. Đây là nền tảng vững chắc nhất để cùng định hướng.`
+      : `Ba Mẹ nhận thấy con say mê ở mảng ${pInterestName}, trong khi con đang tự khám phá nhiều hơn ở mảng ${sInterestName}. Cả hai góc nhìn đều là mảnh ghép giá trị.`;
+
+    const perceptualGap = (pPriority === 'financial_safety')
+      ? `Ba Mẹ đặc biệt chú trọng sự an toàn tài chính và việc làm ổn định, trong khi con có xu hướng muốn sống trọn vẹn với đam mê và trải nghiệm mới.`
+      : (pPriority === 'global')
+      ? `Gia đình mong muốn con có cơ hội hội nhập quốc tế, trong khi con đang cần thời gian xây dựng sự tự tin với năng lực nội tại.`
+      : `Cả nhà đều chung mong muốn con tự lập, nhưng cần thống nhất về lộ trình từng bước để không tạo áp lực quá tải.`;
+
+    const conversationStarters = [
+      {
+        tag: "Về sự an toàn & Cơ hội",
+        question: `“Ba Mẹ thấy con có tiềm năng ở ${pInterestName}. Con nghĩ sao nếu chúng mình cùng tìm hiểu các ngành vừa có thu nhập ổn định vừa được làm đúng sở thích này?”`
+      },
+      {
+        tag: "Về cách vượt qua áp lực",
+        question: `“Khi gặp bài toán khó hoặc bài tập phức tạp, con thích Ba Mẹ đồng hành hỗ trợ hay để con tự do mày mò thử nghiệm trước?”`
+      },
+      {
+        tag: "Thử nghiệm cuối tuần",
+        question: `“Cuối tuần này, Ba Mẹ cùng con dành 60 phút làm một Thử nghiệm nhỏ (Mini Experiment) trong báo cáo Orion để cả nhà cùng kiểm chứng nhé?”`
+      }
+    ];
+
+    return {
+      score,
+      sharedStrengths,
+      perceptualGap,
+      conversationStarters
+    };
+  }
 }
 
 if (typeof window !== 'undefined') {
