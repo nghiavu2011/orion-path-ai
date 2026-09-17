@@ -150,7 +150,10 @@ const indexHtml = fs.readFileSync('./index.html', 'utf8');
 assert.strictEqual(indexHtml.includes('Khảo sát lương: 18 - 45 tr/tháng'), false, 'index.html must not contain unsourced 18-45 salary');
 assert.strictEqual(indexHtml.includes('mô hình Holland chuẩn xác'), false, 'Must not claim psychometric validation');
 assert.strictEqual(indexHtml.includes('Cục Bà mẹ và Trẻ em — Bộ Y tế'), true, 'Must use 2026 authority');
-console.log('✓ Test 10 Passed: Salary transparency disclaimer and RIASEC wording verified.');
+assert.strictEqual(indexHtml.includes('Thước Đo Đồng Điệu'), false, 'Must not use obsolete Thước Đo Đồng Điệu in index.html');
+assert.strictEqual(indexHtml.includes('tổ hợp môn THPT'), false, 'Must not confuse high school elective subjects with college admission combos');
+assert.strictEqual(indexHtml.includes('Bản Đồ Góc Nhìn Gia Đình'), true, 'Must use Bản Đồ Góc Nhìn Gia Đình in index.html');
+console.log('✓ Test 10 Passed: Salary transparency disclaimer, RIASEC wording, and taxonomy verified.');
 
 console.log('--- TEST 11: Privacy Policy Local Storage & 5 Data Tiers Audit ---');
 const privacyHtml = fs.readFileSync('./privacy.html', 'utf8');
@@ -159,7 +162,18 @@ assert.strictEqual(privacyHtml.includes('Local Browser Persistence via localStor
 assert.strictEqual(privacyHtml.includes('Temporary State'), true, 'Must document temporary state');
 assert.strictEqual(privacyHtml.includes('/api/chat'), true, 'Must document data sent to /api/chat');
 assert.strictEqual(privacyHtml.includes('Data NOT Collected'), true, 'Must document data not collected');
-console.log('✓ Test 11 Passed: Privacy copy accurately reflects implementation.');
+assert.strictEqual(privacyHtml.includes('không được Orion lưu vào cơ sở dữ liệu máy chủ'), true, 'Must accurately describe student name local storage');
+assert.strictEqual(privacyHtml.includes('Thiết kế ưu tiên quyền riêng tư'), true, 'Must use Thiết kế ưu tiên quyền riêng tư');
+
+const dataSourcesHtml = fs.readFileSync('./data-sources.html', 'utf8');
+assert.strictEqual(dataSourcesHtml.includes('The Future of Jobs Report 2025'), true, 'Must cite WEF 2025 report');
+assert.strictEqual(dataSourcesHtml.includes('task taxonomy'), true, 'Must clarify O*NET role as task taxonomy');
+assert.strictEqual(dataSourcesHtml.includes('15% hay 92/100'), false, 'Must not mention obsolete false precision numbers');
+
+const methodologyHtml = fs.readFileSync('./methodology.html', 'utf8');
+assert.strictEqual(methodologyHtml.includes('5 Thành Phần'), true, 'Must explain 5-part student model');
+assert.strictEqual(methodologyHtml.includes('Qualitative AI Resilience'), true, 'Must explain qualitative AI resilience framework');
+console.log('✓ Test 11 Passed: Privacy copy, data sources citations, and methodology 5-part model accurately verified.');
 
 console.log('--- TEST 12: Parent-Child Alignment Scorecard (Section 2 Benchmark) ---');
 const scorecard1 = facilitator.calculateAlignmentScorecard(
@@ -182,7 +196,11 @@ const scorecard2 = facilitator.calculateAlignmentScorecard(
 );
 assert.ok(scorecard2.score < scorecard1.score, 'Mismatch scenario should have lower alignment score');
 assert.ok(scorecard2.perceptualGap.includes('an toàn tài chính'));
-console.log('✓ Test 12 Passed: Parent-Child Alignment Scorecard and 3 conversation starter cards verified.');
+assert.strictEqual(Array.isArray(scorecard1.areasOfAgreement), true, 'Must have areasOfAgreement');
+assert.strictEqual(Array.isArray(scorecard1.areasRequiringDiscussion), true, 'Must have areasRequiringDiscussion');
+assert.strictEqual(scorecard1.areasOfAgreement.length >= 2, true);
+assert.strictEqual(scorecard1.areasRequiringDiscussion.length >= 2, true);
+console.log('✓ Test 12 Passed: Family Perspective Map (areas of agreement, areas requiring discussion, 3 starter cards) verified.');
 
 console.log('--- TEST 13: AI Resilience Index in Careers Database & Hypotheses (Section 21) ---');
 Object.values(CAREERS_DATABASE).forEach(career => {

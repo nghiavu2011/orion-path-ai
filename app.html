@@ -102,7 +102,7 @@
                 <label class="form-label" for="fast-grade">Khối lớp hiện tại</label>
                 <select id="fast-grade" class="form-control">
                   <option value="Lớp 9">Lớp 9 (Chuẩn bị vào lớp 10)</option>
-                  <option value="Lớp 10" selected>Lớp 10 (Bắt đầu chọn tổ hợp môn)</option>
+                  <option value="Lớp 10" selected>Lớp 10 (Bắt đầu lựa chọn môn học THPT)</option>
                   <option value="Lớp 11">Lớp 11 (Chuẩn bị chứng chỉ & ĐGNL)</option>
                   <option value="Lớp 12">Lớp 12 (Xét tuyển tốt nghiệp & Đại học)</option>
                 </select>
@@ -254,7 +254,7 @@
                 <label class="form-label" for="user-grade">Khối lớp hiện tại</label>
                 <select id="user-grade" class="form-control">
                   <option value="Lớp 9">Lớp 9 (Chuẩn bị vào lớp 10)</option>
-                  <option value="Lớp 10" selected>Lớp 10 (Bắt đầu chọn tổ hợp môn)</option>
+                  <option value="Lớp 10" selected>Lớp 10 (Bắt đầu lựa chọn môn học THPT)</option>
                   <option value="Lớp 11">Lớp 11 (Chuẩn bị chứng chỉ & ĐGNL)</option>
                   <option value="Lớp 12">Lớp 12 (Xét tuyển tốt nghiệp & Đại học)</option>
                 </select>
@@ -465,7 +465,7 @@
           <div>
             <div style="font-size: 14px; font-weight: 800; color: #fff;">Bạn đang xem Bản đồ sơ bộ từ Chế độ Nhanh (3 phút)</div>
             <div style="font-size: 12px; color: #cbd5e1; margin-top: 2px;">
-              Bạn muốn kết quả sâu sát hơn với điểm học tập thực tế và tổ hợp môn GDPT 2018? → Bổ sung điểm số học tập ngay.
+              Bạn muốn kết quả sâu sát hơn với điểm học tập thực tế, lựa chọn môn học THPT và tổ hợp xét tuyển Đại học? → Bổ sung điểm số học tập ngay.
             </div>
           </div>
         </div>
@@ -481,7 +481,7 @@
           <div style="min-width: 0;">
             <div style="font-size: 14px; font-weight: 800; color: #fff;">Chế Độ Dành Riêng Cho Phụ Huynh (Parent Companion Mode)</div>
             <div style="font-size: 12px; color: #cbd5e1; margin-top: 2px; line-height: 1.4;">
-              Ba Mẹ đang xem góc nhìn hướng nghiệp và Thước đo Đồng điệu cùng con. Mục tiêu nhằm xây dựng đối thoại tích cực, thấu cảm và không áp đặt.
+              Ba Mẹ đang xem góc nhìn hướng nghiệp và Bản đồ Góc nhìn Gia đình cùng con. Mục tiêu nhằm xây dựng đối thoại tích cực, thấu cảm và không áp đặt.
             </div>
           </div>
         </div>
@@ -572,7 +572,7 @@
             <div class="results-section">
               <h3>
                 <span class="material-symbols-outlined text-secondary">school</span>
-                Đề Xuất Tổ Hợp Môn THPT (Chương trình GDPT 2018)
+                Lựa Chọn Môn Học THPT & Tổ Hợp Xét Tuyển Đại Học (GDPT 2018)
               </h3>
               <div id="combination-recommendation-box">
                 <!-- Dynamically populated -->
@@ -727,10 +727,10 @@
       <div class="card-box" style="margin-top: 24px; border: 1px solid rgba(16, 185, 129, 0.35); background: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(99, 102, 241, 0.06));">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
           <div style="max-width: 600px;">
-            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #6EE7B7; letter-spacing: 0.5px;">✨ Quyền riêng tư tuyệt đối • Không lưu trên máy chủ</span>
+            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #6EE7B7; letter-spacing: 0.5px;">✨ Thiết kế ưu tiên quyền riêng tư • Không lưu trên máy chủ</span>
             <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin-top: 4px;">Lưu Trữ An Toàn & Chia Sẻ Cho Gia Đình</h3>
             <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.5;">
-              Hồ sơ của em được tự động lưu an toàn trong trình duyệt (localStorage) trên thiết bị này. Orion không thu thập số điện thoại hay thông tin định danh cá nhân.
+              Hồ sơ của em được tự động lưu an toàn trong trình duyệt (localStorage) trên thiết bị này. Tên hiển thị do người dùng nhập được lưu cục bộ trên thiết bị và không được Orion lưu vào cơ sở dữ liệu máy chủ.
             </p>
             <div style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
               <button onclick="openMyDataModal()" class="btn btn-secondary" style="font-size: 12px; padding: 8px 14px;">
@@ -909,7 +909,7 @@
           <button type="button" onclick="closeParentEvaluationModal()" class="btn btn-secondary" style="font-size:12px; padding:8px 16px;">Hủy</button>
           <button type="button" onclick="document.getElementById('parent-evaluation-form').requestSubmit()" class="btn btn-primary" style="font-size:12.5px; padding:8px 20px;">
             <span class="material-symbols-outlined" style="font-size: 16px;">favorite</span>
-            Lưu & Mở Khóa Thước Đo Đồng Điệu
+            Lưu & Xem Bản Đồ Góc Nhìn Gia Đình
           </button>
         </div>
       </div>
@@ -927,7 +927,7 @@
         </div>
         <div class="modal-body">
           <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5;">
-            Orion Path AI tuân thủ nguyên tắc riêng tư nghiêm ngặt: toàn bộ hồ sơ, điểm số và kết quả thử nghiệm chỉ được lưu trữ cục bộ trong bộ nhớ trình duyệt (localStorage) trên thiết bị của em. Chúng tôi không lưu giữ bản sao trên máy chủ và không thu thập số điện thoại hay căn cước công dân.
+            Orion Path AI tuân thủ nguyên tắc riêng tư nghiêm ngặt: toàn bộ hồ sơ, điểm số và kết quả thử nghiệm chỉ được lưu trữ cục bộ trong bộ nhớ trình duyệt (localStorage) trên thiết bị của em. Tên hiển thị do người dùng nhập được lưu cục bộ trên thiết bị và không được Orion lưu vào cơ sở dữ liệu máy chủ. Chúng tôi không thu thập số điện thoại hay căn cước công dân.
           </p>
 
           <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
@@ -1119,6 +1119,51 @@
       const container = document.getElementById('dashboard-next-action-card');
       if (!container) return;
 
+      const hasScores = Object.values(computedRiasecScores).some(v => v > 0);
+      const hasProfile = globalStudentCareerProfile && (globalStudentCareerProfile.name || globalStudentCareerProfile.math);
+
+      if (!hasScores && !hasProfile) {
+        container.innerHTML = `
+          <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(16, 185, 129, 0.08)); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 14px; padding: 18px 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="material-symbols-outlined text-accent" style="font-size: 22px;">flag</span>
+                <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #FCD34D; letter-spacing: 0.5px;">BƯỚC TIẾP THEO CỦA EM • KHỞI ĐỘNG HÀNH TRÌNH HƯỚNG NGHIỆP</span>
+              </div>
+              <span style="font-size: 11px; background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 6px; color: #cbd5e1;">
+                Trạng thái: <strong>Chưa có dữ liệu</strong>
+              </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px;">
+              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #64748B;">
+                <div style="font-size: 11px; font-weight: 800; color: #94A3B8; margin-bottom: 4px;">🔍 Đang tìm hiểu</div>
+                <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">Chưa xác lập giả thiết nghề nghiệp đầu tiên.</p>
+              </div>
+              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #10B981;">
+                <div style="font-size: 11px; font-weight: 800; color: #6EE7B7; margin-bottom: 4px;">🟢 Bằng chứng đã có</div>
+                <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">Chưa hoàn thành khảo sát sở thích RIASEC hoặc điểm học lực.</p>
+              </div>
+              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #F59E0B;">
+                <div style="font-size: 11px; font-weight: 800; color: #FCD34D; margin-bottom: 4px;">🔵 Bằng chứng còn thiếu</div>
+                <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">Toàn bộ dữ liệu sở thích, học lực và giá trị cá nhân.</p>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div style="font-size: 12px; color: #cbd5e1;">
+                👉 Hãy hoàn thành bài sàng lọc sở thích nghề nghiệp RIASEC (12–30 câu) để mở khóa kế hoạch hành động.
+              </div>
+              <button type="button" onclick="goToScreen(1)" class="btn btn-primary" style="font-size: 12px; padding: 8px 18px;">
+                <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span>
+                Làm bài khảo sát RIASEC ngay
+              </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
       const hypotheses = window.orionCareerEngine ? window.orionCareerEngine.generateCareerHypotheses({
         riasecScores: computedRiasecScores,
         academic: {
@@ -1131,8 +1176,21 @@
 
       const topHypothesis = hypotheses[0] || {
         name: 'Kỹ sư Vi mạch & Bán dẫn',
+        signalLevelLabel: 'Tín hiệu vừa',
+        supportingEvidence: ['Điểm Toán khá, tư duy phân tích'],
+        unknowns: ['Cảm giác xúc cảm thật khi kiểm thử mạch thực tế'],
         experiment: { id: 'exp_semiconductor_01', title: 'Thực nghiệm thiết kế mạch logic số căn bản', duration: '75 phút' }
       };
+
+      const currentExploration = topHypothesis.name;
+      const signalLabel = topHypothesis.signalLevelLabel || 'Tín hiệu khám phá';
+      const availableEvidence = (topHypothesis.supportingEvidence && topHypothesis.supportingEvidence.length > 0)
+        ? topHypothesis.supportingEvidence.slice(0, 2).join('; ')
+        : 'Tín hiệu sở thích nghề nghiệp RIASEC phù hợp';
+      const missingEvidence = (topHypothesis.unknowns && topHypothesis.unknowns.length > 0)
+        ? topHypothesis.unknowns.slice(0, 2).join('; ')
+        : 'Cảm nhận thực tế khi làm việc và mức độ kiên trì với chuyên ngành';
+
       const expTitle = (topHypothesis.experiment && topHypothesis.experiment.title) || '1 mini-project trải nghiệm thực tế';
       const expDuration = (topHypothesis.experiment && topHypothesis.experiment.duration) || '60–90 phút';
       const expId = (topHypothesis.experiment && topHypothesis.experiment.id) || 'exp_semiconductor_01';
@@ -1148,49 +1206,77 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="material-symbols-outlined text-accent" style="font-size: 22px;">flag</span>
-              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #FCD34D; letter-spacing: 0.5px;">BƯỚC TIẾP THEO CỦA EM • KẾ HOẠCH HÀNH ĐỘNG TUẦN NÀY</span>
+              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #FCD34D; letter-spacing: 0.5px;">BƯỚC TIẾP THEO CỦA EM • BẢN ĐỒ TIẾN TRÌNH HÀNH ĐỘNG</span>
             </div>
             <span style="font-size: 11px; background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 6px; color: #cbd5e1;">
-              Giả thiết dẫn đầu: <strong>${topHypothesis.name}</strong>
+              Đang tìm hiểu: <strong style="color: #6EE7B7;">${currentExploration}</strong> (${signalLabel})
             </span>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 16px;">
-            <!-- Action 1 -->
-            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #10B981;">
+          <!-- Evidence Overview (Current State) -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 14px;">
+            <div style="background: rgba(0,0,0,0.22); border-radius: 10px; padding: 12px; border-left: 3px solid #10B981;">
+              <div style="font-size: 11px; font-weight: 800; color: #6EE7B7; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+                <span class="material-symbols-outlined" style="font-size: 15px;">check_circle</span>
+                🟢 Bằng chứng đã có (Available Evidence)
+              </div>
+              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
+                ${availableEvidence}
+              </p>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.22); border-radius: 10px; padding: 12px; border-left: 3px solid #F59E0B;">
+              <div style="font-size: 11px; font-weight: 800; color: #FCD34D; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+                <span class="material-symbols-outlined" style="font-size: 15px;">help</span>
+                🔵 Bằng chứng còn thiếu (Missing Evidence)
+              </div>
+              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
+                ${missingEvidence}
+              </p>
+            </div>
+          </div>
+
+          <!-- 3 Recommended Actions -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 16px;">
+            <!-- Action 1: Experiment -->
+            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #6EE7B7;">
               <div style="font-size: 11px; font-weight: 800; color: #6EE7B7; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
                 <span class="material-symbols-outlined" style="font-size: 15px;">science</span>
                 1 Hành động tuần này (Thử nghiệm thực tế)
               </div>
               <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
-                Hoàn thành mini-project <strong>"${expTitle}"</strong> (${expDuration}) để kiểm chứng cảm xúc thật khi làm việc.
+                Làm mini-project <strong>"${expTitle}"</strong> (${expDuration}) để kiểm chứng cảm xúc thật khi thao tác.
               </p>
             </div>
 
-            <!-- Action 2 -->
+            <!-- Action 2: Family -->
             <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #6366F1;">
               <div style="font-size: 11px; font-weight: 800; color: #C7D2FE; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
-                <span class="material-symbols-outlined" style="font-size: 15px;">chat</span>
-                1 Câu hỏi thảo luận với Ba Mẹ
+                <span class="material-symbols-outlined" style="font-size: 15px;">forum</span>
+                1 Câu hỏi gợi mở cùng Ba Mẹ
               </div>
               <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
-                <em>"Bố mẹ nghĩ sao nếu con dành 2 tiếng cuối tuần này làm thử một dự án nhỏ về ${topHypothesis.name} để kiểm chứng sở thích?"</em>
+                <em>"Ba Mẹ thấy sao nếu con dành 60 phút làm thử một dự án nhỏ về ${currentExploration} để cùng kiểm chứng năng khiếu?"</em>
               </p>
             </div>
 
-            <!-- Action 3 -->
-            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #F59E0B;">
-              <div style="font-size: 11px; font-weight: 800; color: #FCD34D; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+            <!-- Action 3: Academic -->
+            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #38BDF8;">
+              <div style="font-size: 11px; font-weight: 800; color: #7DD3FC; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
                 <span class="material-symbols-outlined" style="font-size: 15px;">school</span>
-                1 Điểm tựa học tập cần lưu ý
+                1 Điểm tựa học thuật
               </div>
               <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
-                Tập trung học chắc môn Toán và Tiếng Anh để giữ lợi thế cạnh tranh với tổ hợp xét tuyển <strong>${combo.primaryCombo}</strong>.
+                Tập trung củng cố kiến thức các môn trong tổ hợp xét tuyển ĐH <strong>${combo.primaryCombo}</strong> để chuẩn bị lộ trình tốt nhất.
               </p>
             </div>
           </div>
 
-          <div style="display: flex; justify-content: flex-end;">
+          <div style="display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap;">
+            <button type="button" onclick="switchDashboardTab('family')" class="btn btn-secondary" style="font-size: 12px; padding: 8px 16px;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">escalator_warning</span>
+              Bản đồ góc nhìn gia đình
+            </button>
             <button type="button" onclick="switchDashboardTab('experiments'); startExperimentAction('${expId}');" class="btn btn-primary" style="font-size: 12px; padding: 8px 18px;">
               <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span>
               Bắt đầu thử nghiệm ngay
@@ -1714,10 +1800,10 @@
           <div style="background: rgba(99, 102, 241, 0.08); border: 1px dashed rgba(99, 102, 241, 0.35); border-radius: 14px; padding: 20px; margin-bottom: 20px; text-align: center;">
             <span class="material-symbols-outlined text-primary" style="font-size: 32px; margin-bottom: 8px;">escalator_warning</span>
             <h4 style="font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 6px;">
-              Mời Ba/Mẹ Đánh Giá Nhanh 3 Câu Để Mở Khóa "Thước Đo Đồng Điệu"
+              Mời Ba/Mẹ Đánh Giá Nhanh 3 Câu Để Mở Khóa "Bản Đồ Góc Nhìn Gia Đình"
             </h4>
             <p style="font-size: 12.5px; color: var(--text-muted); max-width: 620px; margin: 0 auto 16px; line-height: 1.5;">
-              Phụ huynh không còn đứng ngoài cuộc. Chỉ mất 60 giây để Ba/Mẹ chia sẻ quan sát về con, giúp Orion đo lường mức độ đồng điệu quan điểm và gợi ý 3 chủ đề trò chuyện gắn kết gia đình.
+              Phụ huynh không còn đứng ngoài cuộc. Chỉ mất 60 giây để Ba/Mẹ chia sẻ quan sát về con, giúp mở khóa Bản đồ Góc nhìn Gia đình (Family Perspective Map), nhận diện những điểm đồng thuận và gợi ý 3 chủ đề trò chuyện thấu cảm.
             </p>
             <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
               <button onclick="openParentEvaluationModal()" class="btn btn-primary" style="font-size: 12.5px; padding: 8px 18px;">
@@ -1738,40 +1824,48 @@
           ...globalStudentCareerProfile
         }, globalParentAnswers);
 
+        const agreementList = scorecard.areasOfAgreement || [scorecard.sharedStrengths];
+        const discussionList = scorecard.areasRequiringDiscussion || [scorecard.perceptualGap];
+
         scorecardHtml = `
           <div style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 14px; padding: 18px; margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
               <div>
-                <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #6EE7B7; letter-spacing: 0.5px;">The Alignment Scorecard</span>
-                <h4 style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 2px;">Thước Đo Đồng Điệu Giữa Ba Mẹ & Con</h4>
+                <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #6EE7B7; letter-spacing: 0.5px;">Family Perspective Map</span>
+                <h4 style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 2px;">Bản Đồ Góc Nhìn Gia Đình (Đa Chiều & Không Phán Xét)</h4>
               </div>
               <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 18px; font-weight: 800; color: #10B981;">${scorecard.score}% Đồng điệu</span>
+                <span style="font-size: 12px; font-weight: 700; color: #6EE7B7; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 10px; border-radius: 6px;">
+                  Đối thoại kiến tạo
+                </span>
                 <button onclick="openParentEvaluationModal()" class="btn btn-secondary" style="padding: 4px 10px; font-size: 11.5px;">
                   <span class="material-symbols-outlined" style="font-size: 14px;">tune</span> Làm lại
                 </button>
               </div>
             </div>
 
-            <!-- Progress Bar -->
-            <div style="height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-bottom: 14px;">
-              <div style="height: 100%; width: ${scorecard.score}%; background: linear-gradient(90deg, #10B981, #6366F1); border-radius: 4px; transition: width 0.6s ease;"></div>
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 12px; margin-bottom: 14px;">
-              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; min-width: 0; word-break: break-word;">
-                <div style="font-size: 12px; font-weight: 700; color: #6EE7B7; margin-bottom: 4px;">🤝 Điểm chung lớn nhất</div>
-                <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin: 0;">${scorecard.sharedStrengths}</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px; margin-bottom: 16px;">
+              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px; min-width: 0; word-break: break-word; border-left: 3px solid #10B981;">
+                <div style="font-size: 12px; font-weight: 700; color: #6EE7B7; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  <span class="material-symbols-outlined" style="font-size: 16px;">handshake</span> Những điểm đang đồng thuận
+                </div>
+                <ul style="font-size: 12px; color: #cbd5e1; line-height: 1.5; margin: 0; padding-left: 16px;">
+                  ${agreementList.map(pt => `<li style="margin-bottom: 4px;">${pt}</li>`).join('')}
+                </ul>
               </div>
-              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; min-width: 0; word-break: break-word;">
-                <div style="font-size: 12px; font-weight: 700; color: #FCD34D; margin-bottom: 4px;">💡 Khoảng lệch nhận thức cần lắng nghe</div>
-                <p style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin: 0;">${scorecard.perceptualGap}</p>
+              <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px; min-width: 0; word-break: break-word; border-left: 3px solid #F59E0B;">
+                <div style="font-size: 12px; font-weight: 700; color: #FCD34D; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  <span class="material-symbols-outlined" style="font-size: 16px;">forum</span> Những điểm cần trao đổi thêm
+                </div>
+                <ul style="font-size: 12px; color: #cbd5e1; line-height: 1.5; margin: 0; padding-left: 16px;">
+                  ${discussionList.map(pt => `<li style="margin-bottom: 4px;">${pt}</li>`).join('')}
+                </ul>
               </div>
             </div>
 
             <div style="margin-top: 14px;">
               <div style="font-size: 12.5px; font-weight: 700; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-                <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">forum</span>
+                <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">chat_bubble</span>
                 3 Thẻ Gợi Ý Khởi Đầu Đối Thoại (Conversation Starter Cards)
               </div>
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 10px;">
@@ -2116,7 +2210,7 @@
       saveProfileToLocalStorage();
       closeParentEvaluationModal();
       renderFamilyBridgeTab();
-      alert("Đã ghi nhận góc nhìn của Ba Mẹ! Thước Đo Đồng Điệu đã được mở khóa thành công.");
+      alert("Đã ghi nhận góc nhìn của Ba Mẹ! Bản Đồ Góc Nhìn Gia Đình đã sẵn sàng.");
     }
 
     function copyParentInviteLink() {

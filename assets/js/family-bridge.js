@@ -81,10 +81,10 @@ class FamilyBridgeFacilitator {
   }
 
   /**
-   * Tính toán Thước đo Đồng điệu giữa Phụ huynh và Học sinh (Parent-Child Alignment Scorecard)
+   * Bản đồ Góc nhìn Gia đình giữa Phụ huynh và Học sinh (Family Perspective Map)
    * @param {object} studentData { name, topCodes: ['I', 'R'], targets: ['tech'] }
-   * @param {object} parentAnswers { q1_interest: 'R', q2_reaction: 'self_solve', q3_priority: 'passion' }
-   * @returns {object} { score: number, sharedStrengths: string, perceptualGap: string, conversationStarters: Array }
+   * @param {object} parentAnswers { q1_interest: 'I', q2_reaction: 'self_solve', q3_priority: 'passion' }
+   * @returns {object} { score: number, sharedStrengths: string, perceptualGap: string, areasOfAgreement: Array, areasRequiringDiscussion: Array, conversationStarters: Array }
    */
   calculateAlignmentScorecard(studentData = {}, parentAnswers = {}) {
     const studentCodes = studentData.topCodes || ['I', 'R'];
@@ -143,6 +143,18 @@ class FamilyBridgeFacilitator {
       ? `Gia đình mong muốn con có cơ hội hội nhập quốc tế, trong khi con đang cần thời gian xây dựng sự tự tin với năng lực nội tại.`
       : `Cả nhà đều chung mong muốn con tự lập, nhưng cần thống nhất về lộ trình từng bước để không tạo áp lực quá tải.`;
 
+    const areasOfAgreement = [
+      sharedStrengths,
+      "Cả hai thế hệ đều hướng tới sự phát triển độc lập, hạnh phúc lâu dài và năng lực tự chủ của con.",
+      "Thống nhất tìm kiếm môi trường đào tạo chất lượng, minh bạch chi phí và cơ hội việc làm thực tế."
+    ];
+
+    const areasRequiringDiscussion = [
+      perceptualGap,
+      "Cân đối giữa nguyện vọng thử sức với ngành nghề mới và yêu cầu an toàn tài chính của gia đình.",
+      "Thống nhất kỳ vọng về thời gian học tập, mức độ đầu tư và phương án dự phòng khi thị trường thay đổi."
+    ];
+
     const conversationStarters = [
       {
         tag: "Về sự an toàn & Cơ hội",
@@ -159,9 +171,11 @@ class FamilyBridgeFacilitator {
     ];
 
     return {
-      score,
+      score, // Giữ nội bộ cho test/tính toán, giao diện hiển thị Bản đồ góc nhìn định tính
       sharedStrengths,
       perceptualGap,
+      areasOfAgreement,
+      areasRequiringDiscussion,
       conversationStarters
     };
   }

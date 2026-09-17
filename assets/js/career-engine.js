@@ -221,7 +221,7 @@ class OrionCareerEngine {
   }
 
   /**
-   * Đề xuất Tổ hợp môn THPT & Chiến lược học tập 3 năm
+   * Lựa chọn môn học THPT & Tổ hợp xét tuyển Đại học
    * @param {string} primary 
    * @param {object} academic 
    */
