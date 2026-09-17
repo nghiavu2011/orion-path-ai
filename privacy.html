@@ -79,7 +79,12 @@
           </div>
           <div class="p-3.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
             <strong class="text-indigo-200 block mb-1">② Lưu trữ cục bộ trên trình duyệt (Local Browser Persistence via localStorage):</strong>
-            Để học sinh có thể tiếp tục thực hiện và theo dõi tiến độ các <em>Thử Nghiệm Nghề Nghiệp (Career Experiments)</em> cũng như xem lại tiến trình thay đổi (Living Career Profile) qua thời gian, hệ thống lưu trạng thái tiến độ thử nghiệm và ghi chú phản tư cá nhân vào <code>localStorage</code> trên thiết bị của học sinh (khóa: <code>orion_career_experiments_state</code>). Dữ liệu này nằm hoàn toàn trên thiết bị của bạn, không tải lên cơ sở dữ liệu bên ngoài, và bạn có thể xóa sạch bất kỳ lúc nào bằng tính năng "Xóa dữ liệu duyệt web" của trình duyệt.
+            Để học sinh có thể tiếp tục thực hiện và theo dõi tiến độ các <em>Thử Nghiệm Nghề Nghiệp (Career Experiments)</em> cũng như lưu giữ hồ sơ tiến trình (Living Career Profile) qua thời gian, hệ thống lưu trữ cục bộ vào <code>localStorage</code> trên chính thiết bị của học sinh qua 2 khóa dữ liệu:
+            <ul class="list-disc list-inside mt-1.5 space-y-1 text-slate-300">
+              <li><code>orion_career_experiments_state</code>: Lưu trữ danh mục, tiến độ 4 giai đoạn và ghi chú phản tư của các bài thử nghiệm nghề nghiệp.</li>
+              <li><code>orion_profile_cache_v1</code>: Lưu trữ kết quả trắc nghiệm RIASEC, điểm học thuật, giá trị nghề nghiệp và các giả thiết được tạo.</li>
+            </ul>
+            Dữ liệu này nằm hoàn toàn trên thiết bị của bạn, không tải lên máy chủ ngoài. Học sinh có thể trực tiếp kiểm tra, xuất dữ liệu JSON (Export) hoặc xóa sạch hoàn toàn (Delete all local data) bất kỳ lúc nào thông qua tính năng <strong>"Dữ liệu của tôi"</strong> trong ứng dụng hoặc bằng tính năng "Xóa dữ liệu duyệt web" của trình duyệt.
           </div>
           <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
             <strong class="text-amber-200 block mb-1">③ Dữ liệu gửi đến cổng AI (/api/chat):</strong>

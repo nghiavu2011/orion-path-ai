@@ -1,5 +1,5 @@
 // Dữ liệu ngành nghề và thị trường lao động Orion Path AI
-// Chuẩn hóa theo nguyên tắc minh bạch: không bịa đặt số liệu lương, cung cấp nguồn đối chiếu.
+// Chuẩn hóa theo nguyên tắc minh bạch: mô hình tác vụ nghề nghiệp, đánh giá AI định tính, không bịa đặt số liệu.
 
 const CAREERS_DATABASE = [
   {
@@ -8,16 +8,46 @@ const CAREERS_DATABASE = [
     riasec: ["I", "R"],
     desc: "Nghiên cứu, huấn luyện các mô hình học máy (Machine Learning), xử lý ngôn ngữ tự nhiên (NLP) và thị giác máy tính để giải quyết các bài toán tự động hóa thông minh.",
     signalBase: "Phù hợp với học sinh có tư duy phân tích toán học mạnh (I) và yêu thích kỹ thuật thực hành (R).",
-    pathways: [
-      { type: "Đại học", name: "Khoa học Máy tính / Trí tuệ Nhân tạo (ĐH Bách Khoa, ĐHQG, FPT, Sư phạm Kỹ thuật)" },
-      { type: "Cao đẳng / Chứng chỉ", name: "Lập trình viên Quốc tế / Chứng chỉ Kỹ sư Dữ liệu & AI (FPT Polytechnic, Aptech)" }
+    whatYouActuallyDo: "Đọc tài liệu nghiên cứu giải thuật, chuẩn bị và làm sạch tập dữ liệu lớn, viết mã huấn luyện mô hình học máy (Python, PyTorch), đo lường độ chính xác và triển khai mô hình lên hệ thống thực tế.",
+    typicalTasks: [
+      "Tiền xử lý và làm sạch dữ liệu huấn luyện (Data preprocessing)",
+      "Huấn luyện và tinh chỉnh siêu tham số mô hình Machine Learning/Deep Learning",
+      "Đánh giá độ hội tụ và độ chính xác của mô hình trên tập kiểm thử",
+      "Đóng gói mô hình thành API phục vụ sản phẩm người dùng cuối",
+      "Theo dõi và khắc phục hiện tượng trôi dữ liệu (Data drift) khi vận hành thực tế"
     ],
+    skills: {
+      foundation: ["Đại số tuyến tính & Xác suất thống kê", "Tư duy giải thuật cơ bản", "Tiếng Anh đọc tài liệu kỹ thuật"],
+      working: ["Lập trình Python, SQL & thư viện Pandas/NumPy", "Huấn luyện mô hình Scikit-Learn/PyTorch", "Sử dụng Git & công cụ quản lý phiên bản mã nguồn"],
+      strong: ["Kiến trúc mạng Neural sâu (Transformer, CNN)", "Tối ưu hóa tài nguyên phần cứng GPU/TPU", "Đạo đức AI & Kiểm định thiên kiến dữ liệu (Bias)"]
+    },
+    evidenceStudentCanBuild: [
+      "Kho mã nguồn GitHub chứa 1 dự án phân loại ảnh hoặc chatbot mini tự xây dựng",
+      "Bài viết tóm tắt ngắn về nguyên lý hoạt động của một mô hình AI phổ biến",
+      "Chứng chỉ hoàn thành khóa học Python/Machine Learning cơ bản từ nền tảng uy tín (Coursera, Kaggle)"
+    ],
+    entryRoutes: [
+      { type: "Đại học chính quy", name: "Khoa học Máy tính / Trí tuệ Nhân tạo (ĐH Bách Khoa, ĐHQG, FPT, Sư phạm Kỹ thuật)" },
+      { type: "Cao đẳng & Đào tạo nghề", name: "Lập trình ứng dụng / Kỹ sư Dữ liệu (FPT Polytechnic, Aptech)" },
+      { type: "Tự học & Thực chiến", name: "Tham gia thi đấu Kaggle, đóng góp dự án mã nguồn mở và thực tập sớm" }
+    ],
+    pathways: [
+      { type: "Đại học chính quy", name: "Khoa học Máy tính / Trí tuệ Nhân tạo (ĐH Bách Khoa, ĐHQG, FPT, Sư phạm Kỹ thuật)" },
+      { type: "Cao đẳng & Đào tạo nghề", name: "Lập trình ứng dụng / Kỹ sư Dữ liệu (FPT Polytechnic, Aptech)" },
+      { type: "Tự học & Thực chiến", name: "Tham gia thi đấu Kaggle, đóng góp dự án mã nguồn mở và thực tập sớm" }
+    ],
+    adjacentCareers: ["Data Scientist", "Data Engineer", "MLOps Engineer", "Software Engineer", "AI Product Specialist"],
     salary: {
       range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
       source: "Báo cáo thị trường IT Việt Nam & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Nhu cầu tuyển dụng tăng trưởng cao (FPT, Viettel, VinAI, FDI)",
+    aiExposure: "Cao",
+    humanAdvantage: "Cao",
+    transformationDirection: "AI đẩy nhanh khâu viết mã lặp lại; năng lực con người tập trung vào việc đặt đúng bài toán nghiệp vụ, thiết kế kiến trúc mới và kiểm soát an toàn/đạo đức mô hình.",
+    evidenceConfidence: "Cao",
+    dataUpdated: "2026-Q1",
     aiAdaptability: "Là người trực tiếp kiến tạo và tối ưu hóa hệ thống AI",
     aiReplacementRisk: "Thấp",
     humanCoreSkill: "Tư duy trừu tượng toán học & Kiểm định đạo đức thuật toán",
@@ -44,16 +74,46 @@ const CAREERS_DATABASE = [
     riasec: ["R", "I"],
     desc: "Thiết kế mạch tích hợp (ASIC/FPGA), kiểm thử chức năng vi mạch bán dẫn phần cứng phục vụ thiết bị thông minh, ô tô điện và viễn thông.",
     signalBase: "Định hướng trọng điểm quốc gia, cực kỳ phù hợp với học sinh đam mê Vật lý, Toán và phần cứng điện tử.",
-    pathways: [
-      { type: "Đại học", name: "Kỹ thuật Điện tử - Viễn thông / Thiết kế Vi mạch (ĐH Bách Khoa HN/TP.HCM, ĐH Công nghệ ĐHQGHN)" },
-      { type: "Cao đẳng / Đào tạo nghề cao", name: "Kỹ thuật Điện tử ứng dụng (CĐ Nghề Bách Khoa, CĐ Cao Thắng)" }
+    whatYouActuallyDo: "Lập trình mô tả phần cứng (Verilog/VHDL), mô phỏng hoạt động logic của mạch tích hợp trên máy tính, chạy kiểm thử vi mạch vật lý và làm việc cùng nhà máy bán dẫn để sản xuất vi mạch chuẩn xác.",
+    typicalTasks: [
+      "Viết mã mô tả kiến trúc logic phần cứng bằng SystemVerilog/VHDL",
+      "Chạy mô phỏng kiểm thử chức năng và thời gian truyền tín hiệu trên phần mềm EDA",
+      "Phân tích tiêu thụ điện năng và diện tích chip (Power, Performance, Area - PPA)",
+      "Định tuyến vật lý (Place and Route) các cổng logic trên tấm bán dẫn",
+      "Phối hợp đo kiểm vi mạch thực tế sau khi đúc tại xưởng (Post-silicon validation)"
     ],
+    skills: {
+      foundation: ["Vật lý bán dẫn & Điện tử cơ bản", "Đại số Boole & Mạch logic số", "Đọc hiểu tiếng Anh chuyên ngành kỹ thuật"],
+      working: ["Lập trình Verilog/SystemVerilog", "Sử dụng công cụ mô phỏng EDA (ModelSim, Cadence, Synopsys)", "Kỹ năng phân tích dạng sóng tín hiệu"],
+      strong: ["Thiết kế kiến trúc vi mạch số/tương tự chuyên sâu", "Kiểm chuẩn chất lượng chip chuẩn quốc tế", "Tối ưu hóa tiêu thụ năng lượng ở mức nano-mét"]
+    },
+    evidenceStudentCanBuild: [
+      "Mô hình mạch logic số hoặc mạch cộng đã mô phỏng thành công trên Tinkercad/Logisim",
+      "Báo cáo phân tích cấu tạo và chức năng của một vi điều khiển phổ biến (Arduino, ESP32)",
+      "Giải thưởng các cuộc thi khoa học kỹ thuật (STEM/Robotics) cấp trường hoặc tỉnh"
+    ],
+    entryRoutes: [
+      { type: "Đại học chính quy", name: "Kỹ thuật Điện tử - Viễn thông / Thiết kế Vi mạch (ĐH Bách Khoa HN/TP.HCM, ĐH Công nghệ ĐHQGHN)" },
+      { type: "Cao đẳng kỹ thuật", name: "Kỹ thuật Điện tử ứng dụng / Cơ điện tử (CĐ Nghề Bách Khoa, CĐ Cao Thắng)" },
+      { type: "Chương trình chuyên biệt", name: "Khóa đào tạo nhân lực bán dẫn quốc gia hợp tác cùng Synopsys/Cadence" }
+    ],
+    pathways: [
+      { type: "Đại học chính quy", name: "Kỹ thuật Điện tử - Viễn thông / Thiết kế Vi mạch (ĐH Bách Khoa HN/TP.HCM, ĐH Công nghệ ĐHQGHN)" },
+      { type: "Cao đẳng kỹ thuật", name: "Kỹ thuật Điện tử ứng dụng / Cơ điện tử (CĐ Nghề Bách Khoa, CĐ Cao Thắng)" },
+      { type: "Chương trình chuyên biệt", name: "Khóa đào tạo nhân lực bán dẫn quốc gia hợp tác cùng Synopsys/Cadence" }
+    ],
+    adjacentCareers: ["Hardware Engineer", "Embedded Systems Engineer", "FPGA Engineer", "Firmware Engineer", "Semiconductor Test Engineer"],
     salary: {
       range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
       source: "Khảo sát Ngành Bán dẫn & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Được Chính phủ Việt Nam ưu tiên chiến lược đến năm 2030 (hợp tác Intel, Synopsys, Marvell, Amkor)",
+    aiExposure: "Vừa",
+    humanAdvantage: "Cao",
+    transformationDirection: "AI đóng vai trò tối ưu hóa bố trí linh kiện và tăng tốc kiểm thử mô phỏng; quyết định phê duyệt kiến trúc và tính an toàn vật lý tuyệt đối thuộc về kỹ sư con người.",
+    evidenceConfidence: "Cao",
+    dataUpdated: "2026-Q1",
     aiAdaptability: "Rất cao (thiết kế vi mạch vật lý đòi hỏi kiểm chứng thực nghiệm nghiêm ngặt)",
     aiReplacementRisk: "Rất thấp",
     humanCoreSkill: "Thiết kế vi mạch vật lý & Kiểm thử thực nghiệm phần cứng",
@@ -79,16 +139,46 @@ const CAREERS_DATABASE = [
     riasec: ["A", "I"],
     desc: "Nghiên cứu hành vi người dùng, vẽ luồng trải nghiệm (wireframe, user journey) và thiết kế giao diện ứng dụng di động, web trực quan, thẩm mỹ.",
     signalBase: "Giao thoa hoàn hảo giữa tư duy sáng tạo nghệ thuật (A) và nghiên cứu tâm lý thấu cảm (I/S).",
-    pathways: [
-      { type: "Đại học", name: "Thiết kế Đồ họa / Tương tác Đa phương tiện (ĐH Mỹ thuật Công nghiệp, Kiến trúc, RMIT, FPT)" },
-      { type: "Đào tạo thực chiến / Khóa học nghề", name: "Học viện Thiết kế Thực hành (ColorME, Green Academy, Arena Multimedia)" }
+    whatYouActuallyDo: "Phỏng vấn người dùng để hiểu khó khăn khi sử dụng phần mềm, phác thảo luồng điều hướng (Wireframe), thiết kế giao diện chi tiết bằng Figma và kiểm tra độ dễ dùng với người thật.",
+    typicalTasks: [
+      "Phỏng vấn người dùng thực và tổng hợp bản đồ hành trình người dùng (User Journey)",
+      "Phác thảo cấu trúc thông tin và bố cục khung dây (Wireframe/Prototype)",
+      "Xây dựng hệ thống thiết kế (Design System) gồm màu sắc, nút bấm, kiểu chữ nhất quán",
+      "Thực hiện kiểm thử mức độ tiện dụng (Usability Testing) và quan sát phản xạ người dùng",
+      "Phối hợp với đội ngũ kỹ sư phần mềm để đảm bảo giao diện hiển thị đúng thiết kế"
     ],
+    skills: {
+      foundation: ["Cảm quan thẩm mỹ & Nguyên lý thị giác cơ bản", "Tư duy thấu cảm và lắng nghe", "Giao tiếp và diễn đạt ý tưởng mạch lạc"],
+      working: ["Thành thạo công cụ thiết kế giao diện Figma", "Hiểu cấu trúc luồng người dùng và UX Research", "Nắm vững nguyên lý tương tác web và di động"],
+      strong: ["Xây dựng Design System quy mô lớn", "Phân tích dữ liệu hành vi người dùng (A/B testing, Heatmap)", "Thiết kế tiếp cận phổ quát (Accessibility WCAG)"]
+    },
+    evidenceStudentCanBuild: [
+      "Hồ sơ portfolio Figma chứa 1 bản thiết kế lại (redesign) ứng dụng phổ biến với lý do cải tiến rõ ràng",
+      "Bộ nghiên cứu nhỏ quan sát 3 bạn cùng lớp sử dụng một website trường học và đề xuất giải pháp",
+      "Bản phác thảo ý tưởng ứng dụng giải quyết một vấn đề trong đời sống học đường"
+    ],
+    entryRoutes: [
+      { type: "Đại học chính quy", name: "Thiết kế Đồ họa / Tương tác Đa phương tiện / Mỹ thuật Ứng dụng (ĐH Kiến trúc, Mỹ thuật CN, RMIT, FPT)" },
+      { type: "Học viện thực hành", name: "Khóa đào tạo chuyên sâu UI/UX thực chiến (ColorME, Green Academy, Arena Multimedia)" },
+      { type: "Tự học qua dự án", name: "Xây dựng portfolio cá nhân thực tế, tham gia cộng đồng thiết kế và thực tập từ vị trí Junior" }
+    ],
+    pathways: [
+      { type: "Đại học chính quy", name: "Thiết kế Đồ họa / Tương tác Đa phương tiện / Mỹ thuật Ứng dụng (ĐH Kiến trúc, Mỹ thuật CN, RMIT, FPT)" },
+      { type: "Học viện thực hành", name: "Khóa đào tạo chuyên sâu UI/UX thực chiến (ColorME, Green Academy, Arena Multimedia)" },
+      { type: "Tự học qua dự án", name: "Xây dựng portfolio cá nhân thực tế, tham gia cộng đồng thiết kế và thực tập từ vị trí Junior" }
+    ],
+    adjacentCareers: ["Product Designer", "UX Researcher", "Graphic Designer", "Visual Designer", "Product Manager"],
     salary: {
       range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
       source: "Báo cáo tuyển dụng Công nghệ & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Khá cao trong các công ty công nghệ, ngân hàng số và thương mại điện tử",
+    aiExposure: "Cao",
+    humanAdvantage: "Cao",
+    transformationDirection: "AI giảm thời gian vẽ các biến thể giao diện cơ bản; giá trị cốt lõi của nhà thiết kế chuyển dịch sang việc nghiên cứu tâm lý người dùng, bản sắc thương hiệu và tính nhân văn.",
+    evidenceConfidence: "Cao",
+    dataUpdated: "2026-Q1",
     aiAdaptability: "Khá (AI hỗ trợ vẽ nhưng cần con người thấu cảm trải nghiệm người dùng)",
     aiReplacementRisk: "Trung bình",
     humanCoreSkill: "Thấu cảm tâm lý người dùng sâu & Bản sắc thẩm mỹ riêng biệt",
@@ -114,16 +204,46 @@ const CAREERS_DATABASE = [
     riasec: ["I", "C"],
     desc: "Thu thập, làm sạch dữ liệu kinh doanh và chuyển đổi các con số khô khan thành biểu đồ trực quan (Dashboard), đề xuất giải pháp phát triển doanh nghiệp.",
     signalBase: "Phù hợp với học sinh mạnh về tư duy tổ chức dữ liệu ngăn nắp (C) và tò mò khám phá quy luật (I).",
-    pathways: [
-      { type: "Đại học", name: "Khoa học Dữ liệu / Hệ thống Thông tin Quản lý (ĐH Kinh tế Quốc dân, Ngoại thương, ĐHQG)" },
-      { type: "Cao đẳng / Chứng chỉ thực tế", name: "Chứng chỉ Phân tích Dữ liệu chuyên nghiệp Google / Coursera / CĐ Kinh tế" }
+    whatYouActuallyDo: "Viết câu truy vấn trích xuất dữ liệu từ kho, xử lý các ô trống hoặc số liệu sai lệch, vẽ biểu đồ báo cáo và trình bày các điểm cần cải thiện cho đội ngũ kinh doanh.",
+    typicalTasks: [
+      "Thu thập và kiểm tra tính toàn vẹn của dữ liệu từ nhiều nguồn khác nhau",
+      "Viết truy vấn SQL để lọc và tổng hợp số liệu kinh doanh",
+      "Xây dựng bảng hiển thị trực quan (Dashboard) tự động trên Tableau/Power BI",
+      "Phân tích nguyên nhân biến động doanh thu, chi phí hoặc hành vi người dùng",
+      "Thuyết trình báo cáo phân tích cho các bộ phận nghiệp vụ không am hiểu kỹ thuật"
     ],
+    skills: {
+      foundation: ["Toán thống kê mô tả", "Tư duy logic số học", "Tính cẩn thận, ngăn nắp và trung thực với số liệu"],
+      working: ["Thành thạo bảng tính Google Sheets / Excel nâng cao", "Viết câu truy vấn dữ liệu SQL", "Sử dụng công cụ trực quan hóa Power BI hoặc Tableau"],
+      strong: ["Lập trình phân tích dữ liệu Python/R", "Hiểu sâu bản chất nghiệp vụ kinh tế và vận hành", "Nghệ thuật kể chuyện bằng số liệu (Data Storytelling)"]
+    },
+    evidenceStudentCanBuild: [
+      "Bảng tính Google Sheets phân tích một bộ dữ liệu thực tế (chi tiêu cá nhân, điểm số, xu hướng âm nhạc) kèm biểu đồ",
+      "Dashboard tương tác mini chia sẻ trên Power BI Service hoặc Looker Studio",
+      "Chứng chỉ hoàn thành chương trình Phân tích Dữ liệu Google (Google Data Analytics Professional Certificate)"
+    ],
+    entryRoutes: [
+      { type: "Đại học chính quy", name: "Khoa học Dữ liệu / Hệ thống Thông tin Quản lý / Thống kê Kinh tế (ĐH Kinh tế Quốc dân, Ngoại thương, ĐHQG)" },
+      { type: "Cao đẳng & Chứng chỉ", name: "Chứng chỉ Phân tích Dữ liệu Google / Coursera / CĐ Kinh tế" },
+      { type: "Chuyển ngành từ Kinh tế/Toán", name: "Tự trau dồi SQL và trực quan hóa dữ liệu để ứng tuyển vị trí thực tập phân tích" }
+    ],
+    pathways: [
+      { type: "Đại học chính quy", name: "Khoa học Dữ liệu / Hệ thống Thông tin Quản lý / Thống kê Kinh tế (ĐH Kinh tế Quốc dân, Ngoại thương, ĐHQG)" },
+      { type: "Cao đẳng & Chứng chỉ", name: "Chứng chỉ Phân tích Dữ liệu Google / Coursera / CĐ Kinh tế" },
+      { type: "Chuyển ngành từ Kinh tế/Toán", name: "Tự trau dồi SQL và trực quan hóa dữ liệu để ứng tuyển vị trí thực tập phân tích" }
+    ],
+    adjacentCareers: ["Business Intelligence Analyst", "Product Analyst", "Operations Analyst", "Marketing Data Analyst", "Data Scientist"],
     salary: {
       range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
       source: "Vietnam Salary Guide & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Ổn định và rộng khắp mọi ngành nghề (Bán lẻ, Ngân hàng, Y tế, Giáo dục)",
+    aiExposure: "Cao",
+    humanAdvantage: "Vừa",
+    transformationDirection: "AI thay thế việc trích xuất và lọc số liệu thủ công; nhà phân tích chuyển sang vai trò cố vấn chiến lược, phát hiện bất thường và diễn giải ý nghĩa thương mại của dữ liệu.",
+    evidenceConfidence: "Cao",
+    dataUpdated: "2026-Q1",
     aiAdaptability: "Khá (AI viết SQL nhanh nhưng con người cần giải thích ý nghĩa kinh doanh)",
     aiReplacementRisk: "Trung bình",
     humanCoreSkill: "Thấu hiểu ngữ cảnh kinh doanh & Ra quyết định chiến lược",
@@ -149,16 +269,46 @@ const CAREERS_DATABASE = [
     riasec: ["I", "S"],
     desc: "Đo lường tác động môi trường, phát thải carbon và tư vấn doanh nghiệp chuyển đổi xanh, tuân thủ các tiêu chuẩn phát triển bền vững quốc tế.",
     signalBase: "Ngành nghề đón đầu xu thế toàn cầu, kết hợp giữa tình yêu môi trường/cộng đồng (S) và năng lực nghiên cứu chính sách (I).",
-    pathways: [
-      { type: "Đại học", name: "Quản lý Tài nguyên Môi trường / Kinh tế Phát triển (ĐH Bách Khoa, ĐHQG, ĐH Kinh tế TP.HCM)" },
-      { type: "Du học / Học bổng", name: "Học bổng các nước Bắc Âu / Đức / Úc chuyên ngành Sustainability" }
+    whatYouActuallyDo: "Đến nhà máy hoặc vùng sản xuất đo lường nguồn phát thải và mức dùng năng lượng, đối chiếu với tiêu chuẩn môi trường quốc tế, soạn thảo báo cáo phát triển bền vững và đào tạo văn hóa xanh cho doanh nghiệp.",
+    typicalTasks: [
+      "Khảo sát thực địa và thu thập dữ liệu tiêu thụ điện, nước, rác thải tại doanh nghiệp",
+      "Tính toán phát thải khí nhà kính (Phạm vi 1, 2, 3) theo tiêu chuẩn GHG Protocol",
+      "Đối chiếu quy định xuất khẩu xanh của thị trường châu Âu (CBAM, CSRD) và Mỹ",
+      "Lập kế hoạch giảm phát thải và chuyển đổi năng lượng tái tạo",
+      "Soạn thảo Báo cáo Phát triển Bền vững (ESG Report) định kỳ hàng năm cho công ty niêm yết"
     ],
+    skills: {
+      foundation: ["Kiến thức khoa học môi trường & Địa lý sinh thái", "Quan tâm đến biến đổi khí hậu và trách nhiệm xã hội", "Năng lực đọc hiểu văn bản pháp lý"],
+      working: ["Phương pháp kiểm kê khí nhà kính và đo đếm dấu chân carbon", "Đọc hiểu tiêu chuẩn ESG quốc tế (GRI, SASB, ISSB)", "Tiếng Anh chuyên ngành chính sách và môi trường"],
+      strong: ["Kiểm toán carbon chuyên nghiệp và đàm phán chuỗi cung ứng xanh", "Tư vấn chiến lược tài chính xanh (Green Finance/Carbon Credits)", "Kỹ năng đối thoại đa phương với chính quyền và cộng đồng địa phương"]
+    },
+    evidenceStudentCanBuild: [
+      "Báo cáo dự án kiểm toán rác thải hoặc dấu chân carbon tại gia đình/trường học trong 1 tuần",
+      "Bài phân tích về quy định giảm phát thải carbon CBAM của châu Âu ảnh hưởng thế nào đến hàng hóa Việt Nam",
+      "Giấy chứng nhận tham gia chiến dịch tình nguyện hoặc dự án môi trường cộng đồng"
+    ],
+    entryRoutes: [
+      { type: "Đại học chính quy", name: "Quản lý Tài nguyên Môi trường / Kinh tế Phát triển / Khoa học Môi trường (ĐH Bách Khoa, ĐHQG, ĐH Kinh tế TP.HCM)" },
+      { type: "Du học & Học bổng", name: "Chương trình Cử nhân/Thạc sĩ Kinh tế Xanh và Sustainability tại Bắc Âu, Đức, Úc" },
+      { type: "Chuyển giao từ Kỹ thuật/Luật", name: "Học bổ sung các chứng chỉ kiểm định ESG quốc tế và tham gia bộ phận tuân thủ doanh nghiệp" }
+    ],
+    pathways: [
+      { type: "Đại học chính quy", name: "Quản lý Tài nguyên Môi trường / Kinh tế Phát triển / Khoa học Môi trường (ĐH Bách Khoa, ĐHQG, ĐH Kinh tế TP.HCM)" },
+      { type: "Du học & Học bổng", name: "Chương trình Cử nhân/Thạc sĩ Kinh tế Xanh và Sustainability tại Bắc Âu, Đức, Úc" },
+      { type: "Chuyển giao từ Kỹ thuật/Luật", name: "Học bổ sung các chứng chỉ kiểm định ESG quốc tế và tham gia bộ phận tuân thủ doanh nghiệp" }
+    ],
+    adjacentCareers: ["Environmental Consultant", "Climate Risk Analyst", "Sustainability Communications Manager", "Green Finance Analyst", "Renewable Energy Project Manager"],
     salary: {
       range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
       source: "Khảo sát Việc làm Xanh & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Tăng trưởng nhanh do yêu cầu kiểm toán carbon từ thị trường Mỹ và EU",
+    aiExposure: "Thấp",
+    humanAdvantage: "Cao",
+    transformationDirection: "AI hỗ trợ tính toán mô hình dự báo phát thải; toàn bộ khâu thu thập hiện trường, đàm phán chính sách và thúc đẩy con người hành động cần tương tác trực tiếp của chuyên viên.",
+    evidenceConfidence: "Vừa",
+    dataUpdated: "2026-Q1",
     aiAdaptability: "Rất cao (đòi hỏi khảo sát thực địa, thấu cảm cộng đồng và đàm phán chính sách)",
     aiReplacementRisk: "Rất thấp",
     humanCoreSkill: "Khảo sát thực địa sinh thái & Đàm phán chính sách đa phương",
@@ -184,16 +334,46 @@ const CAREERS_DATABASE = [
     riasec: ["S", "I"],
     desc: "Thăm khám, chẩn đoán, điều trị và chăm sóc phục hồi sức khỏe thể chất và tinh thần cho người bệnh.",
     signalBase: "Thiên hướng phụng sự xã hội (S) và tư duy khoa học y sinh sâu sắc (I).",
-    pathways: [
-      { type: "Đại học chính quy dài hạn", name: "Bác sĩ Đa khoa / Răng Hàm Mặt (ĐH Y Hà Nội, ĐH Y Dược TP.HCM - 6 năm)" },
-      { type: "Cử nhân / Cao đẳng Y tế", name: "Điều dưỡng / Kỹ thuật Phục hồi chức năng (4 năm ĐH hoặc 3 năm Cao đẳng, cơ hội làm việc tại Nhật/Đức)" }
+    whatYouActuallyDo: "Trực tiếp thăm khám người bệnh, lắng nghe mô tả triệu chứng, thực hiện các kỹ thuật thăm khám lâm sàng, giải thích bệnh án và lên phác đồ điều trị, chăm sóc hồi phục.",
+    typicalTasks: [
+      "Thăm khám lâm sàng, hỏi bệnh sử và đánh giá thể trạng người bệnh",
+      "Chỉ định và đọc kết quả xét nghiệm, chẩn đoán hình ảnh (X-quang, MRI)",
+      "Thực hiện các thủ thuật y khoa, kê đơn thuốc và theo dõi đáp ứng điều trị",
+      "Tư vấn và giải thích tường tận phác đồ điều trị cho bệnh nhân và thân nhân",
+      "Phối hợp hội chẩn liên chuyên khoa và trực cấp cứu xử lý tình huống khẩn cấp"
     ],
+    skills: {
+      foundation: ["Nền tảng Sinh học, Hóa học vững vàng", "Lòng trắc ẩn và y đức sâu sắc", "Sức khỏe thể chất dẻo dai và kiên trì"],
+      working: ["Kỹ năng giao tiếp và lắng nghe người bệnh thấu cảm", "Quy trình vô khuẩn và thao tác sơ cấp cứu, kỹ thuật điều dưỡng chuẩn", "Khả năng giữ bình tĩnh dưới áp lực cao"],
+      strong: ["Năng lực chẩn đoán lâm sàng biện chứng chính xác", "Thao tác phẫu thuật/thủ thuật y tế tinh tế", "Cập nhật liên tục y văn và phác đồ điều trị quốc tế"]
+    },
+    evidenceStudentCanBuild: [
+      "Chứng nhận hoàn thành khóa tập huấn Sơ cấp cứu (CPR/First Aid) từ Hội Chữ Thập Đỏ",
+      "Nhật ký hoạt động tình nguyện tại các cơ sở bảo trợ xã hội hoặc trung tâm y tế",
+      "Bài nghiên cứu tổng quan ngắn về một vấn đề sức khỏe học đường (cận thị, dinh dưỡng, stress)"
+    ],
+    entryRoutes: [
+      { type: "Đại học chính quy dài hạn", name: "Bác sĩ Đa khoa / Y học Cổ truyền / Răng Hàm Mặt (ĐH Y Hà Nội, ĐH Y Dược TP.HCM - 6 năm + 18 tháng thực hành cấp chứng chỉ hành nghề)" },
+      { type: "Cử nhân / Cao đẳng Y tế", name: "Điều dưỡng / Kỹ thuật Phục hồi Chức năng (ĐH Y tế Công cộng, CĐ Y tế - cơ hội làm việc tại Nhật/Đức)" },
+      { type: "Đào tạo liên tục", name: "Chương trình Bác sĩ nội trú, Chuyên khoa 1 và tu nghiệp quốc tế" }
+    ],
+    pathways: [
+      { type: "Đại học chính quy dài hạn", name: "Bác sĩ Đa khoa / Y học Cổ truyền / Răng Hàm Mặt (ĐH Y Hà Nội, ĐH Y Dược TP.HCM - 6 năm + 18 tháng thực hành cấp chứng chỉ hành nghề)" },
+      { type: "Cử nhân / Cao đẳng Y tế", name: "Điều dưỡng / Kỹ thuật Phục hồi Chức năng (ĐH Y tế Công cộng, CĐ Y tế - cơ hội làm việc tại Nhật/Đức)" },
+      { type: "Đào tạo liên tục", name: "Chương trình Bác sĩ nội trú, Chuyên khoa 1 và tu nghiệp quốc tế" }
+    ],
+    adjacentCareers: ["Clinical Nurse", "Medical Technologist", "Public Health Specialist", "Healthcare Administrator", "Biomedical Researcher"],
     salary: {
       range: "Thu nhập thay đổi đáng kể theo kinh nghiệm, địa phương và doanh nghiệp. Xem nguồn dữ liệu.",
       source: "Báo cáo Khảo sát Y tế & Báo cáo Hướng dẫn Tiền lương",
       verified: true
     },
     laborDemand: "Nhu cầu vĩnh viễn, thiếu hụt điều dưỡng và bác sĩ chất lượng cao",
+    aiExposure: "Thấp",
+    humanAdvantage: "Cao",
+    transformationDirection: "AI đóng vai trò trợ lý đọc nhanh phim chụp và gợi ý tương tác thuốc; bác sĩ và điều dưỡng con người nắm giữ trọn vẹn trách nhiệm quyết định, chăm sóc và trao truyền sự an tâm cho người bệnh.",
+    evidenceConfidence: "Cao",
+    dataUpdated: "2026-Q1",
     aiAdaptability: "Đặc biệt an toàn trước làn sóng AI (sự ấm áp, y đức và thao tác lâm sàng của con người không thể thay thế)",
     aiReplacementRisk: "Rất thấp",
     humanCoreSkill: "Y đức, lòng trắc ẩn chạm tới bệnh nhân & Thao tác lâm sàng tinh tế",

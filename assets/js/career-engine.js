@@ -107,7 +107,7 @@ class OrionCareerEngine {
         finalUnknowns.unshift("Chưa có dữ liệu điểm học thuật THPT (chế độ Khảo sát Nhanh) để đối chiếu năng lực chuyên sâu.");
       }
       const experimentsList = career.recommendedExperiment ? [career.recommendedExperiment] : [];
-      const educationPathsList = career.pathways || [];
+      const educationPathsList = career.pathways || career.entryRoutes || [];
 
       hypotheses.push({
         id: career.id,
@@ -116,6 +116,12 @@ class OrionCareerEngine {
         name: career.name,
         field: career.field || "Công nghệ & Kỹ thuật",
         desc: career.desc,
+        whatYouActuallyDo: career.whatYouActuallyDo || career.desc,
+        typicalTasks: career.typicalTasks || [],
+        skills: career.skills || { foundation: [], working: [], strong: [] },
+        evidenceStudentCanBuild: career.evidenceStudentCanBuild || [],
+        entryRoutes: career.entryRoutes || educationPathsList,
+        adjacentCareers: career.adjacentCareers || [],
         signalLevel: signalKey, // 'strong' | 'moderate' | 'exploratory'
         signalLevelLabel: signalLabel, // 'Tín hiệu mạnh' | 'Tín hiệu vừa' | 'Đang khám phá'
         scoreRank: matchCount,
@@ -130,6 +136,11 @@ class OrionCareerEngine {
         pathways: educationPathsList,
         salary: career.salary,
         laborDemand: career.laborDemand,
+        aiExposure: career.aiExposure || 'Vừa',
+        humanAdvantage: career.humanAdvantage || 'Cao',
+        transformationDirection: career.transformationDirection || '',
+        evidenceConfidence: career.evidenceConfidence || 'Cao',
+        dataUpdated: career.dataUpdated || '2026-Q1',
         aiAdaptability: career.aiAdaptability,
         aiReplacementRisk: career.aiReplacementRisk || 'Thấp',
         humanCoreSkill: career.humanCoreSkill || 'Tư duy logic & Sáng tạo',

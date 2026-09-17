@@ -32,10 +32,14 @@
         <span>Orion Path AI</span>
       </a>
 
-      <div style="display: flex; align-items: center; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
         <span style="font-size: 12px; color: var(--text-muted); display: none;" id="active-student-badge">
           👤 <strong style="color: var(--text-main);" id="badge-student-name">Học sinh</strong>
         </span>
+        <button type="button" onclick="openMyDataModal()" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12.5px;">
+          <span class="material-symbols-outlined" style="font-size: 16px;">shield</span>
+          Dữ liệu của tôi
+        </button>
         <a href="index.html" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12.5px;">
           <span class="material-symbols-outlined" style="font-size: 16px;">home</span>
           Trang chủ
@@ -304,44 +308,43 @@
               </div>
             </div>
 
-            <!-- OPTIONAL: Cultural Reflection Lab Details -->
-            <div style="margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 16px;">
-              <div onclick="toggleReflectionInput()" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: rgba(99, 102, 241, 0.05); padding: 12px 16px; border-radius: 10px; border: 1px solid rgba(99, 102, 241, 0.2);">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <span class="material-symbols-outlined text-primary" style="font-size: 20px;">flare</span>
-                  <span style="font-size: 13px; font-weight: 700; color: #C7D2FE;">Reflection Lab: Chiêm nghiệm văn hóa dân gian (Tùy chọn)</span>
-                </div>
-                <span class="material-symbols-outlined" id="reflection-arrow">expand_more</span>
+            <!-- Core Values & Work Preferences -->
+            <div class="form-group" style="margin-top: 18px;">
+              <label class="form-label">Giá trị cốt lõi em ưu tiên (Chọn 1–3 giá trị)</label>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;">
+                <label class="chip-select-label">
+                  <input type="checkbox" name="core_values" value="Ý nghĩa xã hội" checked> Ý nghĩa xã hội
+                </label>
+                <label class="chip-select-label">
+                  <input type="checkbox" name="core_values" value="Thu nhập ổn định"> Thu nhập ổn định
+                </label>
+                <label class="chip-select-label">
+                  <input type="checkbox" name="core_values" value="Sáng tạo & tự do" checked> Sáng tạo & tự do
+                </label>
+                <label class="chip-select-label">
+                  <input type="checkbox" name="core_values" value="Cơ hội thăng tiến"> Cơ hội thăng tiến
+                </label>
+                <label class="chip-select-label">
+                  <input type="checkbox" name="core_values" value="Cân bằng cuộc sống"> Cân bằng cuộc sống
+                </label>
               </div>
+            </div>
 
-              <div id="reflection-input-box" style="display: none; padding: 14px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 10px 10px;">
-                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
-                  *Lưu ý: Nội dung chiêm nghiệm văn hóa, không phải đánh giá tâm lý, năng lực hay công cụ dự đoán nghề nghiệp. Bạn có thể bỏ qua nếu không có nhu cầu.
-                </p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                  <div class="form-group" style="margin-bottom: 0;">
-                    <label class="form-label" for="user-dob">Ngày sinh (Dương lịch)</label>
-                    <input type="date" id="user-dob" class="form-control" value="2010-06-15">
-                  </div>
-                  <div class="form-group" style="margin-bottom: 0;">
-                    <label class="form-label" for="user-birth-hour">Khung giờ sinh (Tùy chọn)</label>
-                    <select id="user-birth-hour" class="form-control">
-                      <option value="Chưa rõ">Chưa rõ</option>
-                      <option value="Tý (23h-01h)">Tý (23h-01h)</option>
-                      <option value="Sửu (01h-03h)">Sửu (01h-03h)</option>
-                      <option value="Dần (03h-05h)">Dần (03h-05h)</option>
-                      <option value="Mão (05h-07h)">Mão (05h-07h)</option>
-                      <option value="Thìn (07h-09h)">Thìn (07h-09h)</option>
-                      <option value="Tỵ (09h-11h)">Tỵ (09h-11h)</option>
-                      <option value="Ngọ (11h-13h)" selected>Ngọ (11h-13h)</option>
-                      <option value="Mùi (13h-15h)">Mùi (13h-15h)</option>
-                      <option value="Thân (15h-17h)">Thân (15h-17h)</option>
-                      <option value="Dậu (17h-19h)">Dậu (17h-19h)</option>
-                      <option value="Tuất (19h-21h)">Tuất (19h-21h)</option>
-                      <option value="Hợi (21h-23h)">Hợi (21h-23h)</option>
-                    </select>
-                  </div>
-                </div>
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">Phong cách làm việc ưa thích (Chọn các phong cách phù hợp)</label>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;">
+                <label class="chip-select-label">
+                  <input type="checkbox" name="work_preferences" value="Làm việc với con người"> Làm việc với con người
+                </label>
+                <label class="chip-select-label">
+                  <input type="checkbox" name="work_preferences" value="Làm việc với dữ liệu & logic" checked> Làm việc với dữ liệu & logic
+                </label>
+                <label class="chip-select-label">
+                  <input type="checkbox" name="work_preferences" value="Thực hành trực quan"> Thực hành trực quan
+                </label>
+                <label class="chip-select-label">
+                  <input type="checkbox" name="work_preferences" value="Nghiên cứu sâu" checked> Nghiên cứu sâu
+                </label>
               </div>
             </div>
 
@@ -361,14 +364,14 @@
       <div class="card-box" style="max-width: 840px; margin: 0 auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
           <div>
-            <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: var(--secondary); letter-spacing: 0.5px;">Bước 2 trên 4 • 30 câu hỏi Holland RIASEC</span>
-            <h2 style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">Bài Sàng Lọc Sở Thích Nghề Nghiệp RIASEC</h2>
+            <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: var(--secondary); letter-spacing: 0.5px;">Bước 2 trên 4 • 30 câu sàng lọc sở thích nghề nghiệp (Holland RIASEC)</span>
+            <h2 style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">Sàng Lọc Sở Thích Nghề Nghiệp RIASEC</h2>
           </div>
           <button onclick="goToScreen(1)" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Quay lại</button>
         </div>
 
         <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 12px 16px; font-size: 12.5px; color: #A7F3D0; margin-bottom: 20px; line-height: 1.5;">
-          <strong>Mục đích bài sàng lọc:</strong> Đo lường sở thích nghề nghiệp hiện tại dựa trên mô hình Holland RIASEC. Kết quả được tính toán hoàn toàn bằng thuật toán xác định minh bạch, không phán xét năng khiếu hay tương lai số mệnh.
+          <strong>Minh bạch định hướng:</strong> Bài sàng lọc gồm 30 hoạt động thực tế giúp nhận diện nhóm công việc em có hứng thú tự nhiên. Kết quả là điểm xuất phát để cùng xây dựng các giả thiết nghề nghiệp — không phải bài trắc nghiệm tính cách hay công cụ chỉ định nghề nghiệp duy nhất.
         </div>
 
         <form id="riasec-form" onsubmit="event.preventDefault(); submitRiasec();">
@@ -498,25 +501,36 @@
       <div class="dashboard-grid">
         <!-- Main Content Area -->
         <div>
+          <!-- BƯỚC TIẾP THEO CỦA EM (Dashboard Next Action Card) -->
+          <div id="dashboard-next-action-card" style="margin-bottom: 20px;">
+            <!-- Dynamically populated by renderDashboardNextAction() -->
+          </div>
+
           <!-- Sub-Tabs Navigation -->
           <div class="sub-tab-container">
             <button class="sub-tab-btn active" id="tab-btn-hypotheses" onclick="switchDashboardTab('hypotheses')">
-              💼 Giả Thiết Nghề Nghiệp (Hypotheses)
-            </button>
-            <button class="sub-tab-btn" id="tab-btn-academic" onclick="switchDashboardTab('academic')">
-              🎯 Tổ Hợp & Lộ Trình THPT
+              <span class="material-symbols-outlined" style="font-size: 17px;">explore</span>
+              Giả Thiết Nghề Nghiệp
             </button>
             <button class="sub-tab-btn" id="tab-btn-experiments" onclick="switchDashboardTab('experiments')">
-              🔬 Trải Nghiệm Thử (Experiments)
+              <span class="material-symbols-outlined" style="font-size: 17px;">science</span>
+              Phòng Thử Nghiệm Nghề
+            </button>
+            <button class="sub-tab-btn" id="tab-btn-academic" onclick="switchDashboardTab('academic')">
+              <span class="material-symbols-outlined" style="font-size: 17px;">school</span>
+              Lộ Trình THPT & Tuyển Sinh
             </button>
             <button class="sub-tab-btn" id="tab-btn-family" onclick="switchDashboardTab('family')">
-              👨‍👩‍👧 Cầu Nối Gia Đình (Facilitator)
+              <span class="material-symbols-outlined" style="font-size: 17px;">family_restroom</span>
+              Góc Nhìn Gia Đình
             </button>
             <button class="sub-tab-btn" id="tab-btn-living" onclick="switchDashboardTab('living')">
-              📜 Hồ Sơ Của Tôi
+              <span class="material-symbols-outlined" style="font-size: 17px;">account_circle</span>
+              Hồ Sơ Của Tôi
             </button>
             <button class="sub-tab-btn" id="tab-btn-reflection" onclick="switchDashboardTab('reflection')" style="color: #A5B4FC;">
-              🧭 Reflection Lab (Tùy chọn)
+              <span class="material-symbols-outlined" style="font-size: 17px;">auto_awesome</span>
+              Khám Phá Cá Nhân
             </button>
           </div>
 
@@ -524,7 +538,7 @@
           <div id="tab-content-hypotheses" class="tab-pane">
             <div class="results-section">
               <h3>
-                <span class="material-symbols-outlined text-primary">hypothesis</span>
+                <span class="material-symbols-outlined text-primary">explore</span>
                 Giả Thiết Nghề Nghiệp Đáng Khám Phá (3–5 Hướng Đi)
               </h3>
               <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
@@ -537,7 +551,23 @@
             </div>
           </div>
 
-          <!-- TAB 2: ACADEMIC & PATHWAYS -->
+          <!-- TAB 2: CAREER EXPERIMENTS -->
+          <div id="tab-content-experiments" class="tab-pane" style="display: none;">
+            <div class="results-section">
+              <h3>
+                <span class="material-symbols-outlined text-secondary">science</span>
+                Thư Viện Trải Nghiệm Thực Tế (Career Experiments)
+              </h3>
+              <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+                Mỗi mini-project 60–90 phút giúp em chạm vào công việc thật. Bằng chứng từ hành động thực tế luôn có giá trị hơn bài trắc nghiệm lý thuyết.
+              </p>
+              <div id="experiments-list-box">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: ACADEMIC & PATHWAYS -->
           <div id="tab-content-academic" class="tab-pane" style="display: none;">
             <div class="results-section">
               <h3>
@@ -560,27 +590,11 @@
             </div>
           </div>
 
-          <!-- TAB 3: CAREER EXPERIMENTS -->
-          <div id="tab-content-experiments" class="tab-pane" style="display: none;">
-            <div class="results-section">
-              <h3>
-                <span class="material-symbols-outlined text-secondary">science</span>
-                Thư Viện Trải Nghiệm Thực Tế (Career Experiments)
-              </h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
-                Mỗi mini-project 60–90 phút giúp em chạm vào công việc thật. Bằng chứng từ hành động thực tế luôn có giá trị hơn bài trắc nghiệm lý thuyết.
-              </p>
-              <div id="experiments-list-box">
-                <!-- Dynamically populated -->
-              </div>
-            </div>
-          </div>
-
           <!-- TAB 4: FAMILY BRIDGE -->
           <div id="tab-content-family" class="tab-pane" style="display: none;">
             <div class="results-section">
               <h3>
-                <span class="material-symbols-outlined text-tertiary">handshake</span>
+                <span class="material-symbols-outlined text-tertiary">family_restroom</span>
                 Cầu Nối Đối Thoại Gia Đình (AI Làm Điều Phối Viên)
               </h3>
               <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
@@ -596,7 +610,7 @@
           <div id="tab-content-living" class="tab-pane" style="display: none;">
             <div class="results-section">
               <h3>
-                <span class="material-symbols-outlined text-primary">history_edu</span>
+                <span class="material-symbols-outlined text-primary">account_circle</span>
                 Hồ Sơ Hướng Nghiệp Của Tôi (Living Career Profile)
               </h3>
               <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
@@ -611,9 +625,48 @@
           <!-- TAB 6: REFLECTION LAB (OPTIONAL) -->
           <div id="tab-content-reflection" class="tab-pane" style="display: none;">
             <div class="results-section" style="border-color: rgba(99, 102, 241, 0.3);">
-              <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 10px; padding: 12px; margin-bottom: 16px; font-size: 12px; color: #C7D2FE;">
-                <strong>Tuyên bố minh bạch:</strong> Nội dung chiêm nghiệm văn hóa, không phải đánh giá tâm lý, năng lực hay công cụ dự đoán nghề nghiệp. Kết quả này hoàn toàn không can thiệp vào các giả thiết nghề nghiệp ở Tab 1.
+              <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 10px; padding: 12px; margin-bottom: 16px; font-size: 12px; color: #C7D2FE; line-height: 1.5;">
+                <strong>Tuyên bố minh bạch & Cách ly hoàn toàn:</strong> Nội dung chiêm nghiệm văn hóa dân gian (Can Chi, biểu tượng Pythagoras) là góc nhìn mở rộng mang tính văn hóa và chiêm nghiệm cá nhân. Nội dung này hoàn toàn không can thiệp, không tính điểm và không ảnh hưởng đến các giả thiết nghề nghiệp hay đề xuất tổ hợp môn học ở các mục trên.
               </div>
+
+              <!-- On-demand Cultural Reflection Inputs -->
+              <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                <h4 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px;">
+                  Nhập thông tin chiêm nghiệm văn hóa dân gian (Tùy chọn)
+                </h4>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
+                  Thông tin này chỉ được xử lý tạm thời trên trình duyệt của em khi em chủ động nhấn "Xem góc nhìn chiêm nghiệm".
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px;">
+                  <div>
+                    <label class="form-label" for="lab-user-dob" style="font-size: 11.5px;">Ngày sinh (Dương lịch)</label>
+                    <input type="date" id="lab-user-dob" class="form-control" value="2010-06-15" style="font-size: 12.5px;">
+                  </div>
+                  <div>
+                    <label class="form-label" for="lab-user-birth-hour" style="font-size: 11.5px;">Khung giờ sinh (Tùy chọn)</label>
+                    <select id="lab-user-birth-hour" class="form-control" style="font-size: 12.5px;">
+                      <option value="Chưa rõ">Chưa rõ</option>
+                      <option value="Tý (23h-01h)">Tý (23h-01h)</option>
+                      <option value="Sửu (01h-03h)">Sửu (01h-03h)</option>
+                      <option value="Dần (03h-05h)">Dần (03h-05h)</option>
+                      <option value="Mão (05h-07h)">Mão (05h-07h)</option>
+                      <option value="Thìn (07h-09h)">Thìn (07h-09h)</option>
+                      <option value="Tỵ (09h-11h)">Tỵ (09h-11h)</option>
+                      <option value="Ngọ (11h-13h)" selected>Ngọ (11h-13h)</option>
+                      <option value="Mùi (13h-15h)">Mùi (13h-15h)</option>
+                      <option value="Thân (15h-17h)">Thân (15h-17h)</option>
+                      <option value="Dậu (17h-19h)">Dậu (17h-19h)</option>
+                      <option value="Tuất (19h-21h)">Tuất (19h-21h)</option>
+                      <option value="Hợi (21h-23h)">Hợi (21h-23h)</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="button" onclick="runReflectionLabOnDemand()" class="btn btn-secondary" style="font-size: 12px; padding: 8px 16px;">
+                  <span class="material-symbols-outlined" style="font-size: 15px;">auto_awesome</span>
+                  Xem góc nhìn chiêm nghiệm
+                </button>
+              </div>
+
               <div id="reflection-lab-content-box">
                 <!-- Dynamically populated -->
               </div>
@@ -674,14 +727,20 @@
       <div class="card-box" style="margin-top: 24px; border: 1px solid rgba(16, 185, 129, 0.35); background: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(99, 102, 241, 0.06));">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
           <div style="max-width: 600px;">
-            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #6EE7B7; letter-spacing: 0.5px;">✨ Giá trị trao trước • Không cần mật khẩu</span>
-            <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin-top: 4px;">Lưu & Chia Sẻ Bản Đồ Hướng Nghiệp Cho Gia Đình</h3>
+            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #6EE7B7; letter-spacing: 0.5px;">✨ Quyền riêng tư tuyệt đối • Không lưu trên máy chủ</span>
+            <h3 style="font-size: 17px; font-weight: 800; color: #fff; margin-top: 4px;">Lưu Trữ An Toàn & Chia Sẻ Cho Gia Đình</h3>
             <p style="font-size: 12.5px; color: var(--text-muted); margin-top: 4px; line-height: 1.5;">
-              Hồ sơ của em đã được tự động lưu an toàn trong trình duyệt này. Em có thể sao chép nhanh bản tóm tắt hoặc chia sẻ cho Ba Mẹ qua Zalo mà không phải qua bước đăng ký phức tạp.
+              Hồ sơ của em được tự động lưu an toàn trong trình duyệt (localStorage) trên thiết bị này. Orion không thu thập số điện thoại hay thông tin định danh cá nhân.
             </p>
-            <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
-              <input type="text" id="share-phone" class="form-control" placeholder="Số điện thoại (tùy chọn để đồng bộ)" style="max-width: 260px; font-size: 12.5px; padding: 8px 12px;">
-              <button onclick="saveContactSync()" class="btn btn-secondary" style="font-size: 12px; padding: 8px 14px;">Lưu ghi nhớ</button>
+            <div style="display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
+              <button onclick="openMyDataModal()" class="btn btn-secondary" style="font-size: 12px; padding: 8px 14px;">
+                <span class="material-symbols-outlined" style="font-size: 15px;">shield</span>
+                Quản lý Dữ liệu của tôi
+              </button>
+              <button onclick="exportMyDataJson()" class="btn btn-secondary" style="font-size: 12px; padding: 8px 14px;">
+                <span class="material-symbols-outlined" style="font-size: 15px;">download</span>
+                Xuất file JSON dự phòng
+              </button>
             </div>
           </div>
           <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
@@ -855,6 +914,49 @@
         </div>
       </div>
     </div>
+
+    <!-- My Data Transparency & Management Modal -->
+    <div id="modal-my-data" class="modal-overlay" onclick="if(event.target === this) closeMyDataModal()" style="display:none;">
+      <div class="modal-dialog" style="max-width: 600px;">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="material-symbols-outlined text-primary" style="font-size: 22px;">shield</span>
+            <h3 style="font-size: 16px; font-weight: 800; color: #fff;">Quản Lý Dữ Liệu Của Tôi (Client Transparency)</h3>
+          </div>
+          <button type="button" onclick="closeMyDataModal()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:20px; line-height:1;">✕</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5;">
+            Orion Path AI tuân thủ nguyên tắc riêng tư nghiêm ngặt: toàn bộ hồ sơ, điểm số và kết quả thử nghiệm chỉ được lưu trữ cục bộ trong bộ nhớ trình duyệt (localStorage) trên thiết bị của em. Chúng tôi không lưu giữ bản sao trên máy chủ và không thu thập số điện thoại hay căn cước công dân.
+          </p>
+
+          <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-bottom: 16px;">
+            <div style="font-size: 12px; font-weight: 700; color: #6EE7B7; margin-bottom: 8px;">
+              📦 Dữ liệu cục bộ đang lưu trữ trên máy này:
+            </div>
+            <div id="my-data-summary-box" style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" onclick="exportMyDataJson()" class="btn btn-primary" style="flex: 1; font-size: 12px; padding: 10px 14px;">
+                <span class="material-symbols-outlined" style="font-size: 16px;">download</span>
+                Xuất file JSON (Backup)
+              </button>
+              <button type="button" onclick="deleteMyLocalData()" class="btn btn-secondary" style="flex: 1; font-size: 12px; padding: 10px 14px; border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;">
+                <span class="material-symbols-outlined" style="font-size: 16px; color: #ef4444;">delete_forever</span>
+                Xoá toàn bộ dữ liệu trên máy này
+              </button>
+            </div>
+            <div style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 4px;">
+              *Hành động xóa sẽ xóa sạch hai khóa `orion_profile_cache_v1` và `orion_career_experiments_state` trong trình duyệt.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Scripts Loading Order -->
@@ -1012,6 +1114,92 @@
       }, 2400);
     }
 
+    // ==================== DASHBOARD NEXT ACTION CARD ====================
+    function renderDashboardNextAction() {
+      const container = document.getElementById('dashboard-next-action-card');
+      if (!container) return;
+
+      const hypotheses = window.orionCareerEngine ? window.orionCareerEngine.generateCareerHypotheses({
+        riasecScores: computedRiasecScores,
+        academic: {
+          math: globalStudentCareerProfile.math,
+          lit: globalStudentCareerProfile.lit,
+          eng: globalStudentCareerProfile.eng
+        },
+        targets: globalStudentCareerProfile.targets
+      }) : [];
+
+      const topHypothesis = hypotheses[0] || {
+        name: 'Kỹ sư Vi mạch & Bán dẫn',
+        experiment: { id: 'exp_semiconductor_01', title: 'Thực nghiệm thiết kế mạch logic số căn bản', duration: '75 phút' }
+      };
+      const expTitle = (topHypothesis.experiment && topHypothesis.experiment.title) || '1 mini-project trải nghiệm thực tế';
+      const expDuration = (topHypothesis.experiment && topHypothesis.experiment.duration) || '60–90 phút';
+      const expId = (topHypothesis.experiment && topHypothesis.experiment.id) || 'exp_semiconductor_01';
+
+      const topRiasec = window.orionCareerEngine ? window.orionCareerEngine.getTopRiasecCodes(computedRiasecScores)[0] || 'I' : 'I';
+      const combo = window.orionCareerEngine ? window.orionCareerEngine.recommendCombination(topRiasec, {
+        math: globalStudentCareerProfile.math,
+        eng: globalStudentCareerProfile.eng
+      }) : { primaryCombo: 'A01' };
+
+      container.innerHTML = `
+        <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(16, 185, 129, 0.08)); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 14px; padding: 18px 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-symbols-outlined text-accent" style="font-size: 22px;">flag</span>
+              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #FCD34D; letter-spacing: 0.5px;">BƯỚC TIẾP THEO CỦA EM • KẾ HOẠCH HÀNH ĐỘNG TUẦN NÀY</span>
+            </div>
+            <span style="font-size: 11px; background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 6px; color: #cbd5e1;">
+              Giả thiết dẫn đầu: <strong>${topHypothesis.name}</strong>
+            </span>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 16px;">
+            <!-- Action 1 -->
+            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #10B981;">
+              <div style="font-size: 11px; font-weight: 800; color: #6EE7B7; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+                <span class="material-symbols-outlined" style="font-size: 15px;">science</span>
+                1 Hành động tuần này (Thử nghiệm thực tế)
+              </div>
+              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
+                Hoàn thành mini-project <strong>"${expTitle}"</strong> (${expDuration}) để kiểm chứng cảm xúc thật khi làm việc.
+              </p>
+            </div>
+
+            <!-- Action 2 -->
+            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #6366F1;">
+              <div style="font-size: 11px; font-weight: 800; color: #C7D2FE; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+                <span class="material-symbols-outlined" style="font-size: 15px;">chat</span>
+                1 Câu hỏi thảo luận với Ba Mẹ
+              </div>
+              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
+                <em>"Bố mẹ nghĩ sao nếu con dành 2 tiếng cuối tuần này làm thử một dự án nhỏ về ${topHypothesis.name} để kiểm chứng sở thích?"</em>
+              </p>
+            </div>
+
+            <!-- Action 3 -->
+            <div style="background: rgba(0,0,0,0.25); border-radius: 10px; padding: 12px; border-left: 3px solid #F59E0B;">
+              <div style="font-size: 11px; font-weight: 800; color: #FCD34D; margin-bottom: 4px; display: flex; align-items: center; gap: 5px;">
+                <span class="material-symbols-outlined" style="font-size: 15px;">school</span>
+                1 Điểm tựa học tập cần lưu ý
+              </div>
+              <p style="font-size: 12px; color: #E2E8F0; line-height: 1.4; margin: 0;">
+                Tập trung học chắc môn Toán và Tiếng Anh để giữ lợi thế cạnh tranh với tổ hợp xét tuyển <strong>${combo.primaryCombo}</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end;">
+            <button type="button" onclick="switchDashboardTab('experiments'); startExperimentAction('${expId}');" class="btn btn-primary" style="font-size: 12px; padding: 8px 18px;">
+              <span class="material-symbols-outlined" style="font-size: 16px;">play_arrow</span>
+              Bắt đầu thử nghiệm ngay
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
     function collectProfilesAndRenderDashboard() {
       const name = isFastTrackMode ? (document.getElementById('fast-fullname').value || document.getElementById('user-fullname').value || 'Học sinh') : (document.getElementById('user-fullname').value || 'Học sinh');
       const gender = isFastTrackMode ? 'Chưa rõ' : (document.getElementById('user-gender').value || 'Chưa rõ');
@@ -1021,6 +1209,8 @@
       const eng = isFastTrackMode ? null : (parseFloat(document.getElementById('score-english').value) || 8.0);
 
       const checkedTargets = Array.from(document.querySelectorAll('input[name="target_orientations"]:checked')).map(cb => cb.value);
+      const checkedValues = Array.from(document.querySelectorAll('input[name="core_values"]:checked')).map(cb => cb.value);
+      const checkedWorkPrefs = Array.from(document.querySelectorAll('input[name="work_preferences"]:checked')).map(cb => cb.value);
 
       // Separate Career Profile (Evidence Domain)
       globalStudentCareerProfile = {
@@ -1032,14 +1222,13 @@
         eng,
         riasecScores: computedRiasecScores,
         riasec: Object.entries(computedRiasecScores).sort((a,b)=>b[1]-a[1]).map(e=>`${e[0]}: ${e[1]}`).join(', '),
-        targets: checkedTargets
+        targets: checkedTargets,
+        coreValues: checkedValues,
+        workPreferences: checkedWorkPrefs
       };
 
-      // Reflection Profile (Cultural Domain, completely isolated)
-      const userDob = document.getElementById('user-dob').value;
-      if (userDob && typeof window.orionReflectionLab !== 'undefined') {
-        globalReflectionProfile = window.orionReflectionLab.generateCulturalReflection(userDob, name);
-      }
+      // Reflection Profile is strictly on-demand (isolated)
+      globalReflectionProfile = null;
 
       // Update header badges
       document.getElementById('active-student-badge').style.display = 'inline-flex';
@@ -1053,6 +1242,7 @@
       }
 
       // Render Dashboard Parts
+      renderDashboardNextAction();
       renderRiasecRadarAndBars();
       renderCareerHypotheses();
       renderAcademicPathways();
@@ -1151,38 +1341,179 @@
         const expId = h.experiment ? h.experiment.id : null;
         const expStatus = expId && window.careerExperimentManager ? window.careerExperimentManager.getExperimentStatus(expId) : 'NOT STARTED';
 
+        // Evidence Strength calculation
+        let evidenceStrengthBadge = '<span style="font-size:11px; padding:3px 8px; border-radius:6px; background:rgba(255,255,255,0.06); color:#94a3b8; font-weight:700;">Bằng chứng: Sơ bộ (Tự khai & Điểm số)</span>';
+        if (expStatus === 'COMPLETED') {
+          evidenceStrengthBadge = '<span style="font-size:11px; padding:3px 8px; border-radius:6px; background:rgba(16, 185, 129, 0.2); color:#34d399; font-weight:700;">Bằng chứng: Mạnh (Đã có mini-project kiểm chứng) ✓</span>';
+        } else if (expStatus === 'IN PROGRESS') {
+          evidenceStrengthBadge = '<span style="font-size:11px; padding:3px 8px; border-radius:6px; background:rgba(245, 158, 11, 0.2); color:#fbbf24; font-weight:700;">Bằng chứng: Đang phát triển (Đang làm thử)</span>';
+        }
+
+        // Qualitative AI Resilience fields
+        const aiExposure = h.aiExposure || 'Vừa';
+        const humanAdvantage = h.humanAdvantage || 'Cao';
+        const transformationDirection = h.transformationDirection || 'Nhiệm vụ lặp lại được AI hóa; con người tập trung tư duy hệ thống và xử lý tình huống phức tạp.';
+        const confidence = h.evidenceConfidence || 'Cao';
+        const dataUpdated = h.dataUpdated || '2026-Q1';
+
+        // Entry Routes
+        const routes = h.entryRoutes || {};
+
         return `
           <div class="hypothesis-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
               <div>
-                <span class="signal-badge ${badgeClass}">${displayBadge}</span>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <span class="signal-badge ${badgeClass}">${displayBadge}</span>
+                  ${evidenceStrengthBadge}
+                </div>
                 <h4 style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 6px;">${index + 1}. ${h.name}</h4>
               </div>
               <span style="font-size: 11.5px; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-color); max-width: 320px; line-height: 1.3;">
-                <a href="data-sources.html" target="_blank" style="color: #94a3b8; text-decoration: underline;">${h.salary.range}</a>
+                <a href="data-sources.html" target="_blank" style="color: #94a3b8; text-decoration: underline;">${h.salary ? h.salary.range : '15 – 35 triệu/tháng'}</a>
               </span>
             </div>
 
-            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px;">${h.desc}</p>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">${h.desc}</p>
 
-            <!-- AI Resilience Index (Chỉ số Sẵn sàng Kỷ nguyên AI) -->
+            ${h.whatYouActuallyDo ? `
+              <!-- What You Actually Do -->
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 12px;">
+                <div style="font-size: 12px; font-weight: 800; color: #C7D2FE; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  <span class="material-symbols-outlined" style="font-size: 16px; color: #818CF8;">work</span>
+                  Công việc thực tế hàng ngày (What You Actually Do)
+                </div>
+                <p style="font-size: 12px; color: #E2E8F0; line-height: 1.5; margin: 0;">${h.whatYouActuallyDo}</p>
+              </div>
+            ` : ''}
+
+            ${h.typicalTasks && h.typicalTasks.length > 0 ? `
+              <!-- Typical Tasks -->
+              <div style="margin-bottom: 14px;">
+                <div style="font-size: 12px; font-weight: 700; color: #cbd5e1; margin-bottom: 6px;">
+                  📋 5 Nhiệm vụ điển hình thường gặp:
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 6px;">
+                  ${h.typicalTasks.map(task => `
+                    <div class="task-item-badge">
+                      <span class="material-symbols-outlined" style="font-size: 14px; color: var(--secondary); margin-top: 2px;">task_alt</span>
+                      <span>${task}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            ${h.skills ? `
+              <!-- Skills Framework (3-Tier) -->
+              <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+                <div style="font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                  <span class="material-symbols-outlined text-secondary" style="font-size: 16px;">psychology</span>
+                  Bộ kỹ năng cần chuẩn bị (3 Cấp độ)
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; font-size: 11.5px;">
+                  <div style="background: rgba(255,255,255,0.02); padding: 8px 10px; border-radius: 6px;">
+                    <strong style="color: #94A3B8; display: block; margin-bottom: 2px;">🧱 Nền tảng (Foundation):</strong>
+                    <span style="color: #E2E8F0;">${h.skills.foundation ? h.skills.foundation.join(', ') : 'Toán logic, Tiếng Anh'}</span>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.02); padding: 8px 10px; border-radius: 6px;">
+                    <strong style="color: #6EE7B7; display: block; margin-bottom: 2px;">⚙️ Thực thi (Working):</strong>
+                    <span style="color: #E2E8F0;">${h.skills.working ? h.skills.working.join(', ') : 'Công cụ chuyên môn, kỹ thuật cốt lõi'}</span>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.02); padding: 8px 10px; border-radius: 6px;">
+                    <strong style="color: #A5B4FC; display: block; margin-bottom: 2px;">⭐ Nâng cao / Lợi thế (Strong):</strong>
+                    <span style="color: #E2E8F0;">${h.skills.strong ? h.skills.strong.join(', ') : 'Kiến trúc hệ thống, lãnh đạo'}</span>
+                  </div>
+                </div>
+              </div>
+            ` : ''}
+
+            ${h.evidenceStudentCanBuild && h.evidenceStudentCanBuild.length > 0 ? `
+              <!-- Tangible Deliverables for High Schoolers -->
+              <div style="background: rgba(16, 185, 129, 0.04); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+                <div style="font-size: 12px; font-weight: 800; color: #6EE7B7; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                  <span class="material-symbols-outlined" style="font-size: 16px;">folder_special</span>
+                  Sản phẩm bằng chứng học sinh có thể làm ngay:
+                </div>
+                <ul style="font-size: 12px; color: #E2E8F0; padding-left: 18px; margin: 0; line-height: 1.5;">
+                  ${h.evidenceStudentCanBuild.map(ev => `<li>${ev}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            <!-- AI Resilience (Qualitative Framework) -->
             <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 10px; padding: 12px; margin-bottom: 14px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
                 <div style="font-size: 12px; font-weight: 800; color: #C7D2FE; display: flex; align-items: center; gap: 5px;">
                   <span class="material-symbols-outlined" style="font-size: 16px; color: #818CF8;">smart_toy</span>
-                  Chỉ số Sẵn sàng Kỷ nguyên AI (AI Resilience)
+                  Chỉ số Sẵn sàng Kỷ nguyên AI (Qualitative AI Resilience)
                 </div>
-                <span style="font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 700; background: ${h.aiReplacementRisk === 'Rất thấp' || h.aiReplacementRisk === 'Thấp' ? 'rgba(16, 185, 129, 0.15); color: #34d399;' : 'rgba(245, 158, 11, 0.15); color: #fbbf24;'}">
-                  Nguy cơ thay thế bởi AI: ${h.aiReplacementRisk || 'Thấp'}
-                </span>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <span style="font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 700; background: rgba(99, 102, 241, 0.15); color: #A5B4FC;">
+                    Tiếp xúc AI: ${aiExposure}
+                  </span>
+                  <span style="font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 700; background: rgba(16, 185, 129, 0.15); color: #34d399;">
+                    Lợi thế người: ${humanAdvantage}
+                  </span>
+                </div>
               </div>
-              <div style="font-size: 12px; color: var(--text-main); margin-bottom: 4px; line-height: 1.4;">
+              <div style="font-size: 12px; color: var(--text-main); margin-bottom: 6px; line-height: 1.4;">
+                🔄 <strong>Chuyển đổi nhiệm vụ:</strong> ${transformationDirection}
+              </div>
+              <div style="font-size: 12px; color: var(--text-main); margin-bottom: 6px; line-height: 1.4;">
                 ✨ <strong>Kỹ năng con người cốt lõi:</strong> ${h.humanCoreSkill || 'Tư duy phản biện & giải quyết vấn đề phức tạp'}
               </div>
-              <div style="font-size: 11.5px; color: #cbd5e1; background: rgba(0,0,0,0.2); padding: 6px 10px; border-radius: 6px; line-height: 1.4;">
-                🤝 <strong>Chỉ số AI Synergy (Cách cộng hưởng):</strong> ${h.aiSynergyTip || 'Sử dụng AI như cộng sự khuếch đại năng suất thay vì sợ hãi'}
+              <div style="font-size: 11.5px; color: #cbd5e1; background: rgba(0,0,0,0.2); padding: 6px 10px; border-radius: 6px; line-height: 1.4; margin-bottom: 6px;">
+                🤝 <strong>Cách cộng hưởng AI (Synergy):</strong> ${h.aiSynergyTip || 'Sử dụng AI như cộng sự khuếch đại năng suất'}
+              </div>
+              <div style="font-size: 10.5px; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap;">
+                <span>Độ tin cậy dữ liệu: <strong>${confidence}</strong></span>
+                <span>Cập nhật: <strong>${dataUpdated}</strong> • <a href="data-sources.html" target="_blank" style="color: #818CF8; text-decoration: underline;">Xem phương pháp</a></span>
               </div>
             </div>
+
+            <!-- Entry Routes -->
+            ${routes.university || routes.polytechnic || routes.selfStudyCert ? `
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+                <div style="font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                  <span class="material-symbols-outlined text-accent" style="font-size: 16px;">alt_route</span>
+                  3 Cung đường gia nhập nghề nghiệp
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; font-size: 11.5px;">
+                  ${routes.university ? `
+                    <div style="background: rgba(0,0,0,0.2); padding: 8px 10px; border-radius: 6px;">
+                      <strong style="color: #93C5FD; display: block; margin-bottom: 2px;">🎓 Đại học chính quy:</strong>
+                      <div style="color: #fff; font-weight: 600;">${routes.university.name}</div>
+                      <div style="color: var(--text-muted); font-size: 11px;">${routes.university.duration} • ${routes.university.costRange}</div>
+                    </div>
+                  ` : ''}
+                  ${routes.polytechnic ? `
+                    <div style="background: rgba(0,0,0,0.2); padding: 8px 10px; border-radius: 6px;">
+                      <strong style="color: #6EE7B7; display: block; margin-bottom: 2px;">🔧 Cao đẳng / Nghề:</strong>
+                      <div style="color: #fff; font-weight: 600;">${routes.polytechnic.name}</div>
+                      <div style="color: var(--text-muted); font-size: 11px;">${routes.polytechnic.duration} • ${routes.polytechnic.costRange}</div>
+                    </div>
+                  ` : ''}
+                  ${routes.selfStudyCert ? `
+                    <div style="background: rgba(0,0,0,0.2); padding: 8px 10px; border-radius: 6px;">
+                      <strong style="color: #FCD34D; display: block; margin-bottom: 2px;">💻 Tự học & Chứng chỉ:</strong>
+                      <div style="color: #fff; font-weight: 600;">${routes.selfStudyCert.name}</div>
+                      <div style="color: var(--text-muted); font-size: 11px;">${routes.selfStudyCert.duration} • ${routes.selfStudyCert.costRange}</div>
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            ` : ''}
+
+            <!-- Adjacent Careers -->
+            ${h.adjacentCareers && h.adjacentCareers.length > 0 ? `
+              <div style="margin-bottom: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="font-size: 11.5px; color: var(--text-muted); font-weight: 700;">🔗 Nghề nghiệp liên đới:</span>
+                ${h.adjacentCareers.map(ac => `
+                  <span style="font-size: 11px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); padding: 3px 8px; border-radius: 6px; color: #cbd5e1;">${ac}</span>
+                `).join('')}
+              </div>
+            ` : ''}
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 14px;">
               <!-- Evidence For -->
@@ -1242,8 +1573,14 @@
       });
 
       const comboData = window.EDUCATION_DATABASE ? window.EDUCATION_DATABASE.subjectCombinations[combo.primaryCombo] : null;
+      const progression = (window.EDUCATION_DATABASE && window.EDUCATION_DATABASE.highSchoolProgression) || [];
 
       document.getElementById('combination-recommendation-box').innerHTML = `
+        <!-- Clarification: High School Curriculum vs Admission Combinations -->
+        <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; font-size: 12px; color: #C7D2FE; line-height: 1.5;">
+          <strong>Phân biệt quan trọng:</strong> <em>Môn học THPT (Chương trình GDPT 2018)</em> gồm các môn bắt buộc (Toán, Văn, Lịch sử, Ngoại ngữ 1...) và cụm chuyên đề tự chọn. Còn <em>Tổ hợp môn xét tuyển (A00, A01, D01...)</em> là quy ước mã tổ hợp của Bộ GD&ĐT dùng để xét tuyển Đại học, không phải tên khóa học trên trường.
+        </div>
+
         <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 16px;">
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
             <span style="background:var(--primary); color:#fff; padding:4px 12px; border-radius:6px; font-weight:800; font-size:14px;">${combo.primaryCombo}</span>
@@ -1255,10 +1592,26 @@
           </div>
         </div>
 
+        <!-- 4-Stage High School Progression -->
         <div style="margin-top: 18px;">
-          <h4 style="font-size: 14px; font-weight:700; color:#fff; margin-bottom: 12px;">Chiến Lược Lộ Trình 3 Năm (Kỳ thi tốt nghiệp THPT & ĐGNL/TSA)</h4>
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
-            ${combo.timeline.map(t => `
+          <h4 style="font-size: 14px; font-weight:700; color:#fff; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+            <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">timeline</span>
+            Lộ Trình 4 Giai Đoạn Từ Lớp 9 Đến Lớp 12
+          </h4>
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px;">
+            ${progression.length > 0 ? progression.map(stage => `
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span style="font-size: 12px; font-weight: 800; color: #6EE7B7;">${stage.stage}</span>
+                  <span style="font-size: 10.5px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">${stage.targetYear}</span>
+                </div>
+                <div style="font-size: 12.5px; font-weight: 700; color: #fff; margin-bottom: 6px;">${stage.title}</div>
+                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">${stage.focus}</p>
+                <div style="font-size: 11px; color: #A5B4FC; background: rgba(99,102,241,0.08); padding: 6px 8px; border-radius: 6px;">
+                  📌 <strong>Cột mốc:</strong> ${stage.milestones ? stage.milestones.join(' • ') : ''}
+                </div>
+              </div>
+            `).join('') : combo.timeline.map(t => `
               <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px;">
                 <div style="font-size: 11px; font-weight:800; color:var(--secondary); text-transform:uppercase;">${t.year} — ${t.focus}</div>
                 <p style="font-size: 12px; color:var(--text-muted); margin-top: 6px; line-height: 1.4;">${t.desc}</p>
@@ -1268,17 +1621,23 @@
         </div>
       `;
 
-      // Pathways
+      // Pathways with Source and Version Metadata
       const pathways = window.EDUCATION_DATABASE ? window.EDUCATION_DATABASE.educationPathways : [];
       document.getElementById('education-pathways-box').innerHTML = `
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
           ${pathways.map(p => `
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px;">
-              <div style="font-size: 13.5px; font-weight:800; color:#fff; margin-bottom: 4px;">${p.type}</div>
-              <div style="font-size: 11.5px; color:var(--secondary); font-weight:700; margin-bottom: 6px;">Thời gian: ${p.duration} | Chi phí: ${p.costRange}</div>
-              <p style="font-size: 12px; color:var(--text-muted); line-height: 1.4; margin-bottom: 8px;">${p.orientation}</p>
-              <div style="font-size: 11px; color:#cbd5e1; background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:6px;">
-                👉 <strong>Phù hợp:</strong> ${p.suitableFor}
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+              <div>
+                <div style="font-size: 13.5px; font-weight:800; color:#fff; margin-bottom: 4px;">${p.type}</div>
+                <div style="font-size: 11.5px; color:var(--secondary); font-weight:700; margin-bottom: 6px;">Thời gian: ${p.duration} | Chi phí: ${p.costRange}</div>
+                <p style="font-size: 12px; color:var(--text-muted); line-height: 1.4; margin-bottom: 8px;">${p.orientation}</p>
+                <div style="font-size: 11px; color:#cbd5e1; background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:6px; margin-bottom: 8px;">
+                  👉 <strong>Phù hợp:</strong> ${p.suitableFor}
+                </div>
+              </div>
+              <div style="font-size: 10px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 6px; display: flex; justify-content: space-between;">
+                <span>Nguồn: ${p.source || 'Bộ GD&ĐT'}</span>
+                <span>Cập nhật: ${p.verifiedDate || '2026-03'}</span>
               </div>
             </div>
           `).join('')}
@@ -1583,9 +1942,9 @@
 
       if (!globalReflectionProfile) {
         box.innerHTML = `
-          <p style="font-size:12.5px; color:var(--text-muted);">
-            Bạn chưa cung cấp thông tin ngày sinh trong phần Hồ sơ học sinh. Mục này hoàn toàn không bắt buộc cho hướng nghiệp.
-          </p>
+          <div style="font-size:12.5px; color:var(--text-muted); text-align:center; padding:16px; border:1px dashed rgba(255,255,255,0.1); border-radius:10px;">
+            💡 Em chưa kích hoạt góc nhìn này. Hãy chọn ngày sinh ở ô phía trên rồi bấm <strong>"Xem góc nhìn chiêm nghiệm"</strong> nếu muốn tham khảo chiêm nghiệm văn hóa dân gian. Mục này hoàn toàn không bắt buộc cho hướng nghiệp.
+          </div>
         `;
         return;
       }
@@ -1594,7 +1953,7 @@
         <div style="display:flex; flex-direction:column; gap:14px;">
           <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
             <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:10px; padding:12px;">
-              <div style="font-size:11px; color:var(--text-muted);">Can Chi Năm Sinh</div>
+              <div style="font-size:11px; color:var(--text-muted);">Can Chi Năm Sinh (Dân gian)</div>
               <div style="font-size:16px; font-weight:800; color:#fff; margin-top:4px;">${globalReflectionProfile.canChi}</div>
             </div>
             <div style="background:rgba(99,102,241,0.05); border:1px solid rgba(99,102,241,0.2); border-radius:10px; padding:12px;">
@@ -1605,7 +1964,10 @@
 
           <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:10px; padding:14px; font-size:12.5px; line-height:1.5; color:#cbd5e1;">
             <div style="font-weight:700; color:#fff; margin-bottom:6px;">Biểu tượng tính cách văn hóa: ${globalReflectionProfile.lifePathArchetype}</div>
-            <p>${globalReflectionProfile.reflectionEssay}</p>
+            <p style="margin-bottom: 8px;">${globalReflectionProfile.reflectionEssay}</p>
+            <div style="font-size: 11px; color: #94A3B8; font-style: italic; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 6px;">
+              *Ghi chú: Nội dung mang tính văn hóa và chiêm nghiệm cá nhân, hoàn toàn không can thiệp vào các giả thiết nghề nghiệp hay đề xuất học tập.
+            </div>
           </div>
         </div>
       `;
@@ -1725,6 +2087,7 @@
       if (e.key === 'Escape') {
         closeReflectionModal();
         closeParentEvaluationModal();
+        closeMyDataModal();
       }
     });
 
@@ -1878,14 +2241,104 @@
       window.open(`https://zalo.me/share?url=${encodeURIComponent(shareUrl)}`, '_blank');
     }
 
-    function saveContactSync() {
-      const phone = document.getElementById('share-phone')?.value;
-      if (!phone) {
-        alert("Vui lòng nhập số điện thoại để đồng bộ hồ sơ.");
+    // ==================== MY DATA TRANSPARENCY & CLIENT PERSISTENCE ====================
+    function openMyDataModal() {
+      const modal = document.getElementById('modal-my-data');
+      const box = document.getElementById('my-data-summary-box');
+      if (!modal) return;
+
+      let profileData = null;
+      let expData = null;
+      try {
+        const rawProfile = localStorage.getItem('orion_profile_cache_v1');
+        if (rawProfile) profileData = JSON.parse(rawProfile);
+        const rawExp = localStorage.getItem('orion_career_experiments_state');
+        if (rawExp) expData = JSON.parse(rawExp);
+      } catch (e) {}
+
+      const hasProfile = !!(profileData && profileData.profile);
+      const studentName = hasProfile ? profileData.profile.name : 'Chưa có';
+      const grade = hasProfile ? profileData.profile.grade : 'Chưa rõ';
+      const updatedAt = hasProfile && profileData.updatedAt ? new Date(profileData.updatedAt).toLocaleString('vi-VN') : 'Chưa lưu';
+      const expCount = expData ? Object.keys(expData).length : 0;
+      const completedExpCount = expData ? Object.values(expData).filter(x => x.status === 'COMPLETED').length : 0;
+
+      if (box) {
+        box.innerHTML = `
+          <div>• <strong>Hồ sơ học sinh:</strong> <code>orion_profile_cache_v1</code> ${hasProfile ? `(${studentName} - ${grade}, cập nhật: ${updatedAt})` : '(Trống)'}</div>
+          <div>• <strong>Nhật ký thử nghiệm nghề:</strong> <code>orion_career_experiments_state</code> (${expCount} thử nghiệm đã tương tác, ${completedExpCount} đã hoàn thành)</div>
+          <div>• <strong>Cam kết quyền riêng tư:</strong> Không lưu số điện thoại, không lưu email, không lưu CCCD.</div>
+          <div>• <strong>Phạm vi lưu trữ:</strong> 100% Client-side (chỉ lưu trên thiết bị của em, không gửi lên máy chủ).</div>
+        `;
+      }
+
+      modal.style.display = 'flex';
+    }
+
+    function closeMyDataModal() {
+      const modal = document.getElementById('modal-my-data');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function exportMyDataJson() {
+      let exportObj = {
+        app: 'Orion Path AI',
+        exportedAt: new Date().toISOString(),
+        profileCache: null,
+        experimentsState: null
+      };
+
+      try {
+        const rawProfile = localStorage.getItem('orion_profile_cache_v1');
+        if (rawProfile) exportObj.profileCache = JSON.parse(rawProfile);
+        const rawExp = localStorage.getItem('orion_career_experiments_state');
+        if (rawExp) exportObj.experimentsState = JSON.parse(rawExp);
+      } catch (e) {
+        console.warn(e);
+      }
+
+      const jsonStr = JSON.stringify(exportObj, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `orion_career_profile_${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function deleteMyLocalData() {
+      const confirmed = confirm("Em có chắc chắn muốn xóa toàn bộ dữ liệu định hướng và thử nghiệm trên thiết bị này? Thao tác này sẽ giải phóng bộ nhớ trình duyệt và không thể khôi phục.");
+      if (!confirmed) return;
+
+      try {
+        localStorage.removeItem('orion_profile_cache_v1');
+        localStorage.removeItem('orion_career_experiments_state');
+      } catch (e) {
+        console.warn(e);
+      }
+
+      alert("Đã xóa toàn bộ dữ liệu định hướng trên thiết bị này thành công!");
+      closeMyDataModal();
+      window.location.href = 'index.html';
+    }
+
+    function runReflectionLabOnDemand() {
+      const dobInput = document.getElementById('lab-user-dob');
+      const userDob = dobInput ? dobInput.value : null;
+      const name = (globalStudentCareerProfile && globalStudentCareerProfile.name) || 'Học sinh';
+
+      if (!userDob) {
+        alert("Vui lòng chọn ngày sinh để xem góc nhìn chiêm nghiệm văn hóa.");
         return;
       }
-      saveProfileToLocalStorage();
-      alert(`Đã lưu số điện thoại ${phone} để đồng bộ hồ sơ định hướng.`);
+
+      if (typeof window.orionReflectionLab !== 'undefined') {
+        globalReflectionProfile = window.orionReflectionLab.generateCulturalReflection(userDob, name);
+        renderReflectionTab();
+      }
     }
 
     // On Load
