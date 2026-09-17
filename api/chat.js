@@ -36,7 +36,65 @@ Orion là trợ lý định hướng học tập, không phải chuyên gia tâm
 
 Em không phải vượt qua điều này một mình. Hãy tìm kiếm sự hỗ trợ ngay em nhé!`;
 
-export { classifySafety };
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+const USER_SAFE_AI_ERROR = 'Trợ lý AI hiện tạm thời chưa khả dụng. Các kết quả hướng nghiệp và dữ liệu của em vẫn được giữ nguyên. Vui lòng thử lại sau.';
+
+// Lightweight in-memory rate limiter (~15 requests / client / hour)
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+const RATE_LIMIT_MAX = 15;
+const ipRateLimitMap = new Map();
+
+function checkRateLimit(ip) {
+  const now = Date.now();
+  const record = ipRateLimitMap.get(ip);
+  if (!record || (now - record.startTime > RATE_LIMIT_WINDOW_MS)) {
+    ipRateLimitMap.set(ip, { count: 1, startTime: now });
+    return { allowed: true };
+  }
+  if (record.count >= RATE_LIMIT_MAX) {
+    return { allowed: false };
+  }
+  record.count += 1;
+  return { allowed: true };
+}
+
+// Server-side context sanitizers (Strict allow-listing to prevent PII leakage)
+function sanitizeCareerContext(profile) {
+  if (!profile) return null;
+  const cp = profile.careerProfile || profile;
+  return {
+    grade: typeof cp.grade === 'string' ? cp.grade.slice(0, 20) : 'Lớp 10',
+    riasec: typeof cp.riasec === 'string' ? cp.riasec.slice(0, 50) : '',
+    math: (typeof cp.math === 'number' || typeof cp.math === 'string') && cp.math !== null ? String(cp.math).slice(0, 5) : null,
+    lit: (typeof cp.lit === 'number' || typeof cp.lit === 'string') && cp.lit !== null ? String(cp.lit).slice(0, 5) : null,
+    eng: (typeof cp.eng === 'number' || typeof cp.eng === 'string') && cp.eng !== null ? String(cp.eng).slice(0, 5) : null,
+    targets: Array.isArray(cp.targets) ? cp.targets.slice(0, 5).map(t => String(t).slice(0, 50)) : [],
+    coreValues: Array.isArray(cp.coreValues) ? cp.coreValues.slice(0, 3).map(v => String(v).slice(0, 50)) : [],
+    workPreferences: Array.isArray(cp.workPreferences) ? cp.workPreferences.slice(0, 3).map(w => String(w).slice(0, 50)) : [],
+    completedExperiments: Array.isArray(cp.completedExperiments) ? cp.completedExperiments.slice(0, 5).map(e => String(e).slice(0, 100)) : []
+  };
+}
+
+function sanitizeFamilyContext(profile) {
+  if (!profile) return null;
+  const fp = profile.careerProfile || profile;
+  return {
+    grade: typeof fp.grade === 'string' ? fp.grade.slice(0, 20) : 'Lớp 10',
+    riasec: typeof fp.riasec === 'string' ? fp.riasec.slice(0, 50) : '',
+    studentTarget: typeof fp.studentTarget === 'string' ? fp.studentTarget.slice(0, 100) : '',
+    parentExpectation: typeof profile.parentExpectation === 'string' ? profile.parentExpectation.slice(0, 100) : ''
+  };
+}
+
+function sanitizeReflectionContext(profile) {
+  if (!profile) return null;
+  return {
+    birthYear: profile.birthYear ? String(profile.birthYear).slice(0, 4) : null,
+    topic: profile.topic ? String(profile.topic).slice(0, 100) : 'Chiêm nghiệm bản thân'
+  };
+}
+
+export { classifySafety, sanitizeCareerContext, sanitizeFamilyContext, sanitizeReflectionContext, GEMINI_MODEL, USER_SAFE_AI_ERROR, checkRateLimit };
 
 export default async function handler(req, res) {
   // Enforce POST method
@@ -48,13 +106,27 @@ export default async function handler(req, res) {
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
-  const { message, profile, mode = 'career_coach' } = req.body || {};
+  // Rate Limiting (~15 req/hr per IP)
+  const forwarded = req.headers && req.headers['x-forwarded-for'];
+  const clientIp = (typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : null) || (req.socket && req.socket.remoteAddress) || 'client-default';
+  const rateStatus = checkRateLimit(clientIp);
+  if (!rateStatus.allowed) {
+    return res.status(429).json({
+      error: 'Em đã gửi khá nhiều câu hỏi trong giờ này. Vui lòng nghỉ ngơi một chút và quay lại sau nhé.'
+    });
+  }
+
+  const { message, profile, mode = 'career_coach', history = [] } = req.body || {};
 
   if (!message || typeof message !== 'string' || message.trim().length === 0) {
     return res.status(400).json({ error: 'Nội dung câu hỏi không được để trống.' });
   }
 
-  // Enforce message length limit to prevent abuse
+  if (message.length > 2000) {
+    return res.status(400).json({ error: 'Nội dung câu hỏi quá dài (vui lòng tóm tắt dưới 1.000 ký tự).' });
+  }
+
+  // Enforce message length limit
   const sanitizedMessage = message.trim().slice(0, 1000);
 
   // Check child safety classification (canonical 4-tier enum)
@@ -69,8 +141,9 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
+    console.error('AI Runtime Error: AI_CONFIG_MISSING');
     return res.status(503).json({
-      error: 'Hệ thống AI hiện đang trong chế độ bảo trì hoặc chưa cấu hình API Key phía máy chủ. Vui lòng thử lại sau.'
+      error: USER_SAFE_AI_ERROR
     });
   }
 
@@ -78,7 +151,7 @@ export default async function handler(req, res) {
   let systemInstruction = '';
 
   if (mode === 'family_facilitator') {
-    // Family Negotiation Bridge Facilitator
+    const sc = sanitizeFamilyContext(profile);
     systemInstruction = `Bạn là một Điều phối viên Giáo dục và Gia đình (Family Dialogue Facilitator) thấu cảm, khách quan, giàu kinh nghiệm tại Việt Nam.
 Mục tiêu của bạn là xây dựng cầu nối thấu hiểu giữa cha mẹ và học sinh lứa tuổi 14-18 (lớp 9 đến lớp 12).
 NGUYÊN TẮC BẮT BUỘC:
@@ -92,25 +165,26 @@ NGUYÊN TẮC BẮT BUỘC:
 3. Sử dụng ngôn ngữ tôn trọng, ấm áp, văn minh, mang tính kiến tạo giải pháp.
 4. TUYỆT ĐỐI KHÔNG dùng bói toán, tử vi, thần số học để đưa ra lời khuyên.`;
 
-    if (profile && profile.careerProfile) {
-      const cp = profile.careerProfile;
+    if (sc) {
       systemInstruction += `\n\nThông tin bối cảnh học sinh:
-- Tên: ${cp.name || 'Học sinh'}
-- Lớp/Độ tuổi: ${cp.grade || 'Lớp 10'}
-- Sở thích nghề nghiệp (RIASEC): ${cp.riasec || 'Chưa xác định'}
-- Môn học thế mạnh: ${cp.strengths || 'Chưa cập nhật'}
-- Hướng ngành con quan tâm: ${cp.targetField || 'Đang khám phá'}
-- Nguyện vọng gia đình: ${profile.parentExpectation || 'Mong muốn ngành ổn định, an toàn'}`;
+- Khối lớp: ${sc.grade}
+- Sở thích nghề nghiệp (RIASEC): ${sc.riasec || 'Chưa xác định'}
+- Hướng ngành học sinh quan tâm: ${sc.studentTarget || 'Đang khám phá'}
+- Nguyện vọng gia đình: ${sc.parentExpectation || 'Mong muốn ngành ổn định, an toàn'}`;
     }
   } else if (mode === 'reflection_lab') {
-    // Reflection Lab - Cultural & Symbolic Reflection ONLY
+    const rc = sanitizeReflectionContext(profile);
     systemInstruction = `Bạn là chuyên gia diễn giải chiêm nghiệm văn hóa dân gian phương Đông và triết lý số Pythagoras trong khuôn khổ Reflection Lab của Orion.
 NGUYÊN TẮC BẮT BUỘC:
 1. Bạn PHẢI khẳng định: "Đây là nội dung chiêm nghiệm văn hóa, mang tính gợi mở suy ngẫm bản thân, không phải đánh giá tâm lý, đo lường năng lực hay công cụ dự đoán nghề nghiệp."
 2. TUYỆT ĐỐI KHÔNG phán đoán tương lai hay cam đoan số phận học sinh.
 3. Khuyến khích học sinh tập trung vào rèn luyện năng lực thực tế, học tập chăm chỉ và làm các trải nghiệm thực tế để tự quyết định con đường của mình.`;
+    if (rc && rc.birthYear) {
+      systemInstruction += `\n\nNăm sinh tham khảo: ${rc.birthYear} (Chỉ phục vụ góc nhìn văn hóa, không liên quan đến nghề nghiệp)`;
+    }
   } else {
-    // Default: Evidence-based Career Coach
+    // Default: Evidence-based Career Coach (career_coach)
+    const cc = sanitizeCareerContext(profile);
     systemInstruction = `Bạn là Chuyên gia Khai vấn Hướng nghiệp AI (Evidence-Informed Career Coach) dành cho học sinh từ lớp 9 đến lớp 12 tại Việt Nam.
 NGUYÊN TẮC BẮT BUỘC:
 1. Phương pháp hướng nghiệp dựa trên BẰNG CHỨNG (sở thích nghề nghiệp RIASEC, kết quả học tập, môn học yêu thích, kỹ năng đã thể hiện, thử nghiệm thực tế đã làm).
@@ -126,16 +200,14 @@ NGUYÊN TẮC BẮT BUỘC:
       systemInstruction += `\n\n[LƯU Ý ĐẶC BIỆT]: Học sinh đang bày tỏ cảm xúc lo âu/căng thẳng học tập. Hãy phản hồi với sự thấu cảm cao nhất, động viên tinh thần trước khi bàn về việc học, nhắc nhở em giữ gìn sức khỏe.`;
     }
 
-    if (profile) {
-      // Only extract career-related evidence fields (strict isolation from reflection fields)
-      const cp = profile.careerProfile || profile;
-      systemInstruction += `\n\nHồ sơ học sinh (Dữ liệu bằng chứng):
-- Họ tên: ${cp.name || 'Học sinh'}
-- Giới tính: ${cp.gender || 'Chưa rõ'}
-- Điểm học thuật: Toán ${cp.math || 'Chưa rõ'}, Ngữ văn ${cp.lit || 'Chưa rõ'}, Tiếng Anh ${cp.eng || 'Chưa rõ'}
-- Sở thích nghề nghiệp (RIASEC): ${cp.riasec || 'Chưa rõ'}
-- Định hướng quan tâm: ${cp.targets ? (Array.isArray(cp.targets) ? cp.targets.join(', ') : cp.targets) : 'Đang tìm hiểu'}
-- Thử nghiệm đã trải nghiệm: ${cp.completedExperiments || 'Chưa có thử nghiệm nào'}`;
+    if (cc) {
+      systemInstruction += `\n\nHồ sơ học sinh (Dữ liệu bằng chứng đã chuẩn hóa):
+- Khối lớp: ${cc.grade}
+- Điểm học thuật: ${cc.math ? 'Toán ' + cc.math : 'Toán: Chưa có'}, ${cc.lit ? 'Ngữ văn ' + cc.lit : 'Ngữ văn: Chưa có'}, ${cc.eng ? 'Tiếng Anh ' + cc.eng : 'Tiếng Anh: Chưa có'}
+- Sở thích nghề nghiệp (RIASEC): ${cc.riasec || 'Chưa rõ'}
+- Định hướng quan tâm: ${cc.targets.length > 0 ? cc.targets.join(', ') : 'Đang tìm hiểu'}
+- Giá trị cốt lõi: ${cc.coreValues.length > 0 ? cc.coreValues.join(', ') : 'Chưa chọn'}
+- Thử nghiệm đã làm: ${cc.completedExperiments.length > 0 ? cc.completedExperiments.join(', ') : 'Chưa có'}`;
     }
   }
 
@@ -148,10 +220,26 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
 3. Giảm nhẹ áp lực chọn nghề/học tập; khuyến khích học sinh nghỉ ngơi, chia nhỏ mục tiêu và chia sẻ với người thân đáng tin cậy.\n\n` + systemInstruction;
   }
 
+  // Bounded chat history window (at most 4 recent messages, 500 chars max each)
+  const boundedContents = [];
+  if (Array.isArray(history) && history.length > 0) {
+    const recentHistory = history.slice(-4);
+    for (const h of recentHistory) {
+      const role = h.role === 'model' ? 'model' : 'user';
+      const text = typeof h.text === 'string' ? h.text.slice(0, 500) : (typeof h.message === 'string' ? h.message.slice(0, 500) : '');
+      if (text) {
+        boundedContents.push({ role, parts: [{ text }] });
+      }
+    }
+  }
+  boundedContents.push({
+    role: 'user',
+    parts: [{ text: sanitizedMessage }]
+  });
+
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-    
-    // Call Gemini API with timeout protection and native system_instruction
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
 
@@ -165,15 +253,10 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
         system_instruction: {
           parts: [{ text: systemInstruction }]
         },
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: sanitizedMessage }]
-          }
-        ],
+        contents: boundedContents,
         generationConfig: {
           temperature: mode === 'family_facilitator' ? 0.6 : 0.7,
-          maxOutputTokens: 1000
+          maxOutputTokens: 800
         }
       })
     });
@@ -181,10 +264,9 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
     clearTimeout(timeout);
 
     if (!response.ok) {
-      const errText = await response.text();
-      console.error('Gemini Provider Error Status:', response.status, errText.slice(0, 200));
+      console.error('Gemini Provider Error Status:', response.status);
       return res.status(502).json({
-        error: 'Dịch vụ AI đang bận hoặc gặp sự cố kết nối tạm thời. Vui lòng thử lại sau giây lát.'
+        error: USER_SAFE_AI_ERROR
       });
     }
 
@@ -198,18 +280,19 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
       });
     } else {
       return res.status(502).json({
-        error: 'Không nhận được câu trả lời hợp lệ từ AI. Vui lòng đặt lại câu hỏi ngắn gọn hơn.'
+        error: USER_SAFE_AI_ERROR
       });
     }
   } catch (error) {
     if (error.name === 'AbortError') {
+      console.error('AI Request Timeout');
       return res.status(504).json({
-        error: 'Quá thời gian phản hồi từ máy chủ AI (Timeout). Vui lòng thử lại.'
+        error: USER_SAFE_AI_ERROR
       });
     }
     console.error('Serverless Execution Error:', error.message);
     return res.status(500).json({
-      error: 'Đã xảy ra sự cố nội bộ khi xử lý phản hồi AI.'
+      error: USER_SAFE_AI_ERROR
     });
   }
 }

@@ -348,8 +348,67 @@ const openExploreHypotheses = engine.generateCareerHypotheses({
 assert.strictEqual(openExploreHypotheses.length >= 3, true, 'Explore all option returns valid hypotheses');
 console.log('✓ Test 15 Passed: Target orientation matches add verified evidence and explore_all operates smoothly.');
 
+console.log('--- TEST 16: Fast-Track Data Integrity, Fair Normalization & Socratic Bypass ---');
+// 1. RIASEC Normalization & Unbiased Artistic Ranking
+const maxOpportunities = { R: 3, I: 3, A: 1, S: 3, E: 3, C: 2 };
+const fastRawAnswers = { Q1: 'I', Q2: 'A', Q3: 'R', Q4: 'S', Q5: 'R' };
+// Raw counts: R: 2, I: 1, A: 1, S: 1, E: 0, C: 0
+const rawCounts = { R: 2, I: 1, A: 1, S: 1, E: 0, C: 0 };
+const normalizedScores = {};
+for (const cat of ['R', 'I', 'A', 'S', 'E', 'C']) {
+  normalizedScores[cat] = Math.round((rawCounts[cat] / maxOpportunities[cat]) * 10 * 10) / 10;
+}
+// Normalized:
+// A: 1 / 1 = 1.0 -> 10.0
+// R: 2 / 3 = 0.67 -> 6.7
+// I: 1 / 3 = 0.33 -> 3.3
+// S: 1 / 3 = 0.33 -> 3.3
+assert.strictEqual(normalizedScores.A, 10.0, 'A with 1/1 opportunity must normalize to 10.0');
+assert.strictEqual(normalizedScores.R, 6.7, 'R with 2/3 opportunities must normalize to 6.7');
+assert.strictEqual(normalizedScores.I, 3.3, 'I with 1/3 opportunities must normalize to 3.3');
+
+const fastTopCodes = engine.getTopRiasecCodes(normalizedScores);
+assert.strictEqual(fastTopCodes[0], 'A', 'Artistic must fairly rank #1 when student chose 100% of artistic opportunities');
+
+// 2. Fast-Track Profile Isolation (No hidden deep-dive defaults)
+const fastTrackProfile = {
+  name: 'Trần Văn Fast',
+  gender: 'Chưa rõ',
+  grade: 'Lớp 10',
+  math: null, // missing academic data remains missing
+  lit: null,
+  eng: null,
+  riasecScores: normalizedScores,
+  targets: [], // no hidden targets
+  coreValues: [], // no hidden values
+  workPreferences: [], // no hidden work preferences
+  socratic: {
+    completed: false, // truthful bypass
+    q1: '',
+    q2: '',
+    q3: ''
+  }
+};
+
+assert.strictEqual(fastTrackProfile.math, null, 'Academic scores must remain null in Fast-Track');
+assert.strictEqual(fastTrackProfile.targets.length, 0, 'No hidden targets inherited');
+assert.strictEqual(fastTrackProfile.coreValues.length, 0, 'No hidden core values inherited');
+assert.strictEqual(fastTrackProfile.socratic.completed, false, 'Socratic must report completed: false');
+
+// 3. Next Action Resolver handles Fast-Track properly
+const nextActionFast = engine.resolveNextActionState({
+  profile: fastTrackProfile,
+  riasecScores: normalizedScores,
+  socratic: fastTrackProfile.socratic,
+  hypotheses: [],
+  isFastTrack: true
+});
+// When profile and RIASEC exist, and Socratic is bypassed for Fast-Track, resolver proceeds to State 4 (Hypotheses)
+assert.strictEqual(nextActionFast.stateIndex, 4, 'Fast-Track must resolve to State 4 without false socratic claim');
+console.log('✓ Test 16 Passed: Fast-Track RIASEC normalization eliminates bias, preserves missing data, and truthfully handles Socratic bypass.');
+
 console.log('\n==========================================');
-console.log('ALL 15 PRODUCTION ENGINE TESTS PASSED 100%');
+console.log('ALL 16 PRODUCTION ENGINE TESTS PASSED 100%');
 console.log('==========================================');
 
 

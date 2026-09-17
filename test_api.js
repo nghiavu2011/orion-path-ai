@@ -80,8 +80,93 @@ async function runApiTests() {
   }, res4);
   assert.strictEqual(res4.statusCode, 503);
   assert.strictEqual(typeof res4.body.error, 'string');
-  console.log('✓ API Test 4 Passed: Safe 503 maintenance message returned when key missing.');
+  assert.strictEqual(res4.body.error.includes('Trợ lý AI hiện tạm thời chưa khả dụng'), true);
+  assert.strictEqual(res4.body.error.includes('API Key'), false, 'Must not leak API key implementation details');
+  assert.strictEqual(res4.body.error.includes('GEMINI_API_KEY'), false, 'Must not leak env var name');
+  console.log('✓ API Test 4 Passed: Safe 503 user-safe error returned with zero leaked internals.');
   if (oldKey) process.env.GEMINI_API_KEY = oldKey;
+
+  console.log('--- API TEST 5: Centralized Model ID ---');
+  const { GEMINI_MODEL } = await import('./api/chat.js');
+  assert.strictEqual(GEMINI_MODEL, 'gemini-3.8-flash', 'Model must default to stable gemini-3.8-flash');
+  console.log('✓ API Test 5 Passed: Centralized model correctly set to gemini-3.8-flash.');
+
+  console.log('--- API TEST 6: Server-side Allow-list Context Sanitizers ---');
+  const { sanitizeCareerContext, sanitizeFamilyContext, sanitizeReflectionContext } = await import('./api/chat.js');
+  const dirtyProfile = {
+    careerProfile: {
+      name: 'Nguyễn Văn A',
+      phone: '0912345678',
+      email: 'test@example.com',
+      address: '123 Đường ABC, Hà Nội',
+      cccd: '001200000000',
+      school: 'THPT Chu Văn An',
+      grade: 'Lớp 11',
+      math: 8.5,
+      lit: 7.0,
+      eng: 8.0,
+      riasec: 'I-R-A',
+      targets: ['Công nghệ', 'Y tế'],
+      coreValues: ['Sáng tạo'],
+      workPreferences: ['Nghiên cứu'],
+      completedExperiments: ['exp_ai_chatbot']
+    }
+  };
+  const sanitized = sanitizeCareerContext(dirtyProfile);
+  assert.strictEqual(sanitized.phone, undefined, 'PII phone must be stripped');
+  assert.strictEqual(sanitized.email, undefined, 'PII email must be stripped');
+  assert.strictEqual(sanitized.address, undefined, 'PII address must be stripped');
+  assert.strictEqual(sanitized.cccd, undefined, 'PII CCCD must be stripped');
+  assert.strictEqual(sanitized.school, undefined, 'School name must be stripped');
+  assert.strictEqual(sanitized.grade, 'Lớp 11', 'Grade must be preserved');
+  assert.strictEqual(sanitized.math, '8.5', 'Academic math must be preserved');
+
+  const familySanitized = sanitizeFamilyContext({
+    careerProfile: { grade: 'Lớp 12', riasec: 'S-E', studentTarget: 'Sư phạm', phone: '0909090909' },
+    parentExpectation: 'Kinh doanh'
+  });
+  assert.strictEqual(familySanitized.phone, undefined, 'PII in family context stripped');
+  assert.strictEqual(familySanitized.grade, 'Lớp 12');
+  assert.strictEqual(familySanitized.parentExpectation, 'Kinh doanh');
+
+  const reflectionSanitized = sanitizeReflectionContext({ birthYear: 2008, phone: '123', topic: 'Triết lý số' });
+  assert.strictEqual(reflectionSanitized.phone, undefined);
+  assert.strictEqual(reflectionSanitized.birthYear, '2008');
+  console.log('✓ API Test 6 Passed: Context sanitizers strictly allow-list guidance fields and strip all PII.');
+
+  console.log('--- API TEST 7: Rate Limiter (~15 req/hour) ---');
+  const testIp = '198.51.100.42';
+  const { checkRateLimit } = await import('./api/chat.js');
+  let allowedCount = 0;
+  for (let i = 0; i < 20; i++) {
+    const status = checkRateLimit(testIp);
+    if (status.allowed) allowedCount++;
+  }
+  assert.strictEqual(allowedCount, 15, 'Rate limiter must permit exactly 15 requests before blocking');
+  const blockedStatus = checkRateLimit(testIp);
+  assert.strictEqual(blockedStatus.allowed, false, '16th request must be blocked');
+
+  // Test handler integration with blocked IP
+  const resRateLimit = createMockRes();
+  await handler({
+    method: 'POST',
+    headers: { 'x-forwarded-for': testIp },
+    body: { message: 'Kiểm tra rate limit' }
+  }, resRateLimit);
+  assert.strictEqual(resRateLimit.statusCode, 429, 'Blocked client must receive 429');
+  console.log('✓ API Test 7 Passed: In-memory IP rate limiter restricts to 15 req/hr with 429.');
+
+  console.log('--- API TEST 8: Reject Oversized Message ---');
+  const oversizedMessage = 'a'.repeat(2500);
+  const resOversized = createMockRes();
+  await handler({
+    method: 'POST',
+    headers: { 'x-forwarded-for': '198.51.100.99' },
+    body: { message: oversizedMessage }
+  }, resOversized);
+  assert.strictEqual(resOversized.statusCode, 400);
+  assert.strictEqual(resOversized.body.error.includes('quá dài'), true);
+  console.log('✓ API Test 8 Passed: Oversized messages (>2000 chars) are rejected with 400.');
 
   console.log('\n=====================================');
   console.log('ALL API SECURITY TESTS PASSED 100%');

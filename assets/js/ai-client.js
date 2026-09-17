@@ -58,7 +58,7 @@ class OrionAIClient {
 
       if (!response.ok) {
         return {
-          error: data.error || "Không thể kết nối đến máy chủ AI. Vui lòng thử lại sau ít phút."
+          error: data.error || "Trợ lý AI hiện tạm thời chưa khả dụng. Các kết quả hướng nghiệp và dữ liệu của em vẫn được giữ nguyên. Vui lòng thử lại sau."
         };
       }
 
@@ -70,7 +70,7 @@ class OrionAIClient {
     } catch (err) {
       console.error("AI Client Network Error:", err);
       return {
-        error: "Sự cố kết nối mạng. Vui lòng kiểm tra internet và thử lại."
+        error: "Trợ lý AI hiện tạm thời chưa khả dụng. Các kết quả hướng nghiệp và dữ liệu của em vẫn được giữ nguyên. Vui lòng thử lại sau."
       };
     }
   }
@@ -110,12 +110,56 @@ class OrionAIClient {
 
       const data = await response.json();
       if (!response.ok) {
-        return { error: data.error || "Chưa thể kết nối với Điều phối viên AI." };
+        return { error: data.error || "Trợ lý AI hiện tạm thời chưa khả dụng. Các kết quả hướng nghiệp và dữ liệu của em vẫn được giữ nguyên. Vui lòng thử lại sau." };
       }
       return data;
     } catch (err) {
       console.error("Family Facilitator Network Error:", err);
-      return { error: "Sự cố kết nối mạng. Vui lòng thử lại sau." };
+      return { error: "Trợ lý AI hiện tạm thời chưa khả dụng. Các kết quả hướng nghiệp và dữ liệu của em vẫn được giữ nguyên. Vui lòng thử lại sau." };
+    }
+  }
+
+  /**
+   * Gửi câu hỏi đến Reflection Lab
+   * @param {string} messageText 
+   * @param {object} reflectionContext 
+   */
+  async askReflectionLab(messageText, reflectionContext = {}) {
+    if (!messageText || !messageText.trim()) {
+      return { error: "Vui lòng nhập nội dung chiêm nghiệm." };
+    }
+
+    if (typeof window.detectCrisis === 'function' && window.detectCrisis(messageText)) {
+      if (typeof window.renderCrisisAlertModal === 'function') {
+        window.renderCrisisAlertModal();
+      }
+      return {
+        reply: "Cuộc đối thoại đã tạm dừng để ưu tiên an toàn sức khỏe tinh thần. Vui lòng liên hệ Tổng đài 111 nếu có tình huống khẩn cấp.",
+        safetyTriggered: true
+      };
+    }
+
+    try {
+      const response = await fetch(this.endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: messageText.trim(),
+          mode: 'reflection_lab',
+          profile: reflectionContext
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        return { error: data.error || "Trợ lý AI hiện tạm thời chưa khả dụng. Các kết quả hướng nghiệp và dữ liệu của em vẫn được giữ nguyên. Vui lòng thử lại sau." };
+      }
+      return data;
+    } catch (err) {
+      console.error("Reflection Lab Network Error:", err);
+      return { error: "Trợ lý AI hiện tạm thời chưa khả dụng. Các kết quả hướng nghiệp và dữ liệu của em vẫn được giữ nguyên. Vui lòng thử lại sau." };
     }
   }
 }
