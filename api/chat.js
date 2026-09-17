@@ -239,12 +239,6 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
   });
 
   try {
-    let modelToUse = GEMINI_MODEL;
-    let url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
-
     const payload = JSON.stringify({
       system_instruction: {
         parts: [{ text: systemInstruction }]
@@ -256,31 +250,43 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
       }
     });
 
-    let response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      signal: controller.signal,
-      body: payload
-    });
-
-    // Handle temporary 503 high-demand spikes gracefully by failing over to stable fallback model
-    if (response.status === 503 && modelToUse !== GEMINI_FALLBACK_MODEL) {
-      console.warn(`Model ${modelToUse} 503 high demand spike, failing over to ${GEMINI_FALLBACK_MODEL}`);
-      modelToUse = GEMINI_FALLBACK_MODEL;
-      url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
-      response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        signal: controller.signal,
-        body: payload
-      });
+    async function callGemini(modelName, timeoutMs = 8000) {
+      const c = new AbortController();
+      const t = setTimeout(() => c.abort(), timeoutMs);
+      try {
+        const u = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+        const r = await fetch(u, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: c.signal,
+          body: payload
+        });
+        clearTimeout(t);
+        return r;
+      } catch (e) {
+        clearTimeout(t);
+        throw e;
+      }
     }
 
-    clearTimeout(timeout);
+    let modelToUse = GEMINI_MODEL;
+    let response;
+    try {
+      response = await callGemini(modelToUse, 7000);
+      if (response.status === 503 && modelToUse !== GEMINI_FALLBACK_MODEL) {
+        console.warn(`Model ${modelToUse} 503 spike, failing over to ${GEMINI_FALLBACK_MODEL}`);
+        modelToUse = GEMINI_FALLBACK_MODEL;
+        response = await callGemini(modelToUse, 12000);
+      }
+    } catch (err) {
+      if (modelToUse !== GEMINI_FALLBACK_MODEL) {
+        console.warn(`Model ${modelToUse} error/timeout (${err.message}), failing over to ${GEMINI_FALLBACK_MODEL}`);
+        modelToUse = GEMINI_FALLBACK_MODEL;
+        response = await callGemini(modelToUse, 12000);
+      } else {
+        throw err;
+      }
+    }
 
     if (!response.ok) {
       console.error('Gemini Provider Error Status:', response.status);
