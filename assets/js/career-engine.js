@@ -86,6 +86,23 @@ class OrionCareerEngine {
         evidenceList.push(`Điểm Tiếng Anh thuận lợi (${engScore}/10) để tiếp cận tài liệu chuẩn quốc tế.`);
       }
 
+      // ponytail: Nhẹ nhàng đối chiếu mục tiêu học sinh chủ động quan tâm nếu có
+      if (targets && Array.isArray(targets) && targets.length > 0) {
+        const targetStr = targets.join(' ').toLowerCase();
+        const isTargetMatch =
+          (career.id === 'ai_ml_engineer' && (targetStr.includes('tech') || targetStr.includes('công nghệ') || targetStr.includes('lập trình'))) ||
+          (career.id === 'chip_design_engineer' && (targetStr.includes('semiconductor') || targetStr.includes('điện tử') || targetStr.includes('phần cứng'))) ||
+          (career.id === 'data_analyst' && (targetStr.includes('business') || targetStr.includes('kinh tế') || targetStr.includes('dữ liệu'))) ||
+          (career.id === 'healthcare_practitioner' && (targetStr.includes('health') || targetStr.includes('sức khỏe') || targetStr.includes('y tế'))) ||
+          (career.id === 'ui_ux_designer' && (targetStr.includes('design') || targetStr.includes('thiết kế') || targetStr.includes('sáng tạo'))) ||
+          (career.id === 'esg_sustainability_specialist' && (targetStr.includes('environment') || targetStr.includes('môi trường') || targetStr.includes('bền vững') || targetStr.includes('esg')));
+
+        if (isTargetMatch) {
+          matchCount += 1;
+          evidenceList.push(`Trùng khớp với định hướng ngành nghề em đang chủ động quan tâm.`);
+        }
+      }
+
       // Phân tầng tín hiệu chuẩn hóa (Section 15: strong | moderate | exploratory)
       let signalKey = 'exploratory';
       let signalLabel = 'Đang khám phá';

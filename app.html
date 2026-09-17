@@ -285,25 +285,56 @@
 
             <!-- Target Orientations -->
             <div class="form-group">
-              <label class="form-label">Mục tiêu & Hướng đi em quan tâm nhất</label>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin-top: 6px;">
-                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                  <input type="checkbox" name="target_orientations" value="tech" checked> Công nghệ & Trí tuệ nhân tạo
+              <label class="form-label">Mục tiêu & Hướng đi em quan tâm nhất (Có thể chọn nhiều mục)</label>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 6px;">
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; line-height: 1.35;">
+                  <input type="checkbox" name="target_orientations" value="tech" checked style="margin-top: 2px;">
+                  <div>
+                    <div style="font-weight: 600; color: #f8fafc;">💻 Công nghệ & Lập trình</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Phần mềm, Trí tuệ nhân tạo (AI), Web, Game</div>
+                  </div>
                 </label>
-                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                  <input type="checkbox" name="target_orientations" value="semiconductor"> Vi mạch & Bán dẫn
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; line-height: 1.35;">
+                  <input type="checkbox" name="target_orientations" value="semiconductor" style="margin-top: 2px;">
+                  <div>
+                    <div style="font-weight: 600; color: #f8fafc;">⚡ Điện tử & Phần cứng</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Vi mạch, Robot, Thiết bị thông minh</div>
+                  </div>
                 </label>
-                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                  <input type="checkbox" name="target_orientations" value="business"> Kinh tế & Phân tích Dữ liệu
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; line-height: 1.35;">
+                  <input type="checkbox" name="target_orientations" value="business" style="margin-top: 2px;">
+                  <div>
+                    <div style="font-weight: 600; color: #f8fafc;">📊 Kinh tế & Dữ liệu</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Kinh doanh, Tài chính, Phân tích số liệu</div>
+                  </div>
                 </label>
-                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                  <input type="checkbox" name="target_orientations" value="health"> Sức khỏe & Y sinh
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; line-height: 1.35;">
+                  <input type="checkbox" name="target_orientations" value="health" style="margin-top: 2px;">
+                  <div>
+                    <div style="font-weight: 600; color: #f8fafc;">🏥 Sức khỏe & Y tế</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Bác sĩ, Điều dưỡng, Dược & Chăm sóc</div>
+                  </div>
                 </label>
-                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                  <input type="checkbox" name="target_orientations" value="design"> Nghệ thuật số & UI/UX
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; line-height: 1.35;">
+                  <input type="checkbox" name="target_orientations" value="design" style="margin-top: 2px;">
+                  <div>
+                    <div style="font-weight: 600; color: #f8fafc;">🎨 Thiết kế & Sáng tạo</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Giao diện app (UI/UX), Đồ họa, Truyền thông số</div>
+                  </div>
                 </label>
-                <label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer;">
-                  <input type="checkbox" name="target_orientations" value="abroad"> Du học / Học bổng quốc tế
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; line-height: 1.35;">
+                  <input type="checkbox" name="target_orientations" value="environment" style="margin-top: 2px;">
+                  <div>
+                    <div style="font-weight: 600; color: #f8fafc;">🌱 Môi trường & Bền vững</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Kinh tế xanh (ESG), Năng lượng sạch, Sinh thái</div>
+                  </div>
+                </label>
+                <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; background: rgba(255,255,255,0.03); padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; line-height: 1.35;">
+                  <input type="checkbox" name="target_orientations" value="explore_all" style="margin-top: 2px;">
+                  <div>
+                    <div style="font-weight: 600; color: #f8fafc;">🔍 Em chưa rõ / Khám phá đa dạng</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">Sẵn sàng tìm hiểu tất cả các hướng phù hợp</div>
+                  </div>
                 </label>
               </div>
             </div>

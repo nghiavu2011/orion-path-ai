@@ -328,8 +328,28 @@ assert.strictEqual(s8.ctaText, 'Khám phá thử nghiệm tiếp theo');
 assert.strictEqual(s8.ctaActionType, 'NEXT_EXPERIMENT');
 console.log('✓ Test 14 Passed: All 8 deterministic next action states resolved with accurate CTAs & zero fabricated evidence.');
 
+console.log('--- TEST 15: Student-Friendly Target Orientations Matching & Evidence ---');
+const targetTestHypotheses = engine.generateCareerHypotheses({
+  riasecScores: { R: 2, I: 4, A: 2, S: 8, E: 2, C: 2 },
+  academic: { math: 8.0, lit: 8.0, eng: 8.0 },
+  targets: ['health', 'environment']
+});
+const healthCareer = targetTestHypotheses.find(h => h.id === 'healthcare_practitioner');
+assert.ok(healthCareer, 'Healthcare practitioner should be recommended for S-profile with health target');
+const hasTargetEvidence = healthCareer.evidenceFor.some(e => e.includes('chủ động quan tâm'));
+assert.strictEqual(hasTargetEvidence, true, 'Healthcare hypothesis must reflect student interest evidence');
+
+// Verify open explore option does not break generation
+const openExploreHypotheses = engine.generateCareerHypotheses({
+  riasecScores: { R: 2, I: 4, A: 2, S: 8, E: 2, C: 2 },
+  academic: { math: 8.0, lit: 8.0, eng: 8.0 },
+  targets: ['explore_all']
+});
+assert.strictEqual(openExploreHypotheses.length >= 3, true, 'Explore all option returns valid hypotheses');
+console.log('✓ Test 15 Passed: Target orientation matches add verified evidence and explore_all operates smoothly.');
+
 console.log('\n==========================================');
-console.log('ALL 14 PRODUCTION ENGINE TESTS PASSED 100%');
+console.log('ALL 15 PRODUCTION ENGINE TESTS PASSED 100%');
 console.log('==========================================');
 
 
