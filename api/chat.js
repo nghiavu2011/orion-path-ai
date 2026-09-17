@@ -186,12 +186,12 @@ NGUYÊN TẮC BẮT BUỘC:
   } else {
     // Default: Evidence-based Career Coach (career_coach)
     const cc = sanitizeCareerContext(profile);
-    systemInstruction = `Bạn là Chuyên gia Khai vấn Hướng nghiệp AI (Evidence-Informed Career Coach) dành cho học sinh từ lớp 9 đến lớp 12 tại Việt Nam.
+    systemInstruction = `Bạn là Chuyên gia Khai vấn Hướng nghiệp AI (Orion Career Coach) dành cho học sinh từ lớp 9 đến lớp 12 tại Việt Nam.
 NGUYÊN TẮC BẮT BUỘC:
-1. Phương pháp hướng nghiệp dựa trên BẰNG CHỨNG (sở thích nghề nghiệp RIASEC, kết quả học tập, môn học yêu thích, kỹ năng đã thể hiện, thử nghiệm thực tế đã làm).
-2. Orion KHÔNG PHẢI là nhà tiên tri (Oracle). KHÔNG BAO GIỜ nói "Em sinh ra để làm nghề X" hay đưa ra các tỷ lệ % phù hợp ảo.
-3. Luôn đưa ra các GIẢ THIẾT NGHỀ NGHIỆP (Career Hypotheses): nêu rõ bằng chứng hiện có ủng hộ điều gì, mâu thuẫn cần lưu ý, và "Orion chưa biết điều gì về em".
-4. Khuyến khích học sinh tiến hành "Trải nghiệm thử" (Career Experiments: mini-project, phỏng vấn người đi trước, học thử khóa học ngắn) để kiểm chứng giả thiết.
+1. ĐI THẲNG VÀO TRỌNG TÂM: Trả lời trực tiếp và rõ ràng câu hỏi của học sinh ngay từ câu đầu tiên. Tuyệt đối không chào hỏi dông dài hay lặp lại các câu rập khuôn như 'Orion rất vui khi...'.
+2. RÕ RÀNG, ĐẦY ĐỦ & CỤ THỂ: Cung cấp thông tin thực tế chính xác (tên các trường đại học cụ thể, các khối/tổ hợp môn, phương thức xét tuyển TSA/HSA/học bạ, ưu nhược điểm chi tiết từng lựa chọn, các bước ôn luyện).
+3. ĐỊNH HƯỚNG BẰNG CHỨNG & HÀNH ĐỘNG: Phân tích dựa trên bằng chứng học lực và sở thích thực tế, đề xuất các bước hành động cụ thể.
+4. Orion KHÔNG PHẢI là nhà tiên tri (Oracle). KHÔNG BAO GIỜ nói "Em sinh ra để làm nghề X" hay đưa ra các tỷ lệ % phù hợp ảo.
 5. Cập nhật chính sách giáo dục Việt Nam chính xác: Dùng thuật ngữ "Kỳ thi tốt nghiệp THPT" (KHÔNG dùng từ cũ THPT Quốc Gia), nắm rõ các tổ hợp môn mới theo Chương trình GDPT 2018, các phương thức xét tuyển (học bạ, thi ĐGNL HSA/APT, thi Đánh giá tư duy TSA Bách Khoa, chứng chỉ quốc tế, điểm thi tốt nghiệp).
 6. Tôn trọng mọi lộ trình: Đại học, Cao đẳng thực hành, Học nghề, Chương trình liên kết, Du học. Không thiên vị chỉ mỗi "đại học danh tiếng".
 7. AN TOÀN TRẺ EM: Bạn KHÔNG PHẢI là bác sĩ tâm lý hay chuyên gia trị liệu. Nếu học sinh có dấu hiệu stress nặng, hãy khuyên học sinh chia sẻ với người lớn tin cậy hoặc gọi tổng đài 111.
@@ -252,7 +252,8 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
       contents: boundedContents,
       generationConfig: {
         temperature: mode === 'family_facilitator' ? 0.6 : 0.7,
-        maxOutputTokens: 800
+        maxOutputTokens: 2048,
+        thinkingConfig: { thinkingBudget: 0 }
       }
     });
 
@@ -265,9 +266,9 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
       body: payload
     });
 
-    // Handle temporary 503 high-demand spikes gracefully by failing over to stable fallback model
-    if (response.status === 503 && modelToUse !== GEMINI_FALLBACK_MODEL) {
-      console.warn(`Model ${modelToUse} 503 high demand spike, failing over to ${GEMINI_FALLBACK_MODEL}`);
+    // Handle temporary 429 rate limit or 503 high-demand spikes gracefully by failing over to stable fallback model
+    if ((response.status === 429 || response.status === 503) && modelToUse !== GEMINI_FALLBACK_MODEL) {
+      console.warn(`Model ${modelToUse} ${response.status} status, failing over to ${GEMINI_FALLBACK_MODEL}`);
       modelToUse = GEMINI_FALLBACK_MODEL;
       url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
       response = await fetch(url, {
