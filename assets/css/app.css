@@ -96,6 +96,7 @@ body {
 .wizard-progress {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 30px;
 }
@@ -125,6 +126,13 @@ body {
   background: rgba(16, 185, 129, 0.1);
   color: #6EE7B7;
   border-color: rgba(16, 185, 129, 0.3);
+}
+
+.wizard-step-pill.skipped {
+  opacity: 0.45;
+  border-style: dashed;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 /* Screens */
@@ -559,5 +567,51 @@ body {
   accent-color: #10B981;
   flex-shrink: 0;
   cursor: pointer;
+}
+
+/* ==================== PRINT STYLESHEET ==================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+  .starlit-bg,
+  .stars-overlay,
+  header,
+  .wizard-progress,
+  .chat-widget,
+  .modal-overlay,
+  .btn,
+  #fast-track-upgrade-banner,
+  #parent-mode-welcome-banner,
+  .sub-tab-container,
+  #local-cache-restore-alert,
+  .dashboard-grid > div:last-child {
+    display: none !important;
+  }
+  .app-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+  .card-box, .hypothesis-card {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    color: #0f172a !important;
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, strong {
+    color: #0f172a !important;
+  }
+  p, span, div {
+    color: #334155 !important;
+  }
+  .tab-pane {
+    display: block !important;
+  }
 }
 

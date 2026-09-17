@@ -699,7 +699,7 @@
     </section>
 
     <!-- Experiment Reflection Modal -->
-    <div id="experiment-reflection-modal" class="modal-overlay" style="display:none;">
+    <div id="experiment-reflection-modal" class="modal-overlay" onclick="if(event.target === this) closeReflectionModal()" style="display:none;">
       <div class="modal-dialog" style="max-width: 580px;">
         <div class="modal-header">
           <h3 style="font-size: 16px; font-weight: 800; color: #fff;" id="modal-exp-title">Phản Tư Sau Trải Nghiệm</h3>
@@ -745,7 +745,7 @@
     </div>
 
     <!-- Parent Evaluation Modal (Section 2 & 2-Way Facilitator) -->
-    <div id="parent-evaluation-modal" class="modal-overlay" style="display:none;">
+    <div id="parent-evaluation-modal" class="modal-overlay" onclick="if(event.target === this) closeParentEvaluationModal()" style="display:none;">
       <div class="modal-dialog">
         <div class="modal-header">
           <div>
@@ -942,9 +942,14 @@
       for (let i = 1; i <= 5; i++) {
         const pill = document.getElementById('pill-step-' + i);
         if (pill) {
-          pill.classList.remove('active', 'completed');
-          if (i < screenNumber) pill.classList.add('completed');
-          if (i === screenNumber) pill.classList.add('active');
+          pill.classList.remove('active', 'completed', 'skipped');
+          if (isFastTrackMode && (i === 2 || i === 3)) {
+            pill.classList.add('skipped');
+            pill.title = 'Bỏ qua trong chế độ Khảo sát Nhanh';
+          } else {
+            if (i < screenNumber) pill.classList.add('completed');
+            if (i === screenNumber) pill.classList.add('active');
+          }
         }
       }
     }
@@ -1008,12 +1013,12 @@
     }
 
     function collectProfilesAndRenderDashboard() {
-      const name = document.getElementById('user-fullname').value || 'Học sinh';
-      const gender = document.getElementById('user-gender').value;
-      const grade = document.getElementById('user-grade').value;
-      const math = parseFloat(document.getElementById('score-math').value) || 8.0;
-      const lit = parseFloat(document.getElementById('score-literature').value) || 7.5;
-      const eng = parseFloat(document.getElementById('score-english').value) || 8.0;
+      const name = isFastTrackMode ? (document.getElementById('fast-fullname').value || document.getElementById('user-fullname').value || 'Học sinh') : (document.getElementById('user-fullname').value || 'Học sinh');
+      const gender = isFastTrackMode ? 'Chưa rõ' : (document.getElementById('user-gender').value || 'Chưa rõ');
+      const grade = isFastTrackMode ? (document.getElementById('fast-grade').value || 'Lớp 10') : (document.getElementById('user-grade').value || 'Lớp 10');
+      const math = isFastTrackMode ? null : (parseFloat(document.getElementById('score-math').value) || 8.0);
+      const lit = isFastTrackMode ? null : (parseFloat(document.getElementById('score-literature').value) || 7.5);
+      const eng = isFastTrackMode ? null : (parseFloat(document.getElementById('score-english').value) || 8.0);
 
       const checkedTargets = Array.from(document.querySelectorAll('input[name="target_orientations"]:checked')).map(cb => cb.value);
 
@@ -1616,16 +1621,6 @@
       if (targetBtn) targetBtn.classList.add('active');
     }
 
-    // Experiment Reflection Modal Actions
-    function openExperimentAction(expId) {
-      currentActiveExpId = expId;
-      const exp = window.EXPERIMENT_REPOSITORY ? window.EXPERIMENT_REPOSITORY[expId] : null;
-      if (exp) {
-        document.getElementById('modal-exp-title').textContent = `Phản Tư: ${exp.title}`;
-      }
-      document.getElementById('experiment-reflection-modal').style.display = 'flex';
-    }
-
     function closeReflectionModal() {
       document.getElementById('experiment-reflection-modal').style.display = 'none';
       currentActiveExpId = null;
@@ -1685,18 +1680,52 @@
       chatBox.scrollTop = chatBox.scrollHeight;
 
       // Call AI client
-      const res = await window.orionAIClient.askCareerCoach(text, globalStudentCareerProfile);
+      try {
+        const res = await window.orionAIClient.askCareerCoach(text, globalStudentCareerProfile);
 
-      if (res.error) {
-        botDiv.innerHTML = `<span style="color:#ef4444;">${res.error}</span>`;
-      } else if (res.reply) {
-        // Safe formatting
-        botDiv.innerHTML = res.reply
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\n/g, '<br/>');
+        if (res && res.error) {
+          botDiv.innerHTML = `
+            <div style="color:#ef4444; line-height:1.4;">
+              <div style="margin-bottom:6px;">⚠️ ${res.error}</div>
+              <button type="button" onclick="retryChat('${text.replace(/'/g, "\\'")}')" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fff; font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">Thử lại</button>
+            </div>
+          `;
+        } else if (res && res.reply) {
+          // Safe formatting
+          botDiv.innerHTML = res.reply
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '<br/>');
+        } else {
+          botDiv.innerHTML = `
+            <div style="color:#ef4444; line-height:1.4;">
+              <div style="margin-bottom:6px;">⚠️ Không nhận được phản hồi từ AI.</div>
+              <button type="button" onclick="retryChat('${text.replace(/'/g, "\\'")}')" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fff; font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">Thử lại</button>
+            </div>
+          `;
+        }
+      } catch (err) {
+        botDiv.innerHTML = `
+          <div style="color:#ef4444; line-height:1.4;">
+            <div style="margin-bottom:6px;">⚠️ Sự cố kết nối AI. Vui lòng thử lại.</div>
+            <button type="button" onclick="retryChat('${text.replace(/'/g, "\\'")}')" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fff; font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">Thử lại</button>
+          </div>
+        `;
       }
       chatBox.scrollTop = chatBox.scrollHeight;
     }
+
+    function retryChat(msg) {
+      document.getElementById('chat-user-input').value = msg;
+      sendChatMessage();
+    }
+
+    // Global Escape Key Listener for Modals
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeReflectionModal();
+        closeParentEvaluationModal();
+      }
+    });
 
     // ==================== PARENT-CHILD ALIGNMENT CONTROLLER ====================
     function openParentEvaluationModal() {

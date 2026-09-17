@@ -51,10 +51,11 @@ class OrionCareerEngine {
       if (career.riasec.includes(secondary)) matchCount += 2;
       if (career.riasec.includes(tertiary)) matchCount += 1;
 
-      // Tính toán tín hiệu dựa trên học lực
-      const mathScore = parseFloat(academic.math) || 7.0;
-      const engScore = parseFloat(academic.eng) || 7.0;
-      const litScore = parseFloat(academic.lit) || 7.0;
+      // Tính toán tín hiệu dựa trên học lực (nếu có cung cấp)
+      const hasMath = academic && academic.math !== null && academic.math !== undefined && !isNaN(parseFloat(academic.math));
+      const hasEng = academic && academic.eng !== null && academic.eng !== undefined && !isNaN(parseFloat(academic.eng));
+      const mathScore = hasMath ? parseFloat(academic.math) : null;
+      const engScore = hasEng ? parseFloat(academic.eng) : null;
 
       let signalLevel = "Đang khám phá";
       const evidenceList = [];
@@ -62,10 +63,10 @@ class OrionCareerEngine {
 
       // Đánh giá tín hiệu cho nhóm kỹ thuật/công nghệ
       if (career.riasec.includes('I') || career.riasec.includes('R')) {
-        if (mathScore >= 8.0) {
+        if (hasMath && mathScore >= 8.0) {
           evidenceList.push(`Điểm môn Toán học lực tốt (${mathScore}/10) - hỗ trợ năng lực tư duy logic/mô hình.`);
           matchCount += 2;
-        } else if (mathScore < 6.5) {
+        } else if (hasMath && mathScore < 6.5) {
           conflictList.unshift(`Điểm môn Toán hiện tại (${mathScore}) có thể là thử thách nếu học kỹ thuật chuyên sâu.`);
         }
       }
@@ -81,7 +82,7 @@ class OrionCareerEngine {
       }
 
       // Đánh giá ngoại ngữ
-      if (engScore >= 7.5) {
+      if (hasEng && engScore >= 7.5) {
         evidenceList.push(`Điểm Tiếng Anh thuận lợi (${engScore}/10) để tiếp cận tài liệu chuẩn quốc tế.`);
       }
 
@@ -98,10 +99,13 @@ class OrionCareerEngine {
       }
 
       const finalEvidence = evidenceList.length > 0 ? evidenceList : [`Sở thích nghề nghiệp tương đồng với nhóm ${career.riasec.join('/')}`];
-      const finalUnknowns = career.unknownsToTest || [
+      const finalUnknowns = [...(career.unknownsToTest || [
         "Mức độ hứng thú thực tế của em khi làm việc này liên tục mỗi ngày?",
         "Khả năng thích ứng với môi trường làm việc đặc thù của ngành này?"
-      ];
+      ])];
+      if (!hasMath && !hasEng) {
+        finalUnknowns.unshift("Chưa có dữ liệu điểm học thuật THPT (chế độ Khảo sát Nhanh) để đối chiếu năng lực chuyên sâu.");
+      }
       const experimentsList = career.recommendedExperiment ? [career.recommendedExperiment] : [];
       const educationPathsList = career.pathways || [];
 
