@@ -190,12 +190,13 @@ NGUYÊN TẮC BẮT BUỘC:
 NGUYÊN TẮC BẮT BUỘC:
 1. ĐI THẲNG VÀO TRỌNG TÂM: Trả lời trực tiếp và rõ ràng câu hỏi của học sinh ngay từ câu đầu tiên. Tuyệt đối không chào hỏi dông dài hay lặp lại các câu rập khuôn như 'Orion rất vui khi...'.
 2. RÕ RÀNG, ĐẦY ĐỦ & CỤ THỂ: Cung cấp thông tin thực tế chính xác (tên các trường đại học cụ thể, các khối/tổ hợp môn, phương thức xét tuyển TSA/HSA/học bạ, ưu nhược điểm chi tiết từng lựa chọn, các bước ôn luyện).
-3. ĐỊNH HƯỚNG BẰNG CHỨNG & HÀNH ĐỘNG: Phân tích dựa trên bằng chứng học lực và sở thích thực tế, đề xuất các bước hành động cụ thể.
-4. Orion KHÔNG PHẢI là nhà tiên tri (Oracle). KHÔNG BAO GIỜ nói "Em sinh ra để làm nghề X" hay đưa ra các tỷ lệ % phù hợp ảo.
-5. Cập nhật chính sách giáo dục Việt Nam chính xác: Dùng thuật ngữ "Kỳ thi tốt nghiệp THPT" (KHÔNG dùng từ cũ THPT Quốc Gia), nắm rõ các tổ hợp môn mới theo Chương trình GDPT 2018, các phương thức xét tuyển (học bạ, thi ĐGNL HSA/APT, thi Đánh giá tư duy TSA Bách Khoa, chứng chỉ quốc tế, điểm thi tốt nghiệp).
-6. Tôn trọng mọi lộ trình: Đại học, Cao đẳng thực hành, Học nghề, Chương trình liên kết, Du học. Không thiên vị chỉ mỗi "đại học danh tiếng".
-7. AN TOÀN TRẺ EM: Bạn KHÔNG PHẢI là bác sĩ tâm lý hay chuyên gia trị liệu. Nếu học sinh có dấu hiệu stress nặng, hãy khuyên học sinh chia sẻ với người lớn tin cậy hoặc gọi tổng đài 111.
-8. TUYỆT ĐỐI KHÔNG SỬ DỤNG Tử Vi, Nạp Âm, Thần Số Học, Cung Hoàng Đạo trong tư vấn nghề nghiệp.`;
+3. ĐỘ DÀI TỐI ƯU & GÃY GỌN (khoảng 400 - 600 từ): Trình bày bằng các đề mục và gạch đầu dòng rõ ràng, mạch lạc, đi trọn vẹn từ phân tích đến kết luận và các bước hành động tiếp theo, không viết lan man kéo dài.
+4. KẾT THÚC BẰNG HÀNH ĐỘNG CỤ THỂ: Nêu 2-3 bước hành động cụ thể tiếp theo để học sinh áp dụng ngay.
+5. Orion KHÔNG PHẢI là nhà tiên tri (Oracle). KHÔNG BAO GIỜ nói "Em sinh ra để làm nghề X" hay đưa ra các tỷ lệ % phù hợp ảo.
+6. Cập nhật chính sách giáo dục Việt Nam chính xác: Dùng thuật ngữ "Kỳ thi tốt nghiệp THPT" (KHÔNG dùng từ cũ THPT Quốc Gia), nắm rõ các tổ hợp môn mới theo Chương trình GDPT 2018, các phương thức xét tuyển (học bạ, thi ĐGNL HSA/APT, thi Đánh giá tư duy TSA Bách Khoa, chứng chỉ quốc tế, điểm thi tốt nghiệp).
+7. Tôn trọng mọi lộ trình: Đại học, Cao đẳng thực hành, Học nghề, Chương trình liên kết, Du học. Không thiên vị chỉ mỗi "đại học danh tiếng".
+8. AN TOÀN TRẺ EM: Bạn KHÔNG PHẢI là bác sĩ tâm lý hay chuyên gia trị liệu. Nếu học sinh có dấu hiệu stress nặng, hãy khuyên học sinh chia sẻ với người lớn tin cậy hoặc gọi tổng đài 111.
+9. TUYỆT ĐỐI KHÔNG SỬ DỤNG Tử Vi, Nạp Âm, Thần Số Học, Cung Hoàng Đạo trong tư vấn nghề nghiệp.`;
 
     if (safetyLevel === 'DISTRESS') {
       systemInstruction += `\n\n[LƯU Ý ĐẶC BIỆT]: Học sinh đang bày tỏ cảm xúc lo âu/căng thẳng học tập. Hãy phản hồi với sự thấu cảm cao nhất, động viên tinh thần trước khi bàn về việc học, nhắc nhở em giữ gìn sức khỏe.`;
@@ -239,11 +240,8 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
   });
 
   try {
-    let modelToUse = GEMINI_MODEL;
-    let url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
-
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
+    const timeout = setTimeout(() => controller.abort(), 28000); // 28s timeout (aligned with maxDuration: 30s)
 
     const payload = JSON.stringify({
       system_instruction: {
@@ -252,25 +250,22 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
       contents: boundedContents,
       generationConfig: {
         temperature: mode === 'family_facilitator' ? 0.6 : 0.7,
-        maxOutputTokens: 2048,
-        thinkingConfig: { thinkingBudget: 0 }
+        maxOutputTokens: 3000
       }
     });
 
-    let response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      signal: controller.signal,
-      body: payload
-    });
+    const candidateModels = [
+      GEMINI_MODEL,
+      'gemini-3.6-flash',
+      'gemini-3.5-flash',
+      'gemini-3.7-flash',
+      GEMINI_FALLBACK_MODEL,
+      'gemini-2.5-flash'
+    ].filter((m, idx, arr) => m && arr.indexOf(m) === idx);
 
-    // Handle temporary 429 rate limit or 503 high-demand spikes gracefully by failing over to stable fallback model
-    if ((response.status === 429 || response.status === 503) && modelToUse !== GEMINI_FALLBACK_MODEL) {
-      console.warn(`Model ${modelToUse} ${response.status} status, failing over to ${GEMINI_FALLBACK_MODEL}`);
-      modelToUse = GEMINI_FALLBACK_MODEL;
-      url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
+    let response = null;
+    for (const modelToUse of candidateModels) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
       response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -279,30 +274,46 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
         signal: controller.signal,
         body: payload
       });
+
+      if (response.ok) {
+        break;
+      }
+
+      console.warn(`Model ${modelToUse} returned status ${response.status}, trying next fallback...`);
+      if (response.status !== 429 && response.status !== 503) {
+        break;
+      }
     }
 
     clearTimeout(timeout);
 
-    if (!response.ok) {
-      console.error('Gemini Provider Error Status:', response.status);
+    if (!response || !response.ok) {
+      console.error('Gemini Provider Error Status:', response ? response.status : 'No response');
       return res.status(502).json({
         error: USER_SAFE_AI_ERROR
       });
     }
 
     const data = await response.json();
-    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
-      const text = data.candidates[0].content.parts[0].text;
-      return res.status(200).json({
-        reply: text,
-        mode: mode,
-        safetyLevel: safetyLevel
-      });
-    } else {
-      return res.status(502).json({
-        error: USER_SAFE_AI_ERROR
-      });
+    if (data.candidates && data.candidates[0] && data.candidates[0].content && Array.isArray(data.candidates[0].content.parts)) {
+      const text = data.candidates[0].content.parts
+        .filter(p => !p.thought && typeof p.text === 'string')
+        .map(p => p.text)
+        .join('')
+        .trim();
+
+      if (text) {
+        return res.status(200).json({
+          reply: text,
+          mode: mode,
+          safetyLevel: safetyLevel
+        });
+      }
     }
+
+    return res.status(502).json({
+      error: USER_SAFE_AI_ERROR
+    });
   } catch (error) {
     if (error.name === 'AbortError') {
       console.error('AI Request Timeout');
