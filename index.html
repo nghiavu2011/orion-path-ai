@@ -45,6 +45,7 @@
   .glass-card {
     background: rgba(15, 23, 61, 0.5);
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
   .text-gradient-indigo-emerald {
@@ -55,12 +56,21 @@
   .glowing-indigo {
     box-shadow: 0 0 25px rgba(99, 102, 241, 0.35);
   }
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+  details summary {
+    list-style: none;
+  }
+  details[open] .faq-icon {
+    transform: rotate(180deg);
+  }
 </style>
 </head>
 <body class="bg-background text-slate-100 font-sans min-h-screen selection:bg-primary selection:text-white overflow-x-hidden">
 
 <!-- Navigation -->
-<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-margin-desktop py-4 max-w-container-max mx-auto bg-background/80 backdrop-blur-xl border-b border-white/10 shadow-sm">
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-4 md:px-margin-desktop py-3.5 max-w-container-max mx-auto bg-background/85 backdrop-blur-xl border-b border-white/10 shadow-sm">
   <div class="flex items-center gap-2">
     <svg class="w-8 h-8 text-primary filter drop-shadow-[0_0_8px_rgba(192,193,255,0.8)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="8" stroke-linecap="round" class="text-primary"/>
@@ -72,70 +82,80 @@
     <span class="text-xl md:text-2xl font-display font-extrabold text-primary tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Orion Path AI</span>
   </div>
   
-  <div class="hidden lg:flex items-center gap-7 text-xs font-semibold tracking-wide text-slate-300">
-    <a class="hover:text-white transition-colors" href="#solutions">Orion giúp gì</a>
-    <a class="hover:text-white transition-colors" href="#sample-report">Báo cáo mẫu</a>
-    <a class="hover:text-white transition-colors" href="#methodology">Phương pháp</a>
+  <div class="hidden xl:flex items-center gap-6 text-xs font-semibold tracking-wide text-slate-300">
+    <a class="hover:text-white transition-colors" href="#solutions">Hệ sinh thái</a>
+    <a class="hover:text-white transition-colors" href="#ai-resilience">Chỉ số AI 2026+</a>
     <a class="hover:text-white transition-colors" href="#hypotheses">Giả thiết</a>
     <a class="hover:text-white transition-colors" href="#experiments">Thử nghiệm</a>
     <a class="hover:text-white transition-colors" href="#family">Cầu nối gia đình</a>
+    <a class="hover:text-white transition-colors" href="#comparison">Khác biệt</a>
+    <a class="hover:text-white transition-colors" href="#faq">Hỏi đáp</a>
     <a class="hover:text-white transition-colors" href="#pricing">Bảng giá</a>
   </div>
   
-  <div class="flex items-center gap-3">
-    <button class="glowing-indigo bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-full font-bold active:scale-95 transition-all flex items-center gap-2 text-sm" onclick="window.location.href='app.html'">
-      <span>Bắt đầu hồ sơ hướng nghiệp</span>
-      <span class="material-symbols-outlined text-sm">arrow_forward</span>
-    </button>
+  <div class="flex items-center gap-2.5">
+    <a href="app.html" class="glowing-indigo bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-bold active:scale-95 transition-all flex items-center gap-1.5 text-xs md:text-sm">
+      <span class="material-symbols-outlined text-sm">rocket_launch</span>
+      <span>Vào ứng dụng</span>
+    </a>
   </div>
 </nav>
 
 <main class="pt-24">
   <!-- Hero Section -->
-  <section class="relative min-h-[85vh] flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-12 px-margin-mobile md:px-margin-desktop py-16 max-w-container-max mx-auto">
+  <section class="relative min-h-[85vh] flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-12 px-margin-mobile md:px-margin-desktop py-12 max-w-container-max mx-auto">
     <div class="relative z-10 max-w-2xl lg:max-w-xl flex flex-col items-center lg:items-start">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary mb-6">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary mb-5">
         <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-        <span>Hướng nghiệp dựa trên bằng chứng • Không bói toán</span>
+        <span>Hướng nghiệp thực chứng • Chuẩn GDPT 2018 • Sẵn sàng Kỷ nguyên AI</span>
       </div>
       
-      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-display font-extrabold text-white leading-tight mb-5">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-display font-extrabold text-white leading-tight mb-4">
         Hiểu mình hơn. Thử nhiều hướng hơn. <br/>
-        <span class="text-gradient-indigo-emerald">Chọn tương lai có cơ sở hơn.</span>
+        <span class="text-gradient-indigo-emerald">Chọn tương lai vững vàng trong Kỷ nguyên AI.</span>
       </h1>
       
-      <p class="text-sm md:text-base text-slate-300 mb-8 leading-relaxed">
-        Orion giúp học sinh và gia đình tổng hợp sở thích nghề nghiệp, dữ liệu học tập, trải nghiệm thực tế và điều kiện lựa chọn để xây dựng những hướng nghề nghiệp đáng khám phá.
+      <p class="text-sm md:text-base text-slate-300 mb-6 leading-relaxed">
+        Orion Path AI đồng hành cùng học sinh THPT và cha mẹ: kết hợp trắc nghiệm RIASEC Holland, học lực Toán-Văn-Anh thực tế, <strong>Chỉ số Sẵn sàng AI (AI Resilience Index)</strong>, thư viện mini-project thử nghiệm thực chiến và <strong>Thước đo Đồng điệu Gia đình 2 chiều</strong>.
       </p>
       
-      <!-- Primary & Secondary CTA -->
-      <div class="flex flex-col sm:flex-row gap-4 w-full justify-center lg:justify-start">
-        <button class="glowing-indigo bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all active:scale-95" onclick="window.location.href='app.html'">
-          <span class="material-symbols-outlined">rocket_launch</span>
-          Bắt đầu hồ sơ hướng nghiệp
-        </button>
-        <button class="border border-white/20 hover:border-primary/50 bg-white/5 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-bold text-base flex items-center justify-center gap-2 transition-all active:scale-95" onclick="document.getElementById('sample-report').scrollIntoView({behavior: 'smooth'})">
-          <span class="material-symbols-outlined">visibility</span>
-          Xem báo cáo mẫu
+      <!-- Primary Dual CTAs -->
+      <div class="flex flex-col sm:flex-row gap-3 w-full justify-center lg:justify-start mb-6">
+        <a href="app.html" class="glowing-indigo bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3.5 rounded-xl font-bold text-sm md:text-base flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-indigo-500/25">
+          <span class="material-symbols-outlined text-amber-400">bolt</span>
+          <span>Khảo Sát Nhanh (3 phút)</span>
+        </a>
+        <a href="app.html" class="border border-white/20 hover:border-emerald-500/50 bg-white/5 hover:bg-white/10 text-white px-6 py-3.5 rounded-xl font-bold text-sm md:text-base flex items-center justify-center gap-2 transition-all active:scale-95">
+          <span class="material-symbols-outlined text-secondary">assignment</span>
+          <span>Đánh Giá Chuyên Sâu (15 phút)</span>
+        </a>
+        <button class="border border-white/10 hover:border-white/30 bg-black/30 text-slate-300 hover:text-white px-4 py-3.5 rounded-xl font-semibold text-xs md:text-sm flex items-center justify-center gap-1 transition-all active:scale-95" onclick="document.getElementById('sample-report').scrollIntoView({behavior: 'smooth'})">
+          <span class="material-symbols-outlined text-base">visibility</span>
+          <span>Xem mẫu</span>
         </button>
       </div>
 
-      <!-- Value Props Grid -->
-      <div class="grid grid-cols-3 gap-3 mt-10 w-full">
-        <div class="glass-card p-3 rounded-xl flex flex-col text-left border-white/10">
-          <span class="material-symbols-outlined text-primary text-xl mb-1">fact_check</span>
-          <h4 class="font-bold text-xs text-white">Bằng chứng rõ ràng</h4>
-          <p class="text-[11px] text-slate-400">RIASEC & Học lực thực</p>
+      <!-- Live Trust & Key Stats Strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 w-full pt-4 border-t border-white/10 text-left">
+        <div class="glass-card p-3 rounded-xl border-white/5">
+          <div class="text-secondary font-display font-extrabold text-lg sm:text-xl">3–5</div>
+          <div class="text-[11px] text-slate-300 font-semibold leading-tight mt-0.5">Giả thiết nghề nghiệp</div>
+          <div class="text-[10px] text-slate-400">Không ép 1 nhãn dán</div>
         </div>
-        <div class="glass-card p-3 rounded-xl flex flex-col text-left border-white/10">
-          <span class="material-symbols-outlined text-secondary text-xl mb-1">science</span>
-          <h4 class="font-bold text-xs text-white">Thử nghiệm thực tế</h4>
-          <p class="text-[11px] text-slate-400">Mini-project 60-90p</p>
+        <div class="glass-card p-3 rounded-xl border-white/5">
+          <div class="text-primary font-display font-extrabold text-lg sm:text-xl">2026+</div>
+          <div class="text-[11px] text-slate-300 font-semibold leading-tight mt-0.5">AI Resilience Index</div>
+          <div class="text-[10px] text-slate-400">Đo rủi ro thay thế</div>
         </div>
-        <div class="glass-card p-3 rounded-xl flex flex-col text-left border-white/10">
-          <span class="material-symbols-outlined text-tertiary text-xl mb-1">family_restroom</span>
-          <h4 class="font-bold text-xs text-white">Cầu nối gia đình</h4>
-          <p class="text-[11px] text-slate-400">Điều phối không phán xét</p>
+        <div class="glass-card p-3 rounded-xl border-white/5">
+          <div class="text-tertiary font-display font-extrabold text-lg sm:text-xl">60s</div>
+          <div class="text-[11px] text-slate-300 font-semibold leading-tight mt-0.5">Cầu nối gia đình</div>
+          <div class="text-[10px] text-slate-400">Thước đo đồng điệu</div>
+        </div>
+        <div class="glass-card p-3 rounded-xl border-white/5">
+          <div class="text-emerald-400 font-display font-extrabold text-lg sm:text-xl">100%</div>
+          <div class="text-[11px] text-slate-300 font-semibold leading-tight mt-0.5">Chuẩn GDPT 2018</div>
+          <div class="text-[10px] text-slate-400">Tổ hợp môn & ĐGNL</div>
         </div>
       </div>
     </div>
@@ -185,38 +205,80 @@
     </div>
   </section>
 
-  <!-- Section: Orion Giúp Gì -->
+  <!-- Section: 6 Trụ Cột Hệ Sinh Thái Orion -->
   <section id="solutions" class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto border-t border-white/10 scroll-mt-20">
     <div class="text-center max-w-3xl mx-auto mb-16">
-      <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">Giá trị cốt lõi</span>
+      <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">Hệ sinh thái toàn diện</span>
       <h2 class="text-3xl md:text-4xl font-display font-extrabold text-white mb-4">
-        Orion Giúp Gì Cho <span class="text-gradient-indigo-emerald">Học Sinh & Gia Đình?</span>
+        6 Trụ Cột Hướng Nghiệp <span class="text-gradient-indigo-emerald">Thực Chứng & Đồng Điệu</span>
       </h2>
       <p class="text-slate-400 text-sm md:text-base">
-        Thay vì áp đặt một kết luận cứng nhắc, Orion cùng em trải qua hành trình: Thấu hiểu • Khám phá • Đối chiếu • Thử nghiệm • Ra quyết định.
+        Thay vì áp đặt một nhãn dán nghề nghiệp cứng nhắc, Orion cùng em và gia đình trải qua một hành trình khoa học: Thấu hiểu • Khám phá • Đối chiếu • Thử nghiệm • Đồng hành.
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Pillar 1 -->
       <div class="glass-card p-6 md:p-8 rounded-2xl flex flex-col justify-between hover:border-primary/40 transition-colors">
         <div>
-          <div class="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center text-primary mb-4 font-bold text-lg">01</div>
-          <h3 class="text-lg font-bold text-white mb-2">Hồ Sơ Sở Thích RIASEC</h3>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center text-primary font-bold text-lg">01</div>
+            <span class="text-[11px] font-bold text-primary bg-primary/10 px-2.5 py-1 rounded-full">Khảo sát 3' hoặc 15'</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Sàng Lọc RIASEC & Khảo Sát Nhanh</h3>
           <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
-            Bài sàng lọc sở thích nghề nghiệp dựa trên mô hình Holland RIASEC, kết hợp dữ liệu học tập và trải nghiệm thực tế để tìm kiếm các tín hiệu tự nhiên.
+            Linh hoạt giữa Chế độ Nhanh (5 câu phản xạ tình huống 3 phút) hoặc Đánh giá Chuyên sâu (30 câu RIASEC chuẩn Holland kết hợp học lực Toán-Văn-Anh).
           </p>
         </div>
         <div class="mt-6 pt-4 border-t border-white/5 text-xs text-primary font-semibold flex items-center gap-1">
-          <span class="material-symbols-outlined text-xs">verified</span> Đánh giá khách quan, không gán nhãn
+          <span class="material-symbols-outlined text-xs">verified</span> Đánh giá khách quan, không bói toán
         </div>
       </div>
 
+      <!-- Pillar 2 -->
+      <div class="glass-card p-6 md:p-8 rounded-2xl flex flex-col justify-between hover:border-emerald-400/40 transition-colors">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center text-emerald-400 font-bold text-lg">02</div>
+            <span class="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full">Kỷ nguyên AI 2026+</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Chỉ Số Sẵn Sàng AI (Resilience)</h3>
+          <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
+            Đo lường mức độ rủi ro bị tự động hóa của từng ngành nghề, định vị Kỹ năng độc bản của con người (Human Core Skill) và lời khuyên làm chủ AI.
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/5 text-xs text-emerald-400 font-semibold flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">smart_toy</span> Không sợ AI thay thế khi biết hợp lực
+        </div>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="glass-card p-6 md:p-8 rounded-2xl flex flex-col justify-between hover:border-amber-400/40 transition-colors">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center text-amber-400 font-bold text-lg">03</div>
+            <span class="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full">3–5 Hướng đi</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Giả Thiết Nghề Nghiệp Mở</h3>
+          <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
+            Mỗi hướng đi đều trả lời rành mạch: Vì sao Orion gợi ý? Điểm mâu thuẫn & thử thách? Điều Orion chưa biết về em? và Thử nghiệm thực tế cần làm?
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/5 text-xs text-amber-400 font-semibold flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">explore</span> Khám phá tiềm năng, không đóng khung
+        </div>
+      </div>
+
+      <!-- Pillar 4 -->
       <div class="glass-card p-6 md:p-8 rounded-2xl flex flex-col justify-between hover:border-secondary/40 transition-colors">
         <div>
-          <div class="w-12 h-12 rounded-xl bg-secondary/15 flex items-center justify-center text-secondary mb-4 font-bold text-lg">02</div>
-          <h3 class="text-lg font-bold text-white mb-2">Giả Thiết & Thử Nghiệm Thật</h3>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-secondary/15 flex items-center justify-center text-secondary font-bold text-lg">04</div>
+            <span class="text-[11px] font-bold text-secondary bg-secondary/10 px-2.5 py-1 rounded-full">60–90 Phút</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Thư Viện Thử Nghiệm Thực Tế</h3>
           <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
-            Mỗi hướng đi đều trả lời "Vì sao Orion gợi ý?" và "Điều Orion chưa biết về em?". Em được thử sức qua các mini-project 60-90 phút để tự cảm nhận.
+            Mini-project thực chiến (Google Colab, Tinkercad, Figma...) giúp học sinh chạm tay vào công việc thật, kèm 6 câu hỏi phản tư cảm xúc sau trải nghiệm.
           </p>
         </div>
         <div class="mt-6 pt-4 border-t border-white/5 text-xs text-secondary font-semibold flex items-center gap-1">
@@ -224,16 +286,124 @@
         </div>
       </div>
 
+      <!-- Pillar 5 -->
       <div class="glass-card p-6 md:p-8 rounded-2xl flex flex-col justify-between hover:border-tertiary/40 transition-colors">
         <div>
-          <div class="w-12 h-12 rounded-xl bg-tertiary/15 flex items-center justify-center text-tertiary mb-4 font-bold text-lg">03</div>
-          <h3 class="text-lg font-bold text-white mb-2">Cầu Nối Hòa Giải Gia Đình</h3>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-tertiary/15 flex items-center justify-center text-tertiary font-bold text-lg">05</div>
+            <span class="text-[11px] font-bold text-tertiary bg-tertiary/10 px-2.5 py-1 rounded-full">Phụ huynh 60s</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Thước Đo Đồng Điệu Gia Đình</h3>
           <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
-            AI đóng vai trò điều phối viên trung gian: giải tỏa áp lực, dung hòa giữa ước mơ của con và nỗi lo tài chính an toàn của cha mẹ mà không phán xét ai đúng ai sai.
+            Ba Mẹ tham gia khảo sát nhanh 60 giây, mở khóa Thước đo Đồng điệu 2 chiều (Alignment Scorecard) và 3 thẻ gợi ý mở lời đối thoại yêu thương không phán xét.
           </p>
         </div>
         <div class="mt-6 pt-4 border-t border-white/5 text-xs text-tertiary font-semibold flex items-center gap-1">
           <span class="material-symbols-outlined text-xs">handshake</span> Thấu hiểu hai chiều ấm áp
+        </div>
+      </div>
+
+      <!-- Pillar 6 -->
+      <div class="glass-card p-6 md:p-8 rounded-2xl flex flex-col justify-between hover:border-indigo-400/40 transition-colors">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="w-12 h-12 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-400 font-bold text-lg">06</div>
+            <span class="text-[11px] font-bold text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-full">Quy chế THPT</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Tổ Hợp Môn THPT GDPT 2018</h3>
+          <p class="text-xs md:text-sm text-slate-300 leading-relaxed">
+            Đề xuất tổ hợp 3 môn tối ưu kèm 1 tổ hợp dự phòng (A00, A01, D01, D07...), lộ trình tiếp cận kỳ thi Đánh giá tư duy (TSA Bách Khoa) & ĐGNL (HSA/APT).
+          </p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/5 text-xs text-indigo-400 font-semibold flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">school</span> Bám sát quy chế tuyển sinh Việt Nam
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION: AI RESILIENCE INDEX SPOTLIGHT -->
+  <section id="ai-resilience" class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto border-t border-white/10 scroll-mt-20">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-6 text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs font-semibold text-emerald-400 mb-4">
+          <span class="material-symbols-outlined text-sm">psychology</span>
+          <span>Chỉ số độc quyền cho thị trường lao động 2026+</span>
+        </div>
+        <h2 class="text-3xl md:text-4xl font-display font-extrabold text-white mb-5 leading-tight">
+          Chỉ Số Sẵn Sàng Kỷ Nguyên AI: <br/>
+          <span class="text-gradient-indigo-emerald">Biết Đâu Là Rủi Ro, Đâu Là Cơ Hội</span>
+        </h2>
+        <p class="text-slate-300 text-sm md:text-base leading-relaxed mb-6">
+          Trong 5–10 năm tới, khi học sinh bước vào thị trường lao động, AI sẽ định hình lại toàn bộ các ngành nghề. Orion Path AI là nền tảng đầu tiên tại Việt Nam tích hợp <strong>AI Resilience Index</strong> trực tiếp vào từng hướng nghề:
+        </p>
+
+        <div class="space-y-4 text-xs md:text-sm">
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-white/5 border border-white/5">
+            <span class="material-symbols-outlined text-emerald-400 text-lg mt-0.5">security</span>
+            <div>
+              <strong class="text-white">1. Đo lường rủi ro thay thế (AI Replacement Risk):</strong>
+              <p class="text-slate-300 mt-1">Phân loại khách quan mức độ nguy cơ (Thấp / Trung bình / Cao) dựa trên tỷ lệ các tác vụ lặp lại hay đòi hỏi phán đoán đạo đức & cảm xúc con người.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-white/5 border border-white/5">
+            <span class="material-symbols-outlined text-primary text-lg mt-0.5">fingerprint</span>
+            <div>
+              <strong class="text-white">2. Định vị kỹ năng độc bản con người (Human Core Skill):</strong>
+              <p class="text-slate-300 mt-1">Chỉ rõ năng lực cốt lõi mà thuật toán AI không thể học hay bắt chước: tư duy phản biện, thấu cảm sâu sắc, khả năng đàm phán và lãnh đạo truyền cảm hứng.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 p-3.5 rounded-xl bg-white/5 border border-white/5">
+            <span class="material-symbols-outlined text-amber-400 text-lg mt-0.5">electric_bolt</span>
+            <div>
+              <strong class="text-white">3. Lời khuyên cộng tác & đón đầu (AI Synergy Tip):</strong>
+              <p class="text-slate-300 mt-1">Hướng dẫn học sinh cách sử dụng công cụ AI như một người trợ lý đắc lực nhân đôi năng suất, thay vì lo âu bị đào thải.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Sample Card -->
+      <div class="lg:col-span-6">
+        <div class="glass-card p-6 md:p-8 rounded-3xl border-emerald-500/20 shadow-2xl relative">
+          <div class="flex justify-between items-center mb-5">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              AI Resilience Index: 92/100
+            </span>
+            <span class="text-xs text-slate-400">Dự phóng 2026–2030</span>
+          </div>
+
+          <h3 class="text-xl font-bold text-white mb-2">Kỹ Sư Thiết Kế Vi Mạch & Hệ Thống Nhúng</h3>
+          <p class="text-xs text-slate-300 mb-5 leading-relaxed">
+            Thiết kế kiến trúc phần cứng bán dẫn, kiểm thử chip và tích hợp vi điều khiển thông minh trong các thiết bị thực tế.
+          </p>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25">
+              <div class="font-bold text-emerald-300 mb-1 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">shield</span>
+                Nguy cơ AI thay thế: Thấp (15%)
+              </div>
+              <p class="text-slate-300">Yêu cầu can thiệp vật lý thực tế, tính toán tương tác vật liệu và kiểm chuẩn an toàn nghiêm ngặt mà AI chỉ đóng vai trò mô phỏng phụ trợ.</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-primary/10 border border-primary/25">
+              <div class="font-bold text-primary-light mb-1 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">psychology</span>
+                Kỹ năng độc bản con người:
+              </div>
+              <p class="text-slate-300">Tư duy không gian kiến trúc phần cứng, trực giác debug lỗi tín hiệu vật lý và sự nhạy bén tối ưu hóa năng lượng vi mạch.</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/25">
+              <div class="font-bold text-amber-300 mb-1 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">tips_and_updates</span>
+                Lời khuyên cộng tác với AI:
+              </div>
+              <p class="text-slate-300">Sử dụng AI để tự động hóa viết testbench Verilog và mô phỏng tải nhiệt, giải phóng thời gian cho khâu sáng tạo kiến trúc lõi.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -532,6 +702,75 @@
     </div>
   </section>
 
+  <!-- SECTION: VÌ SAO ORION KHÁC BIỆT (COMPARISON TABLE) -->
+  <section id="comparison" class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto border-t border-white/10 scroll-mt-20">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-xs font-bold uppercase tracking-widest text-secondary mb-2 block">Minh bạch & Đột phá</span>
+      <h2 class="text-3xl md:text-4xl font-display font-extrabold text-white mb-4">
+        Vì Sao Orion Khác Biệt <span class="text-gradient-indigo-emerald">So Với Cách Làm Cũ?</span>
+      </h2>
+      <p class="text-slate-400 text-sm md:text-base">
+        Bảng so sánh trực diện giữa các bài trắc nghiệm tính cách thông thường và Hệ thống hướng nghiệp thực chứng Orion Path AI.
+      </p>
+    </div>
+
+    <div class="max-w-5xl mx-auto overflow-x-auto">
+      <table class="w-full border-collapse text-left glass-card rounded-2xl overflow-hidden text-xs md:text-sm">
+        <thead>
+          <tr class="border-b border-white/10 bg-white/5">
+            <th class="p-4 md:p-5 text-white font-bold text-xs uppercase tracking-wider w-1/4">Tiêu chí so sánh</th>
+            <th class="p-4 md:p-5 text-slate-400 font-semibold text-xs uppercase tracking-wider w-3/8">Trắc nghiệm tính cách truyền thống</th>
+            <th class="p-4 md:p-5 text-emerald-400 font-extrabold text-xs uppercase tracking-wider w-3/8 bg-emerald-500/10 border-l border-emerald-500/20">Hệ sinh thái Orion Path AI</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          <tr>
+            <td class="p-4 md:p-5 font-bold text-white">1. Bản chất kết quả</td>
+            <td class="p-4 md:p-5 text-slate-400">Ép vào 1 nhãn dán tính cách cố định (ví dụ: "Bạn sinh ra để làm nghề X").</td>
+            <td class="p-4 md:p-5 text-slate-200 bg-emerald-500/5 border-l border-emerald-500/20 font-medium">
+              <span class="text-emerald-400 font-bold">✓ Mở ra 3–5 Giả thiết nghề nghiệp</span> kèm 4 cấu phần bằng chứng minh bạch, không đóng khung.
+            </td>
+          </tr>
+          <tr>
+            <td class="p-4 md:p-5 font-bold text-white">2. Thích ứng Kỷ nguyên AI</td>
+            <td class="p-4 md:p-5 text-slate-400">Hoàn toàn bỏ qua; danh mục nghề nghiệp tĩnh không tính đến làn sóng tự động hóa.</td>
+            <td class="p-4 md:p-5 text-slate-200 bg-emerald-500/5 border-l border-emerald-500/20 font-medium">
+              <span class="text-emerald-400 font-bold">✓ Tích hợp AI Resilience Index:</span> Phân tích nguy cơ thay thế, định vị kỹ năng con người độc bản (Human Core Skill).
+            </td>
+          </tr>
+          <tr>
+            <td class="p-4 md:p-5 font-bold text-white">3. Vai trò của Phụ huynh</td>
+            <td class="p-4 md:p-5 text-slate-400">Đứng ngoài cuộc; dễ dẫn đến xung đột quan điểm hay áp đặt kỳ vọng lên con cái.</td>
+            <td class="p-4 md:p-5 text-slate-200 bg-emerald-500/5 border-l border-emerald-500/20 font-medium">
+              <span class="text-emerald-400 font-bold">✓ Thước đo Đồng điệu Gia đình (60s):</span> AI làm điều phối viên trung gian, gợi ý 3 chủ đề đối thoại hòa giải thấu cảm.
+            </td>
+          </tr>
+          <tr>
+            <td class="p-4 md:p-5 font-bold text-white">4. Tính hành động thực tế</td>
+            <td class="p-4 md:p-5 text-slate-400">Đọc xong bản báo cáo lý thuyết dài rồi để đó, không biết bước tiếp theo phải làm gì.</td>
+            <td class="p-4 md:p-5 text-slate-200 bg-emerald-500/5 border-l border-emerald-500/20 font-medium">
+              <span class="text-emerald-400 font-bold">✓ Career Experiments 60–90 phút:</span> Mini-project thực chiến (Colab, Figma, mạch logic) kèm 6 câu hỏi phản tư sau làm.
+            </td>
+          </tr>
+          <tr>
+            <td class="p-4 md:p-5 font-bold text-white">5. Bối cảnh giáo dục Việt Nam</td>
+            <td class="p-4 md:p-5 text-slate-400">Dịch máy móc từ bài test nước ngoài, xa rời quy chế thi tốt nghiệp và kỳ thi trong nước.</td>
+            <td class="p-4 md:p-5 text-slate-200 bg-emerald-500/5 border-l border-emerald-500/20 font-medium">
+              <span class="text-emerald-400 font-bold">✓ 100% Chuẩn GDPT 2018:</span> Đề xuất tổ hợp môn THPT (A00, A01, D01...), lộ trình kỳ thi TSA Bách Khoa và HSA ĐHQG.
+            </td>
+          </tr>
+          <tr>
+            <td class="p-4 md:p-5 font-bold text-white">6. Tách biệt Văn hóa & Khoa học</td>
+            <td class="p-4 md:p-5 text-slate-400">Lẫn lộn bói toán ngày sinh với hướng nghiệp khoa học, gây hoang mang cho học sinh.</td>
+            <td class="p-4 md:p-5 text-slate-200 bg-emerald-500/5 border-l border-emerald-500/20 font-medium">
+              <span class="text-emerald-400 font-bold">✓ Cách ly 100%:</span> Reflection Lab chiêm nghiệm văn hóa dân gian hoàn toàn tùy chọn, không ảnh hưởng điểm số nghề nghiệp.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <!-- SECTION 9: REFLECTION LAB -->
   <section id="reflection-lab" class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto border-t border-white/10 scroll-mt-20">
     <div class="max-w-4xl mx-auto glass-card p-8 md:p-10 rounded-3xl border-indigo-500/30 bg-gradient-to-b from-indigo-950/30 to-background">
@@ -612,6 +851,76 @@
         <a href="tel:111" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold text-xs transition-colors">Gọi 111</a>
         <a href="tel:115" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold text-xs transition-colors">Gọi 115</a>
       </div>
+    </div>
+  </section>
+
+  <!-- SECTION: CÂU HỎI THƯỜNG GẶP (FAQ) -->
+  <section id="faq" class="px-margin-mobile md:px-margin-desktop py-20 max-w-4xl mx-auto border-t border-white/10 scroll-mt-20">
+    <div class="text-center mb-16">
+      <span class="text-xs font-bold uppercase tracking-widest text-primary mb-2 block">Giải đáp thắc mắc</span>
+      <h2 class="text-3xl md:text-4xl font-display font-extrabold text-white mb-4">
+        Câu Hỏi Thường Gặp Của <span class="text-gradient-indigo-emerald">Phụ Huynh & Học Sinh</span>
+      </h2>
+      <p class="text-slate-400 text-sm md:text-base">
+        Những thắc mắc phổ biến nhất khi bắt đầu hành trình định hướng giáo dục cùng Orion Path AI.
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      <!-- FAQ 1 -->
+      <details class="glass-card rounded-2xl border-white/10 overflow-hidden group transition-all">
+        <summary class="p-5 md:p-6 cursor-pointer flex items-center justify-between text-white font-bold text-sm md:text-base select-none hover:text-primary transition-colors">
+          <span>1. Con tôi đang học lớp 9 hoặc lớp 10, chọn tổ hợp môn học thế nào để không bị hối tiếc?</span>
+          <span class="material-symbols-outlined faq-icon text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+        </summary>
+        <div class="px-5 pb-6 md:px-6 text-xs md:text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
+          Chương trình GDPT 2018 đòi hỏi học sinh phải lựa chọn môn học lựa chọn ngay từ đầu lớp 10. Orion Path AI phân tích điểm học lực hiện tại (Toán, Ngữ văn, Tiếng Anh) kết hợp với các Giả thiết nghề nghiệp để đề xuất <strong>1 tổ hợp tối ưu</strong> và <strong>1 tổ hợp dự phòng an toàn</strong>. Đồng thời, hệ thống tư vấn lộ trình tiếp cận các kỳ thi Đánh giá năng lực (HSA) và Đánh giá tư duy (TSA) để các em không bị phụ thuộc vào một phương thức xét tuyển duy nhất.
+        </div>
+      </details>
+
+      <!-- FAQ 2 -->
+      <details class="glass-card rounded-2xl border-white/10 overflow-hidden group transition-all">
+        <summary class="p-5 md:p-6 cursor-pointer flex items-center justify-between text-white font-bold text-sm md:text-base select-none hover:text-primary transition-colors">
+          <span>2. Nếu cha mẹ và con bất đồng quan điểm về ngành nghề thì Orion hỗ trợ giải quyết ra sao?</span>
+          <span class="material-symbols-outlined faq-icon text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+        </summary>
+        <div class="px-5 pb-6 md:px-6 text-xs md:text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
+          Orion không bao giờ phân xử "ai đúng ai sai". Với tính năng <strong>Cầu Nối Gia Đình & Thước Đo Đồng Điệu</strong>, phụ huynh chỉ mất 60 giây trả lời 3 câu hỏi quan sát khách quan. Hệ thống sẽ đối chiếu để chỉ ra: Điểm chung lớn nhất, Khoảng lệch nhận thức cần lắng nghe, và cung cấp <strong>3 thẻ gợi ý mở lời đối thoại</strong> ấm áp. Thay vì tranh cãi bằng cảm xúc, cả gia đình sẽ cùng theo dõi kết quả các bài thử nghiệm thực tế (Career Experiments) 60–90 phút để ra quyết định dựa trên bằng chứng thật.
+        </div>
+      </details>
+
+      <!-- FAQ 3 -->
+      <details class="glass-card rounded-2xl border-white/10 overflow-hidden group transition-all">
+        <summary class="p-5 md:p-6 cursor-pointer flex items-center justify-between text-white font-bold text-sm md:text-base select-none hover:text-primary transition-colors">
+          <span>3. Chỉ số Sẵn sàng Kỷ nguyên AI (AI Resilience Index) có ý nghĩa gì đối với tương lai của con?</span>
+          <span class="material-symbols-outlined faq-icon text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+        </summary>
+        <div class="px-5 pb-6 md:px-6 text-xs md:text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
+          Thế hệ học sinh tốt nghiệp từ năm 2026–2030 sẽ bước vào thị trường lao động nơi AI tham gia sâu rộng. AI Resilience Index phân tích rõ: tỷ lệ tác vụ của nghề có thể bị tự động hóa, kỹ năng độc bản con người (Human Core Skill) mà AI không thể thay thế, và hướng dẫn cách biến AI thành trợ lý đắc lực. Điều này giúp học sinh chuẩn bị tâm thế tự tin, trau dồi đúng năng lực thay vì lo sợ bị AI thay thế.
+        </div>
+      </details>
+
+      <!-- FAQ 4 -->
+      <details class="glass-card rounded-2xl border-white/10 overflow-hidden group transition-all">
+        <summary class="p-5 md:p-6 cursor-pointer flex items-center justify-between text-white font-bold text-sm md:text-base select-none hover:text-primary transition-colors">
+          <span>4. Career Experiments (Thử nghiệm thực tế) là gì? Học sinh làm như thế nào?</span>
+          <span class="material-symbols-outlined faq-icon text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+        </summary>
+        <div class="px-5 pb-6 md:px-6 text-xs md:text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
+          Career Experiments là các mini-project được thiết kế vừa vặn trong 60–90 phút (ví dụ: viết trợ lý Python mini trên Google Colab, thiết kế giao diện Figma, mô phỏng mạch điện Tinkercad, hay phân tích ngân sách mini). Học sinh tự tay thực hiện, chấp nhận gặp khó và thử sửa lỗi. Sau khi hoàn thành, 6 câu hỏi phản tư giúp các em tự đo lường cảm xúc thật sự: Có thấy tò mò không? Có muốn làm lâu hơn không? Bằng chứng từ hành động thực tế luôn có giá trị vượt trội so với câu trả lời trắc nghiệm lý thuyết.
+        </div>
+      </details>
+
+      <!-- FAQ 5 -->
+      <details class="glass-card rounded-2xl border-white/10 overflow-hidden group transition-all">
+        <summary class="p-5 md:p-6 cursor-pointer flex items-center justify-between text-white font-bold text-sm md:text-base select-none hover:text-primary transition-colors">
+          <span>5. Dữ liệu học tập và phản hồi của học sinh có được bảo mật an toàn không?</span>
+          <span class="material-symbols-outlined faq-icon text-slate-400 group-hover:text-primary transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+        </summary>
+        <div class="px-5 pb-6 md:px-6 text-xs md:text-sm text-slate-300 leading-relaxed border-t border-white/5 pt-4">
+          Hoàn toàn an toàn. Orion áp dụng kiến trúc Serverless với tiêu chí Zero Client Secrets. Không có bất kỳ API key nhạy cảm nào lưu tại trình duyệt. Hồ sơ được lưu trữ an toàn trong LocalStorage của máy tính người dùng và chỉ đồng bộ ẩn danh khi học sinh chủ động. Orion tuân thủ nghiêm ngặt chính sách Bảo vệ Trẻ em & Vị thành niên, tích hợp cơ chế tự động chuyển hướng đường dây khẩn cấp quốc gia (Tổng đài 111, Cấp cứu 115) nếu phát hiện dấu hiệu khủng hoảng tâm lý.
+        </div>
+      </details>
     </div>
   </section>
 
