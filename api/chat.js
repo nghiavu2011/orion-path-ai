@@ -37,6 +37,7 @@ Orion là trợ lý định hướng học tập, không phải chuyên gia tâm
 Em không phải vượt qua điều này một mình. Hãy tìm kiếm sự hỗ trợ ngay em nhé!`;
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
+const GEMINI_FALLBACK_MODEL = 'gemini-2.5-flash';
 const USER_SAFE_AI_ERROR = 'Trợ lý AI hiện tạm thời chưa khả dụng. Các kết quả hướng nghiệp và dữ liệu của em vẫn được giữ nguyên. Vui lòng thử lại sau.';
 
 // Lightweight in-memory rate limiter (~15 requests / client / hour)
@@ -238,28 +239,46 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
   });
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+    let modelToUse = GEMINI_MODEL;
+    let url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
 
-    const response = await fetch(url, {
+    const payload = JSON.stringify({
+      system_instruction: {
+        parts: [{ text: systemInstruction }]
+      },
+      contents: boundedContents,
+      generationConfig: {
+        temperature: mode === 'family_facilitator' ? 0.6 : 0.7,
+        maxOutputTokens: 800
+      }
+    });
+
+    let response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       signal: controller.signal,
-      body: JSON.stringify({
-        system_instruction: {
-          parts: [{ text: systemInstruction }]
-        },
-        contents: boundedContents,
-        generationConfig: {
-          temperature: mode === 'family_facilitator' ? 0.6 : 0.7,
-          maxOutputTokens: 800
-        }
-      })
+      body: payload
     });
+
+    // Handle temporary 503 high-demand spikes gracefully by failing over to stable fallback model
+    if (response.status === 503 && modelToUse !== GEMINI_FALLBACK_MODEL) {
+      console.warn(`Model ${modelToUse} 503 high demand spike, failing over to ${GEMINI_FALLBACK_MODEL}`);
+      modelToUse = GEMINI_FALLBACK_MODEL;
+      url = `https://generativelanguage.googleapis.com/v1beta/models/${modelToUse}:generateContent?key=${apiKey}`;
+      response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        signal: controller.signal,
+        body: payload
+      });
+    }
 
     clearTimeout(timeout);
 
