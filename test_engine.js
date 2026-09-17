@@ -20,7 +20,7 @@ console.log('✓ Test 1 Passed: Crisis keywords detected accurately.');
 console.log('--- TEST 2: Deterministic RIASEC Scoring & Descriptions ---');
 assert.strictEqual(typeof RIASEC_CATEGORIES.R.name, 'string');
 assert.strictEqual(typeof RIASEC_CATEGORIES.I.name, 'string');
-assert.strictEqual(RIASEC_QUESTIONS.length, 12, 'Questionnaire has 12 standardized questions');
+assert.strictEqual(RIASEC_QUESTIONS.length, 30, 'Questionnaire has 30 standardized questions (5 per category)');
 const engine = new OrionCareerEngine();
 const mockAnswers = { R: 4, I: 4, A: 0, S: 2, E: 1, C: 1 };
 const scores = engine.calculateRiasecScores(mockAnswers);

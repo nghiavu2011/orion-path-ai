@@ -43,18 +43,47 @@ const RIASEC_CATEGORIES = {
 };
 
 const RIASEC_QUESTIONS = [
-  { id: 1, text: "Thích tháo lắp, sửa chữa các thiết bị điện tử hoặc đồ dùng trong nhà", category: "R" },
+  // Realistic (R) - Kỹ thuật & Thực hành (5 câu)
+  { id: 1, text: "Thích tháo lắp, sửa chữa các thiết bị điện tử hoặc đồ dùng cơ khí trong nhà", category: "R" },
   { id: 2, text: "Thích tìm hiểu nguyên lý hoạt động của máy tính, robot hoặc động cơ", category: "R" },
-  { id: 3, text: "Thích giải các bài toán khó hoặc câu đố đòi hỏi suy luận logic", category: "I" },
-  { id: 4, text: "Tò mò đọc các tài liệu khoa học, khám phá vũ trụ hoặc công nghệ mới", category: "I" },
-  { id: 5, text: "Thích vẽ tranh, thiết kế đồ họa, chụp ảnh hoặc quay dựng video", category: "A" },
-  { id: 6, text: "Thích viết văn, sáng tác thơ/truyện hoặc chơi nhạc cụ", category: "A" },
-  { id: 7, text: "Thích lắng nghe, động viên bạn bè khi họ gặp khó khăn trong học tập", category: "S" },
-  { id: 8, text: "Hứng thú với việc tham gia các hoạt động tình nguyện hoặc hướng dẫn người khác", category: "S" },
-  { id: 9, text: "Thích đứng ra điều phối nhóm hoặc khởi xướng một kế hoạch mới", category: "E" },
-  { id: 10, text: "Hứng thú với việc học cách kinh doanh, bán hàng hoặc đàm phán", category: "E" },
-  { id: 11, text: "Thích sắp xếp góc học tập, tài liệu học tập một cách khoa học, ngăn nắp", category: "C" },
-  { id: 12, text: "Cẩn thận kiểm tra lại bài làm để đảm bảo không sót lỗi chính tả hay số liệu", category: "C" }
+  { id: 3, text: "Thích tham gia các hoạt động lắp ráp mô hình, mộc, điện hoặc cơ khí thực hành", category: "R" },
+  { id: 4, text: "Thích làm việc với các công cụ đo đạc, thiết bị kỹ thuật ngoài thực địa hơn là ngồi bàn giấy", category: "R" },
+  { id: 5, text: "Thích vận động thể chất, làm việc ngoài trời hoặc điều khiển máy móc kỹ thuật", category: "R" },
+
+  // Investigative (I) - Nghiên cứu & Khám phá (5 câu)
+  { id: 6, text: "Thích giải các bài toán khó hoặc câu đố đòi hỏi suy luận logic và phân tích", category: "I" },
+  { id: 7, text: "Tò mò đọc các tài liệu khoa học, khám phá vũ trụ, công nghệ mới hoặc sinh học", category: "I" },
+  { id: 8, text: "Thích thực hiện các thí nghiệm khoa học và quan sát để tìm ra quy luật tự nhiên", category: "I" },
+  { id: 9, text: "Thích tự học lập trình, phân tích dữ liệu trên máy tính để kiểm chứng giả thuyết", category: "I" },
+  { id: 10, text: "Thích đặt câu hỏi 'Tại sao?' và đào sâu nghiên cứu bản chất vấn đề đến cùng", category: "I" },
+
+  // Artistic (A) - Nghệ thuật & Sáng tạo (5 câu)
+  { id: 11, text: "Thích vẽ tranh, thiết kế đồ họa, chụp ảnh hoặc quay dựng video sáng tạo", category: "A" },
+  { id: 12, text: "Thích viết văn, sáng tác thơ/truyện, viết kịch bản hoặc chơi nhạc cụ", category: "A" },
+  { id: 13, text: "Thích thiết kế giao diện ứng dụng, trang trí không gian hoặc phối đồ phong cách riêng", category: "A" },
+  { id: 14, text: "Có xu hướng tìm giải pháp độc đáo, tự do biểu đạt ý tưởng thay vì đi theo lối mòn", category: "A" },
+  { id: 15, text: "Thích thưởng thức và cảm thụ các tác phẩm điện ảnh, mỹ thuật, âm nhạc hoặc văn học", category: "A" },
+
+  // Social (S) - Xã hội & Giáo dục (5 câu)
+  { id: 16, text: "Thích lắng nghe, động viên và chia sẻ với bạn bè khi họ gặp khó khăn trong học tập", category: "S" },
+  { id: 17, text: "Hứng thú với việc giảng giải, kèm cặp bài vở cho người khác hiểu bài", category: "S" },
+  { id: 18, text: "Thích tham gia các câu lạc bộ tình nguyện, thiện nguyện và hoạt động vì cộng đồng", category: "S" },
+  { id: 19, text: "Thích làm việc trong môi trường tập thể, nơi mọi người thấu cảm và chăm sóc lẫn nhau", category: "S" },
+  { id: 20, text: "Quan tâm đến các vấn đề xã hội, sức khỏe con người và mong muốn giúp ích cho cộng đồng", category: "S" },
+
+  // Enterprising (E) - Kinh doanh & Quản lý (5 câu)
+  { id: 21, text: "Thích đứng ra điều phối nhóm, phân chia công việc hoặc khởi xướng một kế hoạch mới", category: "E" },
+  { id: 22, text: "Hứng thú với việc học cách kinh doanh, bán hàng, đàm phán hoặc quản lý ngân sách", category: "E" },
+  { id: 23, text: "Tự tin thuyết phục người khác đồng thuận với quan điểm hay ý tưởng của mình", category: "E" },
+  { id: 24, text: "Thích tham gia các cuộc thi tranh biện, thuyết trình trước đám đông hoặc tổ chức sự kiện", category: "E" },
+  { id: 25, text: "Thích đặt ra các mục tiêu tham vọng và dẫn dắt đội ngũ cùng vượt qua thử thách", category: "E" },
+
+  // Conventional (C) - Quy củ & Tổ chức (5 câu)
+  { id: 26, text: "Thích sắp xếp góc học tập, tài liệu và dữ liệu một cách khoa học, ngăn nắp", category: "C" },
+  { id: 27, text: "Cẩn thận kiểm tra lại bài làm để đảm bảo không sót lỗi chính tả, số liệu hay format", category: "C" },
+  { id: 28, text: "Thích làm việc với các bảng tính Excel/Sheets, theo dõi tiến độ công việc theo danh sách", category: "C" },
+  { id: 29, text: "Cảm thấy thoải mái khi làm theo quy trình, kế hoạch đã định sẵn thay vì thay đổi đột ngột", category: "C" },
+  { id: 30, text: "Có tính kỷ luật cao, luôn hoàn thành đúng hạn các nhiệm vụ được giao theo tiêu chuẩn rõ ràng", category: "C" }
 ];
 
 function calculateRiasecFromForm(formElement) {
