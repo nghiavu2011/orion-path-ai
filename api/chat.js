@@ -250,14 +250,15 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
       contents: boundedContents,
       generationConfig: {
         temperature: mode === 'family_facilitator' ? 0.6 : 0.7,
-        maxOutputTokens: 3000
+        maxOutputTokens: 1200,
+        thinkingConfig: { thinkingBudget: 0 }
       }
     });
 
     const candidateModels = [
-      GEMINI_MODEL,
       'gemini-3.6-flash',
       'gemini-3.5-flash',
+      GEMINI_MODEL,
       'gemini-3.7-flash',
       GEMINI_FALLBACK_MODEL,
       'gemini-2.5-flash'
