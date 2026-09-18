@@ -80,16 +80,20 @@
         </span>
       </a>
 
-      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-        <span style="font-size: 12px; color: var(--text-muted); display: none;" id="active-student-badge">
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <span style="font-size: 13px; color: var(--text-muted); display: none;" id="active-student-badge">
           👤 <strong style="color: var(--text-main);" id="badge-student-name">Học sinh</strong>
         </span>
-        <button type="button" onclick="openMyDataModal()" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12.5px;">
-          <span class="material-symbols-outlined" style="font-size: 16px;">shield</span>
+        <button type="button" id="parent-font-toggle-btn" onclick="toggleParentFontSize()" class="btn btn-secondary" style="padding: 7px 14px; font-size: 13px; display: flex; align-items: center; gap: 6px;" title="Phóng to cỡ chữ cho cha mẹ dễ đọc">
+          <span class="material-symbols-outlined" style="font-size: 18px; color: #F59E0B;">text_increase</span>
+          <span id="font-toggle-label">Cỡ chữ lớn (A+)</span>
+        </button>
+        <button type="button" onclick="openMyDataModal()" class="btn btn-secondary" style="padding: 7px 14px; font-size: 13px;">
+          <span class="material-symbols-outlined" style="font-size: 17px;">shield</span>
           Dữ liệu của tôi
         </button>
-        <a href="index.html" class="btn btn-secondary" style="padding: 6px 14px; font-size: 12.5px;">
-          <span class="material-symbols-outlined" style="font-size: 16px;">home</span>
+        <a href="index.html" class="btn btn-secondary" style="padding: 7px 14px; font-size: 13px;">
+          <span class="material-symbols-outlined" style="font-size: 17px;">home</span>
           Trang chủ
         </a>
       </div>
@@ -106,22 +110,22 @@
 
     <!-- ==================== SCREEN 1: PROFILE & ACADEMIC INPUT ==================== -->
     <section class="screen active" id="screen-1">
-      <div class="card-box" style="max-width: 780px; margin: 0 auto;">
+      <div class="card-box" style="max-width: 820px; margin: 0 auto; padding: 26px;">
         
-        <!-- Screen 1 Visual Welcome Banner -->
-        <div class="section-visual-banner" style="margin-bottom: 22px;">
-          <div style="height: 140px; background-image: url('image/app_onboarding_welcome.png'), url('app_onboarding_welcome.png'); background-size: cover; background-position: center; position: relative;">
-            <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(11, 15, 25, 0.92) 0%, rgba(11, 15, 25, 0.65) 55%, rgba(11, 15, 25, 0.25) 100%);"></div>
-            <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 18px 22px; z-index: 2;">
-              <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #38BDF8; letter-spacing: 0.5px;">
-                <span class="material-symbols-outlined" style="font-size: 16px;">stars</span>
-                Orion Path AI • Hệ Thống Khám Phá Hướng Nghiệp Thực Chứng
-              </span>
-              <h1 style="font-size: 19px; font-weight: 800; color: #fff; margin-top: 4px; line-height: 1.3;">
-                Bản Đồ Định Hướng Tương Lai Dành Cho Học Sinh THPT
+        <!-- Screen 1 Full-Bleed Panorama Welcome Banner -->
+        <div class="section-visual-banner" style="margin-bottom: 24px;">
+          <div class="panorama-banner" style="background-image: url('image/app_onboarding_welcome.png'), url('app_onboarding_welcome.png'); min-height: 230px;">
+            <div class="panorama-overlay"></div>
+            <div class="panorama-content" style="max-width: 700px;">
+              <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 800; text-transform: uppercase; color: #38BDF8; letter-spacing: 0.5px; margin-bottom: 6px;">
+                <span class="material-symbols-outlined" style="font-size: 18px;">stars</span>
+                Orion Path AI • Hệ Thống Định Vị Hướng Nghiệp Thực Chứng
+              </div>
+              <h1 style="font-size: 23px; font-weight: 800; color: #fff; margin: 4px 0 8px 0; line-height: 1.35;">
+                Khám Phá Thiên Hướng & Lộ Trình Tương Lai
               </h1>
-              <p style="font-size: 12px; color: #cbd5e1; margin-top: 4px; line-height: 1.4; max-width: 540px;">
-                Kết hợp dữ liệu học lực chuẩn GDPT 2018, sở thích Holland RIASEC và chỉ số thích ứng AI 2026+.
+              <p style="font-size: 14.5px; color: #E2E8F0; line-height: 1.6; margin: 0;">
+                Hệ thống cá nhân hóa dựa trên học lực thực tế chuẩn GDPT 2018, sở thích Holland RIASEC và chỉ số thích ứng AI 2026+. Dành cho cả học sinh và phụ huynh cùng đồng hành.
               </p>
             </div>
           </div>
@@ -473,25 +477,26 @@
         </div>
 
         <!-- Screen 2 RIASEC Visual Hexagonal Guide Card -->
-        <div class="section-visual-banner" style="margin-bottom: 22px;">
-          <div class="visual-feature-card">
-            <div style="height: 140px; border-radius: 10px; overflow: hidden; background-image: url('image/riasec_hexagonal_guide.png'), url('riasec_hexagonal_guide.png'); background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.1);"></div>
-            <div>
-              <div style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-                <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">radar</span>
-                6 Nhóm Thiên Hướng Holland RIASEC:
+        <!-- Screen 2 RIASEC Visual Hexagonal Panorama Banner -->
+        <div class="section-visual-banner" style="margin-bottom: 24px;">
+          <div class="panorama-banner" style="background-image: url('image/riasec_hexagonal_guide.png'), url('riasec_hexagonal_guide.png'); min-height: 230px;">
+            <div class="panorama-overlay"></div>
+            <div class="panorama-content" style="max-width: 720px;">
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; color: #34D399; text-transform: uppercase; margin-bottom: 8px;">
+                <span class="material-symbols-outlined" style="font-size: 20px;">radar</span>
+                6 Chiều Kích Thiên Hướng Nghề Nghiệp (Holland RIASEC)
               </div>
-              <div style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 11px;">
-                <span style="background: rgba(239, 68, 68, 0.15); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.3); padding: 3px 8px; border-radius: 6px;"><strong>R</strong> - Kỹ thuật & Thao tác</span>
-                <span style="background: rgba(59, 130, 246, 0.15); color: #93C5FD; border: 1px solid rgba(59, 130, 246, 0.3); padding: 3px 8px; border-radius: 6px;"><strong>I</strong> - Nghiên cứu & Logic</span>
-                <span style="background: rgba(245, 158, 11, 0.15); color: #FCD34D; border: 1px solid rgba(245, 158, 11, 0.3); padding: 3px 8px; border-radius: 6px;"><strong>A</strong> - Sáng tạo & Thẩm mỹ</span>
-                <span style="background: rgba(16, 185, 129, 0.15); color: #6EE7B7; border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 6px;"><strong>S</strong> - Xã hội & Giáo dục</span>
-                <span style="background: rgba(168, 85, 247, 0.15); color: #D8B4FE; border: 1px solid rgba(168, 85, 247, 0.3); padding: 3px 8px; border-radius: 6px;"><strong>E</strong> - Quản trị & Kinh doanh</span>
-                <span style="background: rgba(14, 165, 233, 0.15); color: #7DD3FC; border: 1px solid rgba(14, 165, 233, 0.3); padding: 3px 8px; border-radius: 6px;"><strong>C</strong> - Nghiệp vụ & Chuẩn xác</span>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                <span style="background: rgba(239, 68, 68, 0.25); color: #FECACA; border: 1px solid rgba(239, 68, 68, 0.4); padding: 5px 11px; border-radius: 8px; font-size: 13px; font-weight: 700;"><strong>R</strong> - Kỹ thuật & Thao tác</span>
+                <span style="background: rgba(59, 130, 246, 0.25); color: #BFDBFE; border: 1px solid rgba(59, 130, 246, 0.4); padding: 5px 11px; border-radius: 8px; font-size: 13px; font-weight: 700;"><strong>I</strong> - Nghiên cứu & Logic</span>
+                <span style="background: rgba(245, 158, 11, 0.25); color: #FDE68A; border: 1px solid rgba(245, 158, 11, 0.4); padding: 5px 11px; border-radius: 8px; font-size: 13px; font-weight: 700;"><strong>A</strong> - Sáng tạo & Thẩm mỹ</span>
+                <span style="background: rgba(16, 185, 129, 0.25); color: #A7F3D0; border: 1px solid rgba(16, 185, 129, 0.4); padding: 5px 11px; border-radius: 8px; font-size: 13px; font-weight: 700;"><strong>S</strong> - Xã hội & Giáo dục</span>
+                <span style="background: rgba(168, 85, 247, 0.25); color: #E9D5FF; border: 1px solid rgba(168, 85, 247, 0.4); padding: 5px 11px; border-radius: 8px; font-size: 13px; font-weight: 700;"><strong>E</strong> - Quản trị & Kinh doanh</span>
+                <span style="background: rgba(14, 165, 233, 0.25); color: #BAE6FD; border: 1px solid rgba(14, 165, 233, 0.4); padding: 5px 11px; border-radius: 8px; font-size: 13px; font-weight: 700;"><strong>C</strong> - Nghiệp vụ & Chuẩn xác</span>
               </div>
-              <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
-                Đánh giá theo mức độ hứng thú tự nhiên của em: 1 (Rất ghét/Không muốn làm) → 5 (Rất thích/Hứng thú cao). Hãy chọn theo phản xạ thật!
-              </div>
+              <p style="font-size: 14px; color: #E2E8F0; line-height: 1.5; margin: 0;">
+                Mỗi câu hỏi dưới đây tương ứng với 1 hoạt động nghề nghiệp. Chọn theo phản xạ tự nhiên của con: <strong>Không thích (0)</strong>, <strong>Bình thường (1)</strong>, hoặc <strong>Rất thích (2)</strong>.
+              </p>
             </div>
           </div>
         </div>
@@ -514,30 +519,33 @@
 
     <!-- ==================== SCREEN 3: SOCRATIC DEEP DIVE ==================== -->
     <section class="screen" id="screen-3">
-      <div class="card-box" style="max-width: 780px; margin: 0 auto;">
+      <div class="card-box" style="max-width: 820px; margin: 0 auto; padding: 26px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
           <div>
-            <span style="font-size: 11.5px; font-weight: 800; text-transform: uppercase; color: var(--accent); letter-spacing: 0.5px;">Bước 3 trên 4</span>
-            <h2 style="font-size: 22px; font-weight: 800; color: #fff; margin-top: 4px;">Khảo Sát Sâu Về Trải Nghiệm & Mong Muốn</h2>
+            <span style="font-size: 12.5px; font-weight: 800; text-transform: uppercase; color: var(--accent); letter-spacing: 0.5px;">Bước 3 trên 4</span>
+            <h2 style="font-size: 24px; font-weight: 800; color: #fff; margin-top: 4px;">Khảo Sát Sâu Về Trải Nghiệm & Mong Muốn</h2>
           </div>
-          <button onclick="goToScreen(2)" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Quay lại</button>
+          <button onclick="goToScreen(2)" class="btn btn-secondary" style="padding: 6px 14px; font-size: 13px;">Quay lại</button>
         </div>
 
-        <p style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5;">
+        <p style="font-size: 14.5px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">
           Những câu hỏi mở này giúp hệ thống nhận diện rõ bối cảnh cá nhân và các điều mà bài trắc nghiệm nhanh chưa thể bao quát hết.
         </p>
 
-        <!-- Screen 3 Visual Reflection Banner -->
-        <div class="section-visual-banner" style="margin-bottom: 22px;">
-          <div class="visual-feature-card">
-            <div style="height: 125px; border-radius: 10px; overflow: hidden; background-image: url('image/career_experiments_lab.png'), url('career_experiments_lab.png'); background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.1);"></div>
-            <div>
-              <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 5px; display: flex; align-items: center; gap: 6px;">
-                <span class="material-symbols-outlined text-accent" style="font-size: 18px;">psychology_alt</span>
+        <!-- Screen 3 Full-Bleed Panorama Reflection Banner -->
+        <div class="section-visual-banner" style="margin-bottom: 24px;">
+          <div class="panorama-banner" style="background-image: url('image/career_experiments_lab.png'), url('career_experiments_lab.png'); min-height: 190px;">
+            <div class="panorama-overlay"></div>
+            <div class="panorama-content" style="max-width: 700px;">
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800; color: #F59E0B; text-transform: uppercase; margin-bottom: 6px;">
+                <span class="material-symbols-outlined" style="font-size: 20px;">psychology_alt</span>
                 Lắng Nghe Tiếng Nói & Mục Tiêu Cá Nhân
               </div>
-              <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin: 0;">
-                Orion tôn trọng sự khác biệt của mỗi học sinh. Dữ liệu định tính này giúp hệ thống tạo ra các giả thiết nghề nghiệp phù hợp với hoàn cảnh và giá trị sống của em và gia đình.
+              <h3 style="font-size: 19px; font-weight: 800; color: #fff; margin: 2px 0 6px 0;">
+                Tự Do Bộc Lộ Suy Nghĩ & Nguyện Vọng Gia Đình
+              </h3>
+              <p style="font-size: 14px; color: #E2E8F0; line-height: 1.55; margin: 0;">
+                Orion tôn trọng sự khác biệt của mỗi học sinh. Dữ liệu định tính này giúp hệ thống tạo ra các giả thiết nghề nghiệp phù hợp với hoàn cảnh và giá trị sống của cả gia đình.
               </p>
             </div>
           </div>
@@ -674,12 +682,24 @@
 
           <!-- TAB 1: CAREER HYPOTHESES -->
           <div id="tab-content-hypotheses" class="tab-pane">
+            <!-- Hypotheses Panorama Banner -->
+            <div class="section-visual-banner" style="margin-bottom: 20px;">
+              <div class="panorama-banner" style="background-image: url('image/galaxy_careers.png'), url('galaxy_careers.png'); min-height: 200px;">
+                <div class="panorama-overlay"></div>
+                <div class="panorama-content" style="max-width: 680px;">
+                  <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #818CF8; letter-spacing: 0.5px;">Khám Phá Tiềm Năng Thực Chứng</div>
+                  <h3 style="font-size: 19px; font-weight: 800; color: #fff; margin: 4px 0 6px 0;">3–5 Giả Thiết Nghề Nghiệp Tương Thích Nhất</h3>
+                  <p style="font-size: 14px; color: #E2E8F0; line-height: 1.5; margin: 0;">Mỗi hướng đi đều trả lời rành mạch: Bằng chứng ủng hộ, Thử thách cần vượt qua và Thử nghiệm thực tế cần làm.</p>
+                </div>
+              </div>
+            </div>
+
             <div class="results-section">
               <h3>
                 <span class="material-symbols-outlined text-primary">explore</span>
                 Giả Thiết Nghề Nghiệp Đáng Khám Phá (3–5 Hướng Đi)
               </h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+              <p style="font-size: 14.5px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6;">
                 Orion không đưa ra một câu trả lời duy nhất. Dưới đây là các hướng đi có <strong>tín hiệu tương thích</strong> dựa trên điểm mạnh Toán/Văn/Anh và nhóm sở thích RIASEC của em.
               </p>
               
@@ -691,12 +711,24 @@
 
           <!-- TAB 2: CAREER EXPERIMENTS -->
           <div id="tab-content-experiments" class="tab-pane" style="display: none;">
+            <!-- Career Experiments Panorama Banner -->
+            <div class="section-visual-banner" style="margin-bottom: 20px;">
+              <div class="panorama-banner" style="background-image: url('image/career_experiments_lab.png'), url('career_experiments_lab.png'); min-height: 200px;">
+                <div class="panorama-overlay"></div>
+                <div class="panorama-content" style="max-width: 680px;">
+                  <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #F59E0B; letter-spacing: 0.5px;">Hành Động Tạo Ra Bằng Chứng</div>
+                  <h3 style="font-size: 19px; font-weight: 800; color: #fff; margin: 4px 0 6px 0;">Thư Viện Trải Nghiệm Thực Tế (Mini-Project)</h3>
+                  <p style="font-size: 14px; color: #E2E8F0; line-height: 1.5; margin: 0;">Mỗi mini-project 60–90 phút giúp em chạm vào công việc thật với công cụ thực tế.</p>
+                </div>
+              </div>
+            </div>
+
             <div class="results-section">
               <h3>
                 <span class="material-symbols-outlined text-secondary">science</span>
                 Thư Viện Trải Nghiệm Thực Tế (Career Experiments)
               </h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+              <p style="font-size: 14.5px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6;">
                 Mỗi mini-project 60–90 phút giúp em chạm vào công việc thật. Bằng chứng từ hành động thực tế luôn có giá trị hơn bài trắc nghiệm lý thuyết.
               </p>
               <div id="experiments-list-box">
@@ -707,14 +739,14 @@
 
           <!-- TAB 3: ACADEMIC & PATHWAYS -->
           <div id="tab-content-academic" class="tab-pane" style="display: none;">
-            <!-- Academic Visual Banner -->
-            <div class="section-visual-banner" style="margin-bottom: 18px;">
-              <div style="height: 130px; background-image: url('image/academic_pathways_gdpt.png'), url('academic_pathways_gdpt.png'); background-size: cover; background-position: center; position: relative;">
-                <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(11, 15, 25, 0.92) 0%, rgba(11, 15, 25, 0.65) 60%, rgba(11, 15, 25, 0.25) 100%);"></div>
-                <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 16px 20px; z-index: 2;">
-                  <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #34D399; letter-spacing: 0.5px;">Chuẩn Quy Chế GDPT 2018 & Tuyển Sinh ĐH 2026+</span>
-                  <div style="font-size: 16px; font-weight: 800; color: #fff; margin-top: 2px;">Tổ Hợp Môn Học & Chiến Lược Thi Đánh Giá Năng Lực (HSA / TSA)</div>
-                  <div style="font-size: 11.5px; color: #cbd5e1; margin-top: 3px;">Tối ưu hóa cơ hội xét tuyển và chọn môn tự chọn thông minh tại trường THPT.</div>
+            <!-- Academic Visual Panorama Banner -->
+            <div class="section-visual-banner" style="margin-bottom: 20px;">
+              <div class="panorama-banner" style="background-image: url('image/academic_pathways_gdpt.png'), url('academic_pathways_gdpt.png'); min-height: 210px;">
+                <div class="panorama-overlay"></div>
+                <div class="panorama-content" style="max-width: 700px;">
+                  <span style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #34D399; letter-spacing: 0.5px;">Chuẩn Quy Chế GDPT 2018 & Tuyển Sinh ĐH 2026+</span>
+                  <div style="font-size: 19px; font-weight: 800; color: #fff; margin-top: 4px; line-height: 1.35;">Tổ Hợp Môn Học & Chiến Lược Thi Đánh Giá Năng Lực (HSA / TSA)</div>
+                  <div style="font-size: 14px; color: #E2E8F0; margin-top: 5px; line-height: 1.5;">Tối ưu hóa cơ hội xét tuyển và chọn môn tự chọn thông minh tại trường THPT theo đúng thực lực học tập.</div>
                 </div>
               </div>
             </div>
@@ -742,30 +774,26 @@
 
           <!-- TAB 4: FAMILY BRIDGE -->
           <div id="tab-content-family" class="tab-pane" style="display: none;">
+            <!-- Family Bridge Panorama Banner -->
+            <div class="section-visual-banner" style="margin-bottom: 20px;">
+              <div class="panorama-banner" style="background-image: url('image/mobile_parent_child.png'), url('mobile_parent_child.png'); min-height: 220px;">
+                <div class="panorama-overlay"></div>
+                <div class="panorama-content" style="max-width: 700px;">
+                  <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; color: #F43F5E; letter-spacing: 0.5px;">Thấu Cảm Hai Chiều • Không Phán Xét</div>
+                  <div style="font-size: 19px; font-weight: 800; color: #fff; margin-top: 4px; line-height: 1.35;">Cầu Nối Thấu Cảm Giữa Cha Mẹ & Con Cái</div>
+                  <div style="font-size: 14px; color: #E2E8F0; margin-top: 5px; line-height: 1.5;">Orion giúp chuyển hóa những tranh luận áp đặt thành các cuộc trò chuyện thấu cảm, tôn trọng góc nhìn của cả hai thế hệ và dựa trên dữ liệu học thuật khách quan.</div>
+                </div>
+              </div>
+            </div>
+
             <div class="results-section">
               <h3>
                 <span class="material-symbols-outlined text-tertiary">family_restroom</span>
                 Cầu Nối Đối Thoại Gia Đình (AI Làm Điều Phối Viên)
               </h3>
-              <p style="font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+              <p style="font-size: 14.5px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6;">
                 Orion không phân xử ai đúng ai sai. Bản báo cáo này đóng vai trò điều phối viên giúp kết nối mục tiêu chung của con và cha mẹ.
               </p>
-
-              <!-- Family Bridge Visual Card -->
-              <div class="section-visual-banner" style="margin-bottom: 18px;">
-                <div class="visual-feature-card">
-                  <div style="height: 125px; border-radius: 10px; overflow: hidden; background-image: url('image/mobile_parent_child.png'), url('mobile_parent_child.png'); background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.1);"></div>
-                  <div>
-                    <div style="font-size: 13.5px; font-weight: 800; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                      <span class="material-symbols-outlined text-tertiary" style="font-size: 18px;">handshake</span>
-                      Cầu Nối Thấu Cảm Giữa Cha Mẹ & Con Cái
-                    </div>
-                    <p style="font-size: 12px; color: #cbd5e1; line-height: 1.5; margin: 0;">
-                      Orion giúp chuyển hóa những tranh luận áp đặt thành các cuộc trò chuyện thấu cảm, tôn trọng góc nhìn của cả hai thế hệ và dựa trên dữ liệu học thuật khách quan.
-                    </p>
-                  </div>
-                </div>
-              </div>
 
               <div id="family-bridge-content-box">
                 <!-- Dynamically populated -->
@@ -1279,25 +1307,28 @@
       }
     }
 
-    // Render RIASEC Form Questions
+    // Render RIASEC Form Questions (High Readability for Parents & Students)
     function initRiasecScreen() {
       const container = document.getElementById('riasec-questions-container');
       if (!container || !window.RIASEC_QUESTIONS) return;
 
       container.innerHTML = window.RIASEC_QUESTIONS.map(q => `
-        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-          <div style="font-size: 13px; color: var(--text-main); flex: 1; min-width: 240px;">
-            <strong style="color: var(--primary-light); margin-right: 6px;">${q.id}.</strong> ${q.text}
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+          <div style="font-size: 15.5px; line-height: 1.5; color: #F8FAFC; flex: 1; min-width: 260px; font-weight: 500;">
+            <strong style="color: var(--primary-light); font-size: 16px; margin-right: 8px;">${q.id}.</strong> ${q.text}
           </div>
-          <div style="display: flex; gap: 12px; align-items: center; font-size: 12px;">
-            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--text-muted);">
-              <input type="radio" name="riasec_q_${q.id}" value="0"> Không thích
+          <div style="display: flex; gap: 10px; align-items: center; font-size: 14px; flex-wrap: wrap;">
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #CBD5E1; background: rgba(255,255,255,0.04); padding: 7px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+              <input type="radio" name="riasec_q_${q.id}" value="0" style="width: 17px; height: 17px; accent-color: #EF4444;">
+              <span>Không thích</span>
             </label>
-            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #cbd5e1;">
-              <input type="radio" name="riasec_q_${q.id}" value="1" checked> Bình thường
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #E2E8F0; background: rgba(255,255,255,0.04); padding: 7px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+              <input type="radio" name="riasec_q_${q.id}" value="1" checked style="width: 17px; height: 17px; accent-color: #6366F1;">
+              <span>Bình thường</span>
             </label>
-            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; color: #34d399; font-weight: 700;">
-              <input type="radio" name="riasec_q_${q.id}" value="2"> Rất thích
+            <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #34D399; font-weight: 700; background: rgba(16,185,129,0.08); padding: 7px 12px; border-radius: 8px; border: 1px solid rgba(16,185,129,0.25);">
+              <input type="radio" name="riasec_q_${q.id}" value="2" style="width: 17px; height: 17px; accent-color: #10B981;">
+              <span>Rất thích</span>
             </label>
           </div>
         </div>
@@ -2704,7 +2735,6 @@
           studentBadge.style.display = 'inline-flex';
           studentBadge.innerHTML = '👨‍👩‍👧 <strong style="color: var(--secondary); margin-left: 4px;">Chế độ Phụ Huynh</strong>';
         }
-
         if (!globalParentAnswers) {
           setTimeout(() => {
             openParentEvaluationModal();
@@ -2713,7 +2743,29 @@
       } else {
         checkLocalStorageCache();
       }
+
+      if (localStorage.getItem('orion_parent_font_zoom') === 'true') {
+        document.body.classList.add('parent-font-zoom');
+        updateAppFontToggleUI(true);
+      }
     });
+
+    // Accessibility: Parent Reading Font Zoom
+    window.toggleParentFontSize = function() {
+      const isZoomed = document.body.classList.toggle('parent-font-zoom');
+      localStorage.setItem('orion_parent_font_zoom', isZoomed ? 'true' : 'false');
+      updateAppFontToggleUI(isZoomed);
+    };
+
+    function updateAppFontToggleUI(isZoomed) {
+      const label = document.getElementById('font-toggle-label');
+      if (label) label.textContent = isZoomed ? 'Chữ chuẩn (A)' : 'Cỡ chữ lớn (A+)';
+      const btn = document.getElementById('parent-font-toggle-btn');
+      if (btn) {
+        btn.style.borderColor = isZoomed ? '#F59E0B' : 'var(--border-color)';
+        btn.style.background = isZoomed ? 'rgba(245, 158, 11, 0.18)' : 'rgba(255,255,255,0.04)';
+      }
+    }
   </script>
 </body>
 </html>

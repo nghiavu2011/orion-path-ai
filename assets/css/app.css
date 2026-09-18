@@ -3,17 +3,17 @@
 :root {
   --bg-main: #0B0F19;
   --bg-card: rgba(17, 24, 39, 0.75);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-highlight: rgba(99, 102, 241, 0.3);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --border-highlight: rgba(99, 102, 241, 0.4);
   --primary: #6366F1;
   --primary-light: #818CF8;
-  --primary-glow: rgba(99, 102, 241, 0.2);
+  --primary-glow: rgba(99, 102, 241, 0.25);
   --secondary: #10B981;
-  --secondary-glow: rgba(16, 185, 129, 0.2);
+  --secondary-glow: rgba(16, 185, 129, 0.25);
   --accent: #F59E0B;
   --danger: #EF4444;
-  --text-main: #F3F4F6;
-  --text-muted: #94A3B8;
+  --text-main: #F8FAFC;
+  --text-muted: #CBD5E1;
   --font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
@@ -27,6 +27,8 @@ body {
   background-color: #050811;
   color: var(--text-main);
   font-family: var(--font-family);
+  font-size: 15.5px;
+  line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
 }
@@ -604,10 +606,10 @@ body {
 /* ==================== VISUAL FEATURE CARDS & SECTION BANNERS ==================== */
 .visual-feature-card {
   display: grid;
-  grid-template-columns: minmax(180px, 220px) 1fr;
-  gap: 16px;
+  grid-template-columns: minmax(200px, 260px) 1fr;
+  gap: 20px;
   align-items: center;
-  padding: 14px;
+  padding: 16px 20px;
 }
 
 @media (max-width: 640px) {
@@ -617,12 +619,78 @@ body {
 }
 
 .section-visual-banner {
-  border-radius: 14px;
+  border-radius: 18px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   border: 1px solid var(--border-color);
-  background: rgba(17, 24, 39, 0.6);
+  background: rgba(17, 24, 39, 0.75);
   position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.panorama-banner {
+  width: 100%;
+  min-height: 220px;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+}
+
+.panorama-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(11, 15, 25, 0.94) 0%, rgba(11, 15, 25, 0.75) 55%, rgba(11, 15, 25, 0.25) 100%);
+}
+
+.panorama-content {
+  position: relative;
+  z-index: 2;
+  padding: 24px 28px;
+  max-width: 660px;
+}
+
+/* ==================== ACCESSIBILITY: PARENT FONT ZOOM (DỄ ĐỌC CHO PHỤ HUYNH) ==================== */
+body.parent-font-zoom {
+  font-size: 18px !important;
+  line-height: 1.75 !important;
+}
+
+body.parent-font-zoom .form-label {
+  font-size: 16.5px !important;
+}
+
+body.parent-font-zoom .form-control,
+body.parent-font-zoom select,
+body.parent-font-zoom textarea {
+  font-size: 17px !important;
+  padding: 14px 18px !important;
+}
+
+body.parent-font-zoom .wizard-step-pill {
+  font-size: 14.5px !important;
+  padding: 9px 18px !important;
+}
+
+body.parent-font-zoom .sub-tab-btn {
+  font-size: 16px !important;
+  padding: 13px 20px !important;
+}
+
+body.parent-font-zoom .btn {
+  font-size: 16px !important;
+  padding: 13px 22px !important;
+}
+
+body.parent-font-zoom p,
+body.parent-font-zoom span,
+body.parent-font-zoom label {
+  line-height: 1.75 !important;
+}
+
+body.parent-font-zoom .results-section h3 {
+  font-size: 20px !important;
 }
 
 /* ==================== PRINT STYLESHEET ==================== */
