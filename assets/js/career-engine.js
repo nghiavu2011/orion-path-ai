@@ -52,10 +52,20 @@ class OrionCareerEngine {
       if (career.riasec.includes(tertiary)) matchCount += 1;
 
       // Tính toán tín hiệu dựa trên học lực (nếu có cung cấp)
-      const hasMath = academic && academic.math !== null && academic.math !== undefined && !isNaN(parseFloat(academic.math));
-      const hasEng = academic && academic.eng !== null && academic.eng !== undefined && !isNaN(parseFloat(academic.eng));
-      const mathScore = hasMath ? parseFloat(academic.math) : null;
-      const engScore = hasEng ? parseFloat(academic.eng) : null;
+      const parseScore = (val) => (val !== null && val !== undefined && !isNaN(parseFloat(val))) ? parseFloat(val) : null;
+      const mathScore = academic ? parseScore(academic.math) : null;
+      const litScore = academic ? parseScore(academic.lit) : null;
+      const engScore = academic ? parseScore(academic.eng) : null;
+      const physScore = academic ? parseScore(academic.physics) : null;
+      const chemScore = academic ? parseScore(academic.chemistry) : null;
+      const bioScore = academic ? parseScore(academic.biology) : null;
+      const histScore = academic ? parseScore(academic.history) : null;
+      const geoScore = academic ? parseScore(academic.geography) : null;
+      const infoScore = academic ? parseScore(academic.informatics) : null;
+      const civScore = academic ? parseScore(academic.civics) : null;
+
+      const hasMath = mathScore !== null;
+      const hasEng = engScore !== null;
 
       let signalLevel = "Đang khám phá";
       const evidenceList = [];
@@ -69,16 +79,60 @@ class OrionCareerEngine {
         } else if (hasMath && mathScore < 6.5) {
           conflictList.unshift(`Điểm môn Toán hiện tại (${mathScore}) có thể là thử thách nếu học kỹ thuật chuyên sâu.`);
         }
+        if (physScore !== null && physScore >= 8.0) {
+          evidenceList.push(`Điểm Vật lí xuất sắc (${physScore}/10) - thế mạnh trực tiếp cho kỹ thuật, vi mạch bán dẫn.`);
+          matchCount += 2;
+        }
+        if (infoScore !== null && infoScore >= 8.0) {
+          evidenceList.push(`Điểm Tin học tốt (${infoScore}/10) - củng cố tư duy lập trình và thuật toán.`);
+          matchCount += 2;
+        }
       }
 
       // Đánh giá tín hiệu cho nhóm nghệ thuật/sáng tạo
       if (career.riasec.includes('A')) {
         evidenceList.push(`Nhóm Nghệ thuật (${riasecScores.A}đ) - thể hiện sự nhạy bén về thẩm mỹ và cách diễn đạt ý tưởng.`);
+        if (infoScore !== null && infoScore >= 8.0 && career.id === 'ui_ux_designer') {
+          evidenceList.push(`Điểm Tin học tốt (${infoScore}/10) - hỗ trợ tiếp cận công cụ thiết kế và lập trình giao diện.`);
+          matchCount += 1;
+        }
       }
 
       // Đánh giá tín hiệu cho nhóm xã hội/y tế
       if (career.riasec.includes('S')) {
         evidenceList.push(`Nhóm Xã hội (${riasecScores.S}đ) - có xu hướng thấu cảm và thích chăm sóc, hỗ trợ cộng đồng.`);
+      }
+
+      // Đánh giá chuyên biệt cho Y tế & Chăm sóc sức khỏe
+      if (career.id === 'healthcare_practitioner') {
+        if (bioScore !== null && bioScore >= 8.0) {
+          evidenceList.push(`Điểm Sinh học xuất sắc (${bioScore}/10) - nền tảng sinh học và chuyển hóa sống then chốt cho ngành Y.`);
+          matchCount += 3;
+        }
+        if (chemScore !== null && chemScore >= 8.0) {
+          evidenceList.push(`Điểm Hóa học tốt (${chemScore}/10) - hỗ trợ tiếp thu Dược lý và Hóa sinh đại cương.`);
+          matchCount += 2;
+        }
+      }
+
+      // Đánh giá chuyên biệt cho ESG & Môi trường
+      if (career.id === 'esg_sustainability_specialist') {
+        if (geoScore !== null && geoScore >= 8.0) {
+          evidenceList.push(`Điểm Địa lí tốt (${geoScore}/10) - giúp bao quát tài nguyên thiên nhiên và quy hoạch sinh thái.`);
+          matchCount += 2;
+        }
+        if (bioScore !== null && bioScore >= 8.0) {
+          evidenceList.push(`Điểm Sinh học tốt (${bioScore}/10) - lợi thế đánh giá tác động sinh thái và môi trường.`);
+          matchCount += 2;
+        }
+      }
+
+      // Đánh giá chuyên biệt cho Kinh tế & Dữ liệu
+      if (career.id === 'data_analyst') {
+        if (infoScore !== null && infoScore >= 8.0) {
+          evidenceList.push(`Điểm Tin học tốt (${infoScore}/10) - thuận lợi thực hành SQL/Python và phân tích số liệu.`);
+          matchCount += 1;
+        }
       }
 
       // Đánh giá ngoại ngữ
@@ -243,51 +297,131 @@ class OrionCareerEngine {
    * @param {object} academic 
    */
   recommendCombination(primary, academic = {}) {
-    const math = parseFloat(academic.math) || 7.5;
-    const eng = parseFloat(academic.eng) || 7.5;
+    const parseScore = (val) => (val !== null && val !== undefined && !isNaN(parseFloat(val))) ? parseFloat(val) : null;
+    const isValid = (n) => typeof n === 'number' && !isNaN(n) && n >= 0 && n <= 10;
+
+    const math = parseScore(academic.math);
+    const lit = parseScore(academic.lit);
+    const eng = parseScore(academic.eng);
+    const physics = parseScore(academic.physics);
+    const chemistry = parseScore(academic.chemistry);
+    const biology = parseScore(academic.biology);
+    const history = parseScore(academic.history);
+    const geography = parseScore(academic.geography);
+    const informatics = parseScore(academic.informatics);
+    const civics = parseScore(academic.civics);
+
+    // List of standard admission combinations
+    const comboDefs = [
+      { code: 'A00', name: 'Toán, Vật lý, Hóa học', subjects: [math, physics, chemistry], subNames: ['Toán', 'Vật lí', 'Hóa học'] },
+      { code: 'A01', name: 'Toán, Vật lý, Tiếng Anh', subjects: [math, physics, eng], subNames: ['Toán', 'Vật lí', 'Tiếng Anh'] },
+      { code: 'A02', name: 'Toán, Vật lý, Sinh học', subjects: [math, physics, biology], subNames: ['Toán', 'Vật lí', 'Sinh học'] },
+      { code: 'B00', name: 'Toán, Hóa học, Sinh học', subjects: [math, chemistry, biology], subNames: ['Toán', 'Hóa học', 'Sinh học'] },
+      { code: 'D01', name: 'Toán, Ngữ văn, Tiếng Anh', subjects: [math, lit, eng], subNames: ['Toán', 'Ngữ văn', 'Tiếng Anh'] },
+      { code: 'D07', name: 'Toán, Hóa học, Tiếng Anh', subjects: [math, chemistry, eng], subNames: ['Toán', 'Hóa học', 'Tiếng Anh'] },
+      { code: 'C00', name: 'Ngữ văn, Lịch sử, Địa lý', subjects: [lit, history, geography], subNames: ['Ngữ văn', 'Lịch sử', 'Địa lí'] },
+      { code: 'C01', name: 'Ngữ văn, Toán, Vật lý', subjects: [lit, math, physics], subNames: ['Ngữ văn', 'Toán', 'Vật lí'] },
+      { code: 'D14', name: 'Ngữ văn, Lịch sử, Tiếng Anh', subjects: [lit, history, eng], subNames: ['Ngữ văn', 'Lịch sử', 'Tiếng Anh'] },
+      { code: 'D15', name: 'Ngữ văn, Địa lý, Tiếng Anh', subjects: [lit, geography, eng], subNames: ['Ngữ văn', 'Địa lí', 'Tiếng Anh'] }
+    ];
+
+    // Compute composite scores for combinations where all 3 subjects were provided
+    const scoredCombos = [];
+    comboDefs.forEach(c => {
+      if (c.subjects.every(isValid)) {
+        const total = parseFloat(c.subjects.reduce((sum, s) => sum + s, 0).toFixed(2));
+        scoredCombos.push({
+          code: c.code,
+          name: c.name,
+          score: total,
+          subNames: c.subNames,
+          subjectDetails: c.subNames.map((sName, idx) => `${sName}: ${c.subjects[idx]}`).join(' • ')
+        });
+      }
+    });
+
+    scoredCombos.sort((a, b) => b.score - a.score);
 
     let primaryCombo = 'A01';
     let backupCombo = 'D01';
     let rationale = '';
 
-    if (primary === 'I' || primary === 'R') {
-      if (math >= 8.0 && eng >= 7.5) {
-        primaryCombo = 'A01';
-        backupCombo = 'A00';
-        rationale = 'Thế mạnh tự nhiên và ngoại ngữ tốt giúp em có lợi thế cạnh tranh vào các khối ngành Công nghệ thông tin, Trí tuệ Nhân tạo, Vi mạch Bán dẫn.';
-      } else {
-        primaryCombo = 'A00';
-        backupCombo = 'A01';
-        rationale = 'Tổ hợp truyền thống Toán - Lý - Hóa mở rộng tối đa cơ hội xét tuyển vào tất cả các trường đại học, cao đẳng kỹ thuật trên toàn quốc.';
-      }
-    } else if (primary === 'S') {
-      if (math >= 7.0 && eng >= 7.5) {
-        primaryCombo = 'D01';
-        backupCombo = 'B00';
-        rationale = 'Nhóm Xã hội kết hợp tư duy ngôn ngữ tốt phù hợp cho ngành Tâm lý học, Giáo dục, Luật hoặc Quản lý dịch vụ Y tế.';
-      } else {
-        primaryCombo = 'B00';
-        backupCombo = 'D07';
-        rationale = 'Tổ hợp then chốt cho khối ngành Chăm sóc sức khỏe, Y sinh và Dược học.';
-      }
-    } else if (primary === 'A') {
-      primaryCombo = 'D01';
-      backupCombo = 'H01';
-      rationale = 'Nền tảng Toán - Văn - Anh vững chắc giúp mở rộng xét tuyển khối ngành Thiết kế đa phương tiện, UI/UX, Truyền thông số.';
+    if (scoredCombos.length > 0) {
+      // Preference weight by RIASEC orientation
+      const getRiasecWeight = (code) => {
+        if (primary === 'I' || primary === 'R') {
+          if (code === 'A01') return 1.5;
+          if (code === 'A00') return 1.2;
+          if (code === 'D07' || code === 'A02') return 0.8;
+        } else if (primary === 'S') {
+          if (code === 'B00') return 2.0;
+          if (code === 'D01') return 1.5;
+          if (code === 'C00' || code === 'D14') return 1.2;
+        } else if (primary === 'A') {
+          if (code === 'D01') return 2.0;
+          if (code === 'C01') return 1.5;
+          if (code === 'C00') return 1.0;
+        } else {
+          if (code === 'D01') return 2.0;
+          if (code === 'A01') return 1.5;
+          if (code === 'A00') return 1.0;
+        }
+        return 0;
+      };
+
+      const ranked = [...scoredCombos].sort((a, b) => (b.score + getRiasecWeight(b.code)) - (a.score + getRiasecWeight(a.code)));
+      primaryCombo = ranked[0].code;
+      backupCombo = ranked.length > 1 ? ranked[1].code : (primaryCombo === 'A01' ? 'A00' : 'D01');
+
+      const pCombo = scoredCombos.find(c => c.code === primaryCombo) || scoredCombos[0];
+      const bCombo = scoredCombos.find(c => c.code === backupCombo);
+
+      rationale = `Dựa trên điểm thực tế các môn đã nhập (${pCombo.subjectDetails}), tổ hợp ${pCombo.code} đạt tổng điểm dự phóng ấn tượng ${pCombo.score}/30 điểm, rất phù hợp với thiên hướng nhóm ${primary}. Phương án dự phòng ${bCombo ? bCombo.code + ' (' + bCombo.score + '/30đ)' : backupCombo} giúp tối đa hóa tỷ lệ trúng tuyển nguyện vọng vào các trường ĐH.`;
     } else {
-      primaryCombo = 'D01';
-      backupCombo = 'A01';
-      rationale = 'Lựa chọn an toàn, độ phủ tuyển sinh rộng nhất vào các trường khối ngành Kinh tế, Quản trị, Marketing và Logistics.';
+      // Fallback if only partial core subjects exist (graceful backward compatibility)
+      const m = isValid(math) ? math : 7.5;
+      const e = isValid(eng) ? eng : 7.5;
+
+      if (primary === 'I' || primary === 'R') {
+        if (m >= 8.0 && e >= 7.5) {
+          primaryCombo = 'A01';
+          backupCombo = 'A00';
+          rationale = 'Thế mạnh môn Toán và Ngoại ngữ giúp em có lợi thế cạnh tranh lớn vào các khối ngành Công nghệ thông tin, Trí tuệ Nhân tạo, Vi mạch Bán dẫn.';
+        } else {
+          primaryCombo = 'A00';
+          backupCombo = 'A01';
+          rationale = 'Tổ hợp truyền thống Toán - Lí - Hóa mở rộng tối đa cơ hội xét tuyển vào các trường đại học kỹ thuật công nghệ trên toàn quốc.';
+        }
+      } else if (primary === 'S') {
+        if (m >= 7.0 && e >= 7.5) {
+          primaryCombo = 'D01';
+          backupCombo = 'B00';
+          rationale = 'Nhóm Xã hội kết hợp tư duy ngôn ngữ tốt phù hợp cho ngành Tâm lý học, Giáo dục, Luật hoặc Quản lý y tế.';
+        } else {
+          primaryCombo = 'B00';
+          backupCombo = 'D07';
+          rationale = 'Tổ hợp then chốt cho khối ngành Chăm sóc sức khỏe, Y sinh và Dược học.';
+        }
+      } else if (primary === 'A') {
+        primaryCombo = 'D01';
+        backupCombo = 'C01';
+        rationale = 'Nền tảng Toán - Văn - Anh vững chắc giúp mở rộng xét tuyển khối ngành Thiết kế đa phương tiện, UI/UX, Truyền thông số.';
+      } else {
+        primaryCombo = 'D01';
+        backupCombo = 'A01';
+        rationale = 'Lựa chọn an toàn, độ phủ tuyển sinh rộng nhất vào các trường khối ngành Kinh tế, Quản trị, Marketing và Logistics.';
+      }
     }
 
     return {
       primaryCombo,
       backupCombo,
       rationale,
+      scoredCombos,
       timeline: [
-        { year: "Lớp 10", focus: "Thăm dò & Nền tảng", desc: `Học đều các môn, chú trọng củng cố 3 môn tổ hợp ${primaryCombo}. Tham gia 1-2 trải nghiệm thử (Career Experiments) để kiểm chứng sở thích.` },
-        { year: "Lớp 11", focus: "Kỹ năng & Chứng chỉ", desc: "Đạt mục tiêu chứng chỉ ngoại ngữ (IELTS/VSTEP) nếu có định hướng xét tuyển kết hợp; bắt đầu tiếp cận cấu trúc đề thi Đánh giá năng lực / Đánh giá tư duy." },
-        { year: "Lớp 12", focus: "Chiến lược & Đột phá", desc: "Tập trung tối đa cho Kỳ thi tốt nghiệp THPT và các đợt thi ĐGNL (HSA/APT/TSA) sớm để chủ động đỗ nguyện vọng ưu tiên." }
+        { year: "Lớp 10", focus: "Thăm dò & Nền tảng", desc: `Học đều các môn, chú trọng củng cố 3 môn tổ hợp ${primaryCombo}. Tham gia 1-2 mini-project trải nghiệm thử để kiểm chứng sở thích.` },
+        { year: "Lớp 11", focus: "Kỹ năng & Chứng chỉ", desc: "Đạt mục tiêu chứng chỉ ngoại ngữ (IELTS/VSTEP/SAT) nếu có định hướng xét tuyển kết hợp; bắt đầu tiếp cận cấu trúc đề thi Đánh giá năng lực / Đánh giá tư duy." },
+        { year: "Lớp 12", focus: "Chiến lược & Đột phá", desc: "Tập trung tối đa cho Kỳ thi tốt nghiệp THPT và các đợt thi ĐGNL/TSA sớm từ tháng 3–5 để chủ động trúng tuyển sớm nguyện vọng ưu tiên." }
       ]
     };
   }

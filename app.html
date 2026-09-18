@@ -323,33 +323,128 @@
 
               <div class="form-group">
                 <label class="form-label" for="user-grade">Khối lớp hiện tại</label>
-                <select id="user-grade" class="form-control">
+                <select id="user-grade" class="form-control" onchange="handleUserGradeChange(this.value)">
                   <option value="Lớp 9">Lớp 9 (Chuẩn bị vào lớp 10)</option>
                   <option value="Lớp 10" selected>Lớp 10 (Bắt đầu lựa chọn môn học THPT)</option>
-                  <option value="Lớp 11">Lớp 11 (Chuẩn bị chứng chỉ & ĐGNL)</option>
-                  <option value="Lớp 12">Lớp 12 (Xét tuyển tốt nghiệp & Đại học)</option>
+                  <option value="Lớp 11">Lớp 11 (Đã chọn tổ hợp môn • Chuẩn bị ĐGNL/TSA)</option>
+                  <option value="Lớp 12">Lớp 12 (Đã có tổ hợp môn • Xét tuyển tốt nghiệp & ĐH)</option>
                 </select>
               </div>
             </div>
 
             <!-- Academic Scores Grid -->
-            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; margin: 16px 0;">
-              <div style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">grade</span>
-                Điểm số trung bình gần nhất (Thang điểm 10)
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin: 16px 0;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px;">
+                  <span class="material-symbols-outlined text-secondary" style="font-size: 19px;">grade</span>
+                  <span>Điểm số học tập gần nhất (Thang điểm 10)</span>
+                </div>
+                <span id="grade-advice-pill" style="font-size: 11px; color: #34D399; background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.25); padding: 2px 8px; border-radius: 9999px; font-weight: 600;">
+                  3 Môn bắt buộc
+                </span>
               </div>
+
+              <!-- 3 Core Compulsory Subjects -->
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label class="form-label" for="score-math">Toán</label>
-                  <input type="number" id="score-math" min="1" max="10" step="0.1" class="form-control" value="8.5" required>
+                  <label class="form-label" for="score-math" style="display: flex; justify-content: space-between;">
+                    <span>Toán</span>
+                    <span style="font-size: 10.5px; color: #94A3B8;">Bắt buộc</span>
+                  </label>
+                  <input type="number" id="score-math" min="1" max="10" step="0.1" class="form-control" value="8.5" oninput="updateLiveCombinationPreview()" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label class="form-label" for="score-literature">Ngữ văn</label>
-                  <input type="number" id="score-literature" min="1" max="10" step="0.1" class="form-control" value="7.5" required>
+                  <label class="form-label" for="score-literature" style="display: flex; justify-content: space-between;">
+                    <span>Ngữ văn</span>
+                    <span style="font-size: 10.5px; color: #94A3B8;">Bắt buộc</span>
+                  </label>
+                  <input type="number" id="score-literature" min="1" max="10" step="0.1" class="form-control" value="7.5" oninput="updateLiveCombinationPreview()" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label class="form-label" for="score-english">Tiếng Anh</label>
-                  <input type="number" id="score-english" min="1" max="10" step="0.1" class="form-control" value="8.0" required>
+                  <label class="form-label" for="score-english" style="display: flex; justify-content: space-between;">
+                    <span>Tiếng Anh</span>
+                    <span style="font-size: 10.5px; color: #94A3B8;">Bắt buộc</span>
+                  </label>
+                  <input type="number" id="score-english" min="1" max="10" step="0.1" class="form-control" value="8.0" oninput="updateLiveCombinationPreview()" required>
+                </div>
+              </div>
+
+              <!-- Elective Subjects for Grade 11-12 & Grade 10 -->
+              <div id="elective-subjects-wrapper" style="margin-top: 16px; padding-top: 14px; border-top: 1px dashed rgba(255, 255, 255, 0.12);">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+                  <div>
+                    <span style="font-size: 13px; font-weight: 700; color: #38BDF8; display: inline-flex; align-items: center; gap: 5px;">
+                      <span class="material-symbols-outlined" style="font-size: 17px;">playlist_add_check</span>
+                      Môn Tự Chọn Theo Tổ Hợp (Dành cho Lớp 11–12 & Lớp 10)
+                    </span>
+                    <p style="font-size: 11.5px; color: #94A3B8; margin: 3px 0 0 0; line-height: 1.4;">
+                      Học sinh đã chọn tổ hợp hoặc có môn thế mạnh hãy điền thêm để hệ thống tính điểm tổ hợp xét tuyển ĐH chính xác:
+                    </p>
+                  </div>
+                  <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <button type="button" onclick="quickFillElectives('stem')" class="btn btn-secondary" style="padding: 4px 9px; font-size: 11px; border-radius: 6px;" title="Điền nhanh gợi ý tổ hợp tự nhiên">+ Khối Tự nhiên (Lí, Hóa, Sinh)</button>
+                    <button type="button" onclick="quickFillElectives('social')" class="btn btn-secondary" style="padding: 4px 9px; font-size: 11px; border-radius: 6px;" title="Điền nhanh gợi ý tổ hợp xã hội">+ Khối Xã hội (Sử, Địa, GDKT)</button>
+                    <button type="button" onclick="quickFillElectives('tech')" class="btn btn-secondary" style="padding: 4px 9px; font-size: 11px; border-radius: 6px;" title="Điền nhanh Tin học">+ Tin học</button>
+                    <button type="button" onclick="clearElectives()" class="btn btn-secondary" style="padding: 4px 7px; font-size: 11px; border-radius: 6px; color: #F87171;" title="Xóa môn tự chọn">Xóa</button>
+                  </div>
+                </div>
+
+                <!-- 7 Elective Subject Inputs -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)); gap: 10px;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="score-physics" style="font-size: 12px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                      <span>Vật lí</span>
+                      <span style="font-size: 10px; color: #64748B;">Lí</span>
+                    </label>
+                    <input type="number" id="score-physics" min="1" max="10" step="0.1" class="form-control" placeholder="VD: 8.5" oninput="updateLiveCombinationPreview()" style="padding: 7px 10px; font-size: 13px;">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="score-chemistry" style="font-size: 12px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                      <span>Hóa học</span>
+                      <span style="font-size: 10px; color: #64748B;">Hóa</span>
+                    </label>
+                    <input type="number" id="score-chemistry" min="1" max="10" step="0.1" class="form-control" placeholder="VD: 8.0" oninput="updateLiveCombinationPreview()" style="padding: 7px 10px; font-size: 13px;">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="score-biology" style="font-size: 12px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                      <span>Sinh học</span>
+                      <span style="font-size: 10px; color: #64748B;">Sinh</span>
+                    </label>
+                    <input type="number" id="score-biology" min="1" max="10" step="0.1" class="form-control" placeholder="VD: 8.0" oninput="updateLiveCombinationPreview()" style="padding: 7px 10px; font-size: 13px;">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="score-history" style="font-size: 12px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                      <span>Lịch sử</span>
+                      <span style="font-size: 10px; color: #64748B;">Sử</span>
+                    </label>
+                    <input type="number" id="score-history" min="1" max="10" step="0.1" class="form-control" placeholder="VD: 8.0" oninput="updateLiveCombinationPreview()" style="padding: 7px 10px; font-size: 13px;">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="score-geography" style="font-size: 12px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                      <span>Địa lí</span>
+                      <span style="font-size: 10px; color: #64748B;">Địa</span>
+                    </label>
+                    <input type="number" id="score-geography" min="1" max="10" step="0.1" class="form-control" placeholder="VD: 8.0" oninput="updateLiveCombinationPreview()" style="padding: 7px 10px; font-size: 13px;">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="score-informatics" style="font-size: 12px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                      <span>Tin học</span>
+                      <span style="font-size: 10px; color: #64748B;">Tin</span>
+                    </label>
+                    <input type="number" id="score-informatics" min="1" max="10" step="0.1" class="form-control" placeholder="VD: 9.0" oninput="updateLiveCombinationPreview()" style="padding: 7px 10px; font-size: 13px;">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="score-civics" style="font-size: 12px; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                      <span>GDKT & PL</span>
+                      <span style="font-size: 10px; color: #64748B;">Kinh tế/Luật</span>
+                    </label>
+                    <input type="number" id="score-civics" min="1" max="10" step="0.1" class="form-control" placeholder="VD: 8.5" oninput="updateLiveCombinationPreview()" style="padding: 7px 10px; font-size: 13px;">
+                  </div>
+                </div>
+
+                <!-- Real-time Live Preview of calculated admission combinations -->
+                <div id="combination-live-preview" style="margin-top: 12px; display: none; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #BAE6FD;">
+                  <!-- Dynamically populated -->
                 </div>
               </div>
             </div>
@@ -1175,6 +1270,92 @@
     let isFastTrackMode = false;
     let globalParentAnswers = null;
 
+    // Grade change handler & Elective subjects management
+    function handleUserGradeChange(grade) {
+      const advicePill = document.getElementById('grade-advice-pill');
+      if (!advicePill) return;
+      if (grade === 'Lớp 11' || grade === 'Lớp 12') {
+        advicePill.textContent = 'Lớp 11–12: Nên điền các môn trong tổ hợp đã chọn';
+        advicePill.style.color = '#38BDF8';
+        advicePill.style.background = 'rgba(56, 189, 248, 0.12)';
+        advicePill.style.borderColor = 'rgba(56, 189, 248, 0.35)';
+      } else {
+        advicePill.textContent = '3 Môn bắt buộc';
+        advicePill.style.color = '#34D399';
+        advicePill.style.background = 'rgba(52, 211, 153, 0.1)';
+        advicePill.style.borderColor = 'rgba(52, 211, 153, 0.25)';
+      }
+    }
+
+    function quickFillElectives(type) {
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+      };
+      if (type === 'stem') {
+        setVal('score-physics', '8.5');
+        setVal('score-chemistry', '8.0');
+        setVal('score-biology', '8.0');
+      } else if (type === 'social') {
+        setVal('score-history', '8.0');
+        setVal('score-geography', '8.0');
+        setVal('score-civics', '8.5');
+      } else if (type === 'tech') {
+        setVal('score-informatics', '9.0');
+        setVal('score-physics', '8.5');
+      }
+      updateLiveCombinationPreview();
+    }
+
+    function clearElectives() {
+      ['score-physics', 'score-chemistry', 'score-biology', 'score-history', 'score-geography', 'score-informatics', 'score-civics'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      updateLiveCombinationPreview();
+    }
+
+    function updateLiveCombinationPreview() {
+      const getVal = (id) => {
+        const el = document.getElementById(id);
+        if (!el || el.value === '' || isNaN(parseFloat(el.value))) return null;
+        return parseFloat(el.value);
+      };
+      const m = getVal('score-math');
+      const v = getVal('score-literature');
+      const a = getVal('score-english');
+      const l = getVal('score-physics');
+      const h = getVal('score-chemistry');
+      const s = getVal('score-biology');
+      const su = getVal('score-history');
+      const d = getVal('score-geography');
+
+      const combos = [];
+      if (m !== null && l !== null && h !== null) combos.push(`A00: ${(m + l + h).toFixed(1)}đ`);
+      if (m !== null && l !== null && a !== null) combos.push(`A01: ${(m + l + a).toFixed(1)}đ`);
+      if (m !== null && h !== null && s !== null) combos.push(`B00: ${(m + h + s).toFixed(1)}đ`);
+      if (v !== null && su !== null && d !== null) combos.push(`C00: ${(v + su + d).toFixed(1)}đ`);
+      if (m !== null && v !== null && a !== null) combos.push(`D01: ${(m + v + a).toFixed(1)}đ`);
+      if (m !== null && h !== null && a !== null) combos.push(`D07: ${(m + h + a).toFixed(1)}đ`);
+
+      const previewBox = document.getElementById('combination-live-preview');
+      if (!previewBox) return;
+      if (combos.length > 0) {
+        previewBox.style.display = 'block';
+        previewBox.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #38BDF8; margin-bottom: 4px;">
+            <span class="material-symbols-outlined" style="font-size: 16px;">bolt</span>
+            <span>Điểm dự phóng các tổ hợp xét tuyển đã đủ môn:</span>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            ${combos.map(c => `<span style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 12px; color: #E0F2FE;">${c}</span>`).join('')}
+          </div>
+        `;
+      } else {
+        previewBox.style.display = 'none';
+      }
+    }
+
     // Mode Switcher (Fast-Track 3-min vs Deep-Dive 15-min)
     function switchScreen1Mode(mode) {
       currentMode = mode;
@@ -1513,9 +1694,23 @@
       const name = isFastTrackMode ? (document.getElementById('fast-fullname').value || 'Học sinh') : (document.getElementById('user-fullname').value || 'Học sinh');
       const gender = isFastTrackMode ? 'Chưa rõ' : (document.getElementById('user-gender').value || 'Chưa rõ');
       const grade = isFastTrackMode ? (document.getElementById('fast-grade').value || 'Lớp 10') : (document.getElementById('user-grade').value || 'Lớp 10');
-      const math = isFastTrackMode ? null : (!isNaN(parseFloat(document.getElementById('score-math').value)) ? parseFloat(document.getElementById('score-math').value) : null);
-      const lit = isFastTrackMode ? null : (!isNaN(parseFloat(document.getElementById('score-literature').value)) ? parseFloat(document.getElementById('score-literature').value) : null);
-      const eng = isFastTrackMode ? null : (!isNaN(parseFloat(document.getElementById('score-english').value)) ? parseFloat(document.getElementById('score-english').value) : null);
+
+      const parseInputScore = (id) => {
+        const el = document.getElementById(id);
+        if (!el || el.value === '' || isNaN(parseFloat(el.value))) return null;
+        return parseFloat(el.value);
+      };
+
+      const math = isFastTrackMode ? null : parseInputScore('score-math');
+      const lit = isFastTrackMode ? null : parseInputScore('score-literature');
+      const eng = isFastTrackMode ? null : parseInputScore('score-english');
+      const physics = isFastTrackMode ? null : parseInputScore('score-physics');
+      const chemistry = isFastTrackMode ? null : parseInputScore('score-chemistry');
+      const biology = isFastTrackMode ? null : parseInputScore('score-biology');
+      const history = isFastTrackMode ? null : parseInputScore('score-history');
+      const geography = isFastTrackMode ? null : parseInputScore('score-geography');
+      const informatics = isFastTrackMode ? null : parseInputScore('score-informatics');
+      const civics = isFastTrackMode ? null : parseInputScore('score-civics');
 
       // Fast-Track must NOT silently inherit hidden Deep-Dive selections (Section 16)
       const checkedTargets = isFastTrackMode ? [] : Array.from(document.querySelectorAll('input[name="target_orientations"]:checked')).map(cb => cb.value);
@@ -1543,6 +1738,13 @@
         math,
         lit,
         eng,
+        physics,
+        chemistry,
+        biology,
+        history,
+        geography,
+        informatics,
+        civics,
         riasecScores: computedRiasecScores,
         riasec: Object.entries(computedRiasecScores).sort((a,b)=>b[1]-a[1]).map(e=>`${e[0]}: ${e[1]}`).join(', '),
         targets: checkedTargets,
@@ -1652,7 +1854,14 @@
         academic: {
           math: globalStudentCareerProfile.math,
           lit: globalStudentCareerProfile.lit,
-          eng: globalStudentCareerProfile.eng
+          eng: globalStudentCareerProfile.eng,
+          physics: globalStudentCareerProfile.physics,
+          chemistry: globalStudentCareerProfile.chemistry,
+          biology: globalStudentCareerProfile.biology,
+          history: globalStudentCareerProfile.history,
+          geography: globalStudentCareerProfile.geography,
+          informatics: globalStudentCareerProfile.informatics,
+          civics: globalStudentCareerProfile.civics
         },
         targets: globalStudentCareerProfile.targets
       });
@@ -1915,9 +2124,53 @@
         const topRiasec = window.orionCareerEngine.getTopRiasecCodes(computedRiasecScores)[0] || 'I';
         const combo = window.orionCareerEngine.recommendCombination(topRiasec, {
           math: globalStudentCareerProfile.math,
-          eng: globalStudentCareerProfile.eng
+          lit: globalStudentCareerProfile.lit,
+          eng: globalStudentCareerProfile.eng,
+          physics: globalStudentCareerProfile.physics,
+          chemistry: globalStudentCareerProfile.chemistry,
+          biology: globalStudentCareerProfile.biology,
+          history: globalStudentCareerProfile.history,
+          geography: globalStudentCareerProfile.geography,
+          informatics: globalStudentCareerProfile.informatics,
+          civics: globalStudentCareerProfile.civics
         });
         const comboData = window.EDUCATION_DATABASE ? window.EDUCATION_DATABASE.subjectCombinations[combo.primaryCombo] : null;
+        const backupData = window.EDUCATION_DATABASE ? window.EDUCATION_DATABASE.subjectCombinations[combo.backupCombo] : null;
+
+        let scoredCombosHtml = '';
+        if (combo.scoredCombos && combo.scoredCombos.length > 0) {
+          scoredCombosHtml = `
+            <div style="margin-top: 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                <h4 style="font-size: 14.5px; font-weight:700; color:#fff; margin:0; display:flex; align-items:center; gap:6px;">
+                  <span class="material-symbols-outlined text-secondary" style="font-size: 18px;">calculate</span>
+                  Bảng Điểm Dự Phóng Các Tổ Hợp Xét Tuyển ĐH Của Em
+                </h4>
+                <span style="font-size:11.5px; color:#94A3B8;">Tính tự động từ các môn em đã nhập</span>
+              </div>
+              <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
+                ${combo.scoredCombos.map((sc) => {
+                  const isPrimary = sc.code === combo.primaryCombo;
+                  const isBackup = sc.code === combo.backupCombo;
+                  const tag = isPrimary ? '<span style="background:rgba(16,185,129,0.2); color:#34D399; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:4px;">Tối ưu nhất</span>' : (isBackup ? '<span style="background:rgba(99,102,241,0.2); color:#A5B4FC; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:4px;">Dự phòng an toàn</span>' : '');
+                  return `
+                    <div style="background: ${isPrimary ? 'rgba(16,185,129,0.06)' : 'rgba(255,255,255,0.02)'}; border: 1px solid ${isPrimary ? 'rgba(16,185,129,0.35)' : 'var(--border-color)'}; border-radius: 10px; padding: 12px 14px;">
+                      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="font-weight:800; font-size:15px; color:${isPrimary ? '#34D399' : '#fff'};">${sc.code}</span>
+                        ${tag}
+                      </div>
+                      <div style="font-size:12px; color:#CBD5E1; margin-bottom:6px;">${sc.name}</div>
+                      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed rgba(255,255,255,0.08); margin-top:6px; padding-top:6px;">
+                        <span style="font-size:11px; color:#94A3B8;">${sc.subjectDetails}</span>
+                        <span style="font-size:14px; font-weight:800; color:#FBBF24;">${sc.score} / 30đ</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }
 
         personalizedComboHtml = `
           <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px; margin-bottom: 16px;">
@@ -1928,9 +2181,10 @@
             </div>
             <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">${combo.rationale}</p>
             <div style="font-size:12px; color:#A5B4FC; background:rgba(99,102,241,0.08); padding:8px 12px; border-radius:8px;">
-              💡 <strong>Tổ hợp phụ nên cân nhắc dự phòng:</strong> ${combo.backupCombo}
+              💡 <strong>Tổ hợp phụ nên cân nhắc dự phòng:</strong> ${combo.backupCombo} ${backupData ? '(' + backupData.name + ')' : ''}
             </div>
           </div>
+          ${scoredCombosHtml}
         `;
       }
 
@@ -2217,8 +2471,19 @@
               <div style="font-weight:700; color:#fff; margin-top:2px;">${globalStudentCareerProfile.name || 'Học sinh'} (${globalStudentCareerProfile.grade || 'Lớp 10'})</div>
             </div>
             <div style="background:rgba(0,0,0,0.2); padding:10px 12px; border-radius:8px;">
-              <div style="color:var(--text-muted); font-size:11px;">Điểm học lực nền tảng</div>
-              <div style="font-weight:700; color:#fff; margin-top:2px;">Toán ${globalStudentCareerProfile.math} • Văn ${globalStudentCareerProfile.lit} • Anh ${globalStudentCareerProfile.eng}</div>
+              <div style="color:var(--text-muted); font-size:11px;">Điểm học lực & tổ hợp môn</div>
+              <div style="font-weight:700; color:#fff; margin-top:2px;">${(() => {
+                const p = globalStudentCareerProfile;
+                const electivesArr = [];
+                if (p.physics) electivesArr.push(`Lí ${p.physics}`);
+                if (p.chemistry) electivesArr.push(`Hóa ${p.chemistry}`);
+                if (p.biology) electivesArr.push(`Sinh ${p.biology}`);
+                if (p.history) electivesArr.push(`Sử ${p.history}`);
+                if (p.geography) electivesArr.push(`Địa ${p.geography}`);
+                if (p.informatics) electivesArr.push(`Tin ${p.informatics}`);
+                if (p.civics) electivesArr.push(`KTPL ${p.civics}`);
+                return `Toán ${p.math || '—'} • Văn ${p.lit || '—'} • Anh ${p.eng || '—'}` + (electivesArr.length > 0 ? ` • ${electivesArr.join(' • ')}` : '');
+              })()}</div>
             </div>
             <div style="background:rgba(0,0,0,0.2); padding:10px 12px; border-radius:8px;">
               <div style="color:var(--text-muted); font-size:11px;">Thử nghiệm đã hoàn thành</div>
@@ -2560,6 +2825,28 @@
           if (fgr) fgr.value = globalStudentCareerProfile.grade;
         }
 
+        // Restore academic scores if present
+        const scoreFields = [
+          ['score-math', globalStudentCareerProfile.math],
+          ['score-lit', globalStudentCareerProfile.lit],
+          ['score-eng', globalStudentCareerProfile.eng],
+          ['score-physics', globalStudentCareerProfile.physics],
+          ['score-chemistry', globalStudentCareerProfile.chemistry],
+          ['score-biology', globalStudentCareerProfile.biology],
+          ['score-history', globalStudentCareerProfile.history],
+          ['score-geography', globalStudentCareerProfile.geography],
+          ['score-informatics', globalStudentCareerProfile.informatics],
+          ['score-civics', globalStudentCareerProfile.civics]
+        ];
+        scoreFields.forEach(([id, val]) => {
+          const el = document.getElementById(id);
+          if (el && val !== null && val !== undefined) el.value = val;
+        });
+
+        if (typeof updateLiveCombinationPreview === 'function') {
+          updateLiveCombinationPreview();
+        }
+
         collectProfilesAndRenderDashboard();
         goToScreen(5);
       } catch (e) {
@@ -2577,10 +2864,37 @@
         academic: {
           math: globalStudentCareerProfile.math,
           lit: globalStudentCareerProfile.lit,
-          eng: globalStudentCareerProfile.eng
+          eng: globalStudentCareerProfile.eng,
+          physics: globalStudentCareerProfile.physics,
+          chemistry: globalStudentCareerProfile.chemistry,
+          biology: globalStudentCareerProfile.biology,
+          history: globalStudentCareerProfile.history,
+          geography: globalStudentCareerProfile.geography,
+          informatics: globalStudentCareerProfile.informatics,
+          civics: globalStudentCareerProfile.civics
         },
         targets: globalStudentCareerProfile.targets
       }) : [];
+
+      let comboSummary = '';
+      if (window.orionCareerEngine) {
+        const topRiasec = window.orionCareerEngine.getTopRiasecCodes(computedRiasecScores)[0] || 'I';
+        const combo = window.orionCareerEngine.recommendCombination(topRiasec, {
+          math: globalStudentCareerProfile.math,
+          lit: globalStudentCareerProfile.lit,
+          eng: globalStudentCareerProfile.eng,
+          physics: globalStudentCareerProfile.physics,
+          chemistry: globalStudentCareerProfile.chemistry,
+          biology: globalStudentCareerProfile.biology,
+          history: globalStudentCareerProfile.history,
+          geography: globalStudentCareerProfile.geography,
+          informatics: globalStudentCareerProfile.informatics,
+          civics: globalStudentCareerProfile.civics
+        });
+        if (combo && combo.primaryCombo) {
+          comboSummary = `🎯 Tổ hợp đề xuất: ${combo.primaryCombo} (Dự phòng: ${combo.backupCombo})\n`;
+        }
+      }
 
       const topCareers = hypotheses.slice(0, 3).map((h, i) => `${i + 1}. ${h.name} (${h.signalLevelLabel || 'Tín hiệu tốt'})`).join('\n');
       const shareUrl = window.location.origin + window.location.pathname + `?ref=share`;
@@ -2588,6 +2902,7 @@
       const summary = `🌟 BẢN ĐỒ HƯỚNG NGHIỆP — ORION PATH AI\n` +
         `👤 Học sinh: ${name} (${grade})\n` +
         `📊 Mã thiên hướng RIASEC: ${topCodes}\n` +
+        comboSummary +
         `💼 Top giả thiết nghề nghiệp phù hợp:\n${topCareers}\n` +
         `🔗 Xem chi tiết tại: ${shareUrl}`;
 

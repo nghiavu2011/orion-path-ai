@@ -115,6 +115,30 @@ const EDUCATION_DATABASE = {
       type: "Tổ hợp xét tuyển Khoa học Xã hội & Nhân văn",
       majors: "Báo chí - Truyền thông, Quan hệ Quốc tế, Tâm lý học, Xã hội học, Du lịch & Khách sạn",
       suitability: "Học sinh có lòng thấu cảm xã hội sâu sắc, khả năng lập luận ngôn từ và trí nhớ xã hội tốt."
+    },
+    "C01": {
+      name: "Ngữ văn, Toán, Vật lý",
+      type: "Tổ hợp xét tuyển Kỹ thuật, Kiến trúc & Đồ họa",
+      majors: "Kiến trúc, Thiết kế Nội thất, Quy hoạch Đô thị, Kỹ thuật Công trình, Quản lý Xây dựng",
+      suitability: "Phối hợp giữa cảm thụ không gian thẩm mỹ của Ngữ văn với tư duy hình học và cơ học của Toán - Lý."
+    },
+    "D14": {
+      name: "Ngữ văn, Lịch sử, Tiếng Anh",
+      type: "Tổ hợp xét tuyển Ngoại giao, Quốc tế học & Luật",
+      majors: "Quan hệ Quốc tế, Luật Quốc tế, Ngôn ngữ học, Đông phương học, Báo chí Đa phương tiện",
+      suitability: "Thế mạnh xã hội và ngoại ngữ sắc bén, phù hợp với các nghề làm việc trong môi trường đa quốc gia."
+    },
+    "D15": {
+      name: "Ngữ văn, Địa lý, Tiếng Anh",
+      type: "Tổ hợp xét tuyển Địa lý kinh tế, Du lịch & Dịch vụ",
+      majors: "Quản trị Dịch vụ Du lịch & Lữ hành, Địa lý Kinh tế, Bất động sản, Quản lý Đô thị, Ngôn ngữ Anh",
+      suitability: "Tư duy không gian văn hóa kết hợp kỹ năng tiếng Anh năng động và khả năng giao tiếp cởi mở."
+    },
+    "A02": {
+      name: "Toán, Vật lý, Sinh học",
+      type: "Tổ hợp xét tuyển Kỹ thuật Y sinh & Công nghệ Môi trường",
+      majors: "Kỹ thuật Y sinh, Công nghệ Sinh học, Kỹ thuật Môi trường, Nông nghiệp Thông minh",
+      suitability: "Dành cho học sinh đam mê công nghệ ứng dụng trong sự sống và chăm sóc sức khỏe."
     }
   },
 

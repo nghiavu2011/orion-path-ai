@@ -407,8 +407,53 @@ const nextActionFast = engine.resolveNextActionState({
 assert.strictEqual(nextActionFast.stateIndex, 4, 'Fast-Track must resolve to State 4 without false socratic claim');
 console.log('✓ Test 16 Passed: Fast-Track RIASEC normalization eliminates bias, preserves missing data, and truthfully handles Socratic bypass.');
 
+console.log('--- TEST 17: Elective Subjects & Real-Time Combination Scoring (Grade 11-12) ---');
+// 1. Recommend combinations with all electives provided
+const stemAcademic = {
+  math: 8.5,
+  lit: 7.0,
+  eng: 8.0,
+  physics: 9.0,
+  chemistry: 8.5,
+  biology: 7.5,
+  informatics: 9.5
+};
+
+const stemCombo = engine.recommendCombination('I', stemAcademic);
+assert.ok(stemCombo.primaryCombo, 'Should produce a primaryCombo');
+assert.ok(stemCombo.backupCombo, 'Should produce a backupCombo');
+assert.ok(Array.isArray(stemCombo.scoredCombos), 'Should return scoredCombos list');
+assert.ok(stemCombo.scoredCombos.length >= 4, 'Should compute multiple valid combinations');
+
+// Check A00: Math(8.5) + Physics(9.0) + Chemistry(8.5) = 26.0
+const a00 = stemCombo.scoredCombos.find(c => c.code === 'A00');
+assert.ok(a00, 'A00 combination must be present');
+assert.strictEqual(a00.score, 26.0, 'A00 score must equal 26.0');
+
+// Check A01: Math(8.5) + Physics(9.0) + Eng(8.0) = 25.5
+const a01 = stemCombo.scoredCombos.find(c => c.code === 'A01');
+assert.ok(a01, 'A01 combination must be present');
+assert.strictEqual(a01.score, 25.5, 'A01 score must equal 25.5');
+
+// Check B00: Math(8.5) + Chemistry(8.5) + Biology(7.5) = 24.5
+const b00 = stemCombo.scoredCombos.find(c => c.code === 'B00');
+assert.ok(b00, 'B00 combination must be present');
+assert.strictEqual(b00.score, 24.5, 'B00 score must equal 24.5');
+
+// 2. Career hypotheses incorporating elective scores
+const hypothesesWithElectives = engine.generateCareerHypotheses({
+  riasecScores: { R: 4, I: 5, A: 1, S: 1, E: 1, C: 1 },
+  academic: stemAcademic,
+  targets: ['tech']
+});
+const techHypo = hypothesesWithElectives.find(h => h.id === 'ai_ml_engineer' || h.id === 'chip_design_engineer');
+assert.ok(techHypo, 'Technology hypothesis must be generated');
+const hasElectiveEvidence = techHypo.evidenceFor.some(e => e.includes('Vật lí') || e.includes('Tin học'));
+assert.strictEqual(hasElectiveEvidence, true, 'Tech hypothesis must include Physics/Informatics elective evidence');
+console.log('✓ Test 17 Passed: Elective subjects combination scoring and career hypothesis integration verified.');
+
 console.log('\n==========================================');
-console.log('ALL 16 PRODUCTION ENGINE TESTS PASSED 100%');
+console.log('ALL 17 PRODUCTION ENGINE TESTS PASSED 100%');
 console.log('==========================================');
 
 

@@ -63,12 +63,20 @@ function checkRateLimit(ip) {
 function sanitizeCareerContext(profile) {
   if (!profile) return null;
   const cp = profile.careerProfile || profile;
+  const sanitizeScore = (val) => (typeof val === 'number' || typeof val === 'string') && val !== null ? String(val).slice(0, 5) : null;
   return {
     grade: typeof cp.grade === 'string' ? cp.grade.slice(0, 20) : 'Lớp 10',
     riasec: typeof cp.riasec === 'string' ? cp.riasec.slice(0, 50) : '',
-    math: (typeof cp.math === 'number' || typeof cp.math === 'string') && cp.math !== null ? String(cp.math).slice(0, 5) : null,
-    lit: (typeof cp.lit === 'number' || typeof cp.lit === 'string') && cp.lit !== null ? String(cp.lit).slice(0, 5) : null,
-    eng: (typeof cp.eng === 'number' || typeof cp.eng === 'string') && cp.eng !== null ? String(cp.eng).slice(0, 5) : null,
+    math: sanitizeScore(cp.math),
+    lit: sanitizeScore(cp.lit),
+    eng: sanitizeScore(cp.eng),
+    physics: sanitizeScore(cp.physics),
+    chemistry: sanitizeScore(cp.chemistry),
+    biology: sanitizeScore(cp.biology),
+    history: sanitizeScore(cp.history),
+    geography: sanitizeScore(cp.geography),
+    informatics: sanitizeScore(cp.informatics),
+    civics: sanitizeScore(cp.civics),
     targets: Array.isArray(cp.targets) ? cp.targets.slice(0, 5).map(t => String(t).slice(0, 50)) : [],
     coreValues: Array.isArray(cp.coreValues) ? cp.coreValues.slice(0, 3).map(v => String(v).slice(0, 50)) : [],
     workPreferences: Array.isArray(cp.workPreferences) ? cp.workPreferences.slice(0, 3).map(w => String(w).slice(0, 50)) : [],
@@ -203,9 +211,19 @@ NGUYÊN TẮC BẮT BUỘC:
     }
 
     if (cc) {
+      const electiveList = [];
+      if (cc.physics) electiveList.push(`Vật lí ${cc.physics}`);
+      if (cc.chemistry) electiveList.push(`Hóa học ${cc.chemistry}`);
+      if (cc.biology) electiveList.push(`Sinh học ${cc.biology}`);
+      if (cc.history) electiveList.push(`Lịch sử ${cc.history}`);
+      if (cc.geography) electiveList.push(`Địa lí ${cc.geography}`);
+      if (cc.informatics) electiveList.push(`Tin học ${cc.informatics}`);
+      if (cc.civics) electiveList.push(`GDKT&PL ${cc.civics}`);
+      const electivesStr = electiveList.length > 0 ? ` • Môn tự chọn: ${electiveList.join(', ')}` : '';
+
       systemInstruction += `\n\nHồ sơ học sinh (Dữ liệu bằng chứng đã chuẩn hóa):
 - Khối lớp: ${cc.grade}
-- Điểm học thuật: ${cc.math ? 'Toán ' + cc.math : 'Toán: Chưa có'}, ${cc.lit ? 'Ngữ văn ' + cc.lit : 'Ngữ văn: Chưa có'}, ${cc.eng ? 'Tiếng Anh ' + cc.eng : 'Tiếng Anh: Chưa có'}
+- Điểm học thuật: ${cc.math ? 'Toán ' + cc.math : 'Toán: Chưa có'}, ${cc.lit ? 'Ngữ văn ' + cc.lit : 'Ngữ văn: Chưa có'}, ${cc.eng ? 'Tiếng Anh ' + cc.eng : 'Tiếng Anh: Chưa có'}${electivesStr}
 - Sở thích nghề nghiệp (RIASEC): ${cc.riasec || 'Chưa rõ'}
 - Định hướng quan tâm: ${cc.targets.length > 0 ? cc.targets.join(', ') : 'Đang tìm hiểu'}
 - Giá trị cốt lõi: ${cc.coreValues.length > 0 ? cc.coreValues.join(', ') : 'Chưa chọn'}
