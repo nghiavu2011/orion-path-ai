@@ -601,6 +601,30 @@ body {
   color: #e2e8f0;
 }
 
+/* ==================== VISUAL FEATURE CARDS & SECTION BANNERS ==================== */
+.visual-feature-card {
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 14px;
+}
+
+@media (max-width: 640px) {
+  .visual-feature-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+.section-visual-banner {
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid var(--border-color);
+  background: rgba(17, 24, 39, 0.6);
+  position: relative;
+}
+
 /* ==================== PRINT STYLESHEET ==================== */
 @media print {
   body {

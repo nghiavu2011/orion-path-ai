@@ -1,32 +1,100 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
   <defs>
-    <linearGradient id="opGradFavicon" x1="15%" y1="15%" x2="85%" y2="85%">
+    <!-- Background Gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#141B34"/>
+      <stop offset="60%" stop-color="#0B0F1F"/>
+      <stop offset="100%" stop-color="#050711"/>
+    </radialGradient>
+
+    <!-- Path Primary Gradient (Indigo to Cyan to Emerald) -->
+    <linearGradient id="orionGrad" x1="10%" y1="10%" x2="90%" y2="90%">
       <stop offset="0%" stop-color="#818CF8"/>
-      <stop offset="50%" stop-color="#6366F1"/>
+      <stop offset="45%" stop-color="#6366F1"/>
+      <stop offset="75%" stop-color="#06B6D4"/>
       <stop offset="100%" stop-color="#34D399"/>
     </linearGradient>
-    <filter id="opGlowFavicon" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+
+    <!-- Beacon Star Glow -->
+    <linearGradient id="starGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#E0E7FF"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+
+    <radialGradient id="beaconRadial" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="40%" stop-color="#38BDF8" stop-opacity="0.8"/>
+      <stop offset="80%" stop-color="#34D399" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Soft Ambient Glow Filter -->
+    <filter id="glowSubtle" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Intense Star Glow -->
+    <filter id="starGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="blur1"/>
+      <feGaussianBlur stdDeviation="6" result="blur2"/>
+      <feMerge>
+        <feMergeNode in="blur2"/>
+        <feMergeNode in="blur1"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
   </defs>
 
-  <!-- Deep space background rounded tile -->
-  <rect width="100" height="100" rx="24" fill="#0B0F19"/>
-  <rect width="100" height="100" rx="24" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  <!-- Deep Space Tile with subtle border -->
+  <rect width="120" height="120" rx="28" fill="url(#bgGrad)"/>
+  <rect width="118" height="118" x="1" y="1" rx="27" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1.2"/>
+  <circle cx="95" cy="25" r="35" fill="#6366F1" opacity="0.08" filter="blur(20px)"/>
+  <circle cx="25" cy="95" r="30" fill="#10B981" opacity="0.08" filter="blur(16px)"/>
 
-  <!-- Intertwined O & P Constellation Loop -->
-  <path d="M42 24 C25 24 16 36 16 52 C16 68 25 80 42 80 C53 80 61 73 65 62 L65 52" 
-        stroke="url(#opGradFavicon)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#opGlowFavicon)"/>
+  <!-- Background Constellation Guide Grid (Subtle) -->
+  <g opacity="0.25" stroke="#818CF8" stroke-width="0.75" stroke-dasharray="2 3">
+    <line x1="32" y1="28" x2="88" y2="28" />
+    <line x1="32" y1="28" x2="52" y2="60" />
+    <line x1="88" y1="28" x2="68" y2="60" />
+    <line x1="52" y1="60" x2="36" y2="94" />
+    <line x1="68" y1="60" x2="84" y2="94" />
+  </g>
 
-  <path d="M48 80 L48 24 C48 24 58 22 68 24 C79 26 85 34 85 45 C85 56 77 62 65 62 L48 62" 
-        stroke="url(#opGradFavicon)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#opGlowFavicon)"/>
+  <!-- Major Orion Star Nodes -->
+  <circle cx="32" cy="28" r="2.2" fill="#FBBF24" opacity="0.85"/>
+  <circle cx="88" cy="28" r="1.8" fill="#93C5FD" opacity="0.7"/>
+  <circle cx="36" cy="94" r="1.8" fill="#93C5FD" opacity="0.7"/>
+  <circle cx="84" cy="94" r="2.4" fill="#60A5FA" opacity="0.85"/>
 
-  <!-- Orion's Belt: 3 Celestial Beacon Stars -->
-  <circle cx="57" cy="37" r="3" fill="#FFFFFF"/>
-  <circle cx="65" cy="45" r="3.5" fill="#4EDEA3"/>
-  <circle cx="73" cy="53" r="3" fill="#FFFFFF"/>
+  <!-- The Intertwined O & P Career Trajectory Arc (Main Mark) -->
+  <path d="M52 24 C30 24 18 40 18 60 C18 80 30 96 52 96 C72 96 82 82 82 66" 
+        stroke="url(#orionGrad)" stroke-width="7" stroke-linecap="round" filter="url(#glowSubtle)"/>
+
+  <path d="M52 96 L52 24 C52 24 64 21 78 24 C92 27 98 38 98 50 C98 62 88 72 74 72 L52 72" 
+        stroke="url(#orionGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#glowSubtle)"/>
+
+  <!-- Inner Dynamic Light Flow Accent -->
+  <path d="M52 32 L52 88" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
+  <path d="M56 26 C66 24 76 25 84 31 C90 36 92 43 92 50 C92 57 86 64 74 65 L52 65" 
+        stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Orion's Belt: 3 Celestial Beacon Stars (Alnitak, Alnilam, Mintaka) -->
+  <g filter="url(#starGlow)">
+    <circle cx="58" cy="44" r="2.8" fill="#FFFFFF"/>
+    <circle cx="68" cy="50" r="3.6" fill="#38BDF8"/>
+    <circle cx="78" cy="56" r="2.8" fill="#34D399"/>
+  </g>
+
+  <!-- The North Star / Guidance Polaris Sparkle at apex of Path -->
+  <g transform="translate(98, 50)" filter="url(#starGlow)">
+    <circle cx="0" cy="0" r="10" fill="url(#beaconRadial)"/>
+    <path d="M0 -7.5 Q0 0 7.5 0 Q0 0 0 7.5 Q0 0 -7.5 0 Q0 0 0 -7.5 Z" fill="url(#starGrad)"/>
+    <circle cx="0" cy="0" r="1.8" fill="#FFFFFF"/>
+  </g>
 </svg>
