@@ -1,13 +1,13 @@
-// Dữ liệu tuyển sinh & lộ trình giáo dục Việt Nam (Chuẩn hóa GDPT 2018)
+// Dữ liệu tuyển sinh & lộ trình giáo dục Việt Nam (Chương trình THPT Mới - Kỳ thi 2025–2026+)
 // Phân định rõ: Lộ trình 4 năm (Lớp 9-12), Môn học THPT vs Tổ hợp xét tuyển ĐH, Dữ liệu có phiên bản & nguồn đối chiếu.
 
 const EDUCATION_DATABASE = {
   examName: "Kỳ thi tốt nghiệp THPT",
-  curriculum: "Chương trình Giáo dục phổ thông 2018 (Bộ GD&ĐT)",
+  curriculum: "Chương trình THPT Mới (áp dụng kỳ thi 2025–2026+)",
   version: "2026-Q1",
   verifiedDate: "2026-03",
 
-  // 1. LỘ TRÌNH 4 NĂM PHỔ THÔNG (GDPT 2018)
+  // 1. LỘ TRÌNH 4 NĂM PHỔ THÔNG (CHƯƠNG TRÌNH MỚI)
   highSchoolProgression: [
     {
       grade: "Lớp 9",
@@ -22,7 +22,7 @@ const EDUCATION_DATABASE = {
     {
       grade: "Lớp 10",
       stage: "Xây dựng nền tảng",
-      objective: "Củng cố phương pháp học tập mới và thích nghi với chương trình GDPT 2018",
+      objective: "Củng cố phương pháp học tập mới và thích nghi với chương trình THPT mới",
       actions: [
         "Hoàn thành tốt các môn học bắt buộc và 4 môn lựa chọn đã đăng ký",
         "Tham gia các câu lạc bộ học thuật, ngoại khóa hoặc hoạt động trải nghiệm hướng nghiệp",
@@ -51,7 +51,7 @@ const EDUCATION_DATABASE = {
     }
   ],
 
-  // 2. MÔN HỌC THPT GDPT 2018 (KHÔNG PHẢI TỔ HỢP ĐẠI HỌC)
+  // 2. MÔN HỌC THPT CHƯƠNG TRÌNH MỚI (KHÔNG PHẢI TỔ HỢP ĐẠI HỌC)
   thptCurriculum: {
     compulsorySubjects: [
       "Ngữ văn", "Toán", "Ngoại ngữ 1 (Tiếng Anh...)", "Lịch sử",
@@ -75,7 +75,7 @@ const EDUCATION_DATABASE = {
         note: "Dành cho học sinh định hướng Thiết kế sản phẩm, Công nghệ ứng dụng, Đa phương tiện."
       }
     ],
-    clarificationNote: "Lưu ý: Môn học THPT là các môn học sinh theo học tại trường cấp 3 theo quy chế GDPT 2018. Khác với các mã A00, A01, D01... vốn là 'Tổ hợp môn xét tuyển Đại học'."
+    clarificationNote: "Lưu ý: Môn học THPT là các môn học sinh theo học tại trường cấp 3 theo chương trình mới. Khác với các mã A00, A01, D01... vốn là 'Tổ hợp môn xét tuyển Đại học'."
   },
 
   // 3. TỔ HỢP MÔN XÉT TUYỂN ĐẠI HỌC
