@@ -837,12 +837,27 @@ html.light .panorama-overlay {
   background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 55%, rgba(255, 255, 255, 0.3) 100%) !important;
 }
 
-html.light .panorama-content h2 {
+html.light .panorama-content h2,
+html.light .panorama-content h3 {
   color: #0F172A !important;
 }
 
 html.light .panorama-content p {
   color: #334155 !important;
+}
+
+/* Dedicated Light Mode Banners for Tabs in Screen 5 */
+html.light #tab-content-hypotheses .panorama-banner {
+  background-image: url('../../image/galaxy_careers_light.png') !important;
+}
+html.light #tab-content-experiments .panorama-banner {
+  background-image: url('../../image/career_experiments_lab_light.png') !important;
+}
+html.light #tab-content-academic .panorama-banner {
+  background-image: url('../../image/academic_pathways_gdpt_light.png') !important;
+}
+html.light #tab-content-family .panorama-banner {
+  background-image: url('../../image/mobile_parent_child_light.png') !important;
 }
 
 html.light .parent-radio-card {
