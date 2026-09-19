@@ -942,6 +942,59 @@ html.light [style*="color:#e2e8f0"] {
   color: #334155 !important;
 }
 
+/* Case-insensitive text contrast overrides */
+html.light [style*="color: #f8fafc" i],
+html.light [style*="color:#f8fafc" i] {
+  color: #0F172A !important;
+}
+
+html.light [style*="color: #94a3b8" i],
+html.light [style*="color:#94a3b8" i],
+html.light [style*="color: #64748b" i],
+html.light [style*="color:#64748b" i] {
+  color: #475569 !important;
+}
+
+/* Light blue / indigo pastels -> Deep sapphire */
+html.light [style*="color: #C7D2FE" i],
+html.light [style*="color: #A5B4FC" i],
+html.light [style*="color: #93C5FD" i],
+html.light [style*="color: #BAE6FD" i],
+html.light [style*="color: #38BDF8" i],
+html.light [style*="color: #818CF8" i] {
+  color: #2563EB !important;
+}
+
+/* Light green / mint pastels -> Deep emerald */
+html.light [style*="color: #6EE7B7" i],
+html.light [style*="color: #A7F3D0" i],
+html.light [style*="color: #BBF7D0" i],
+html.light [style*="color: #34D399" i] {
+  color: #047857 !important;
+}
+
+/* Light amber / yellow pastels -> Deep amber */
+html.light [style*="color: #FCD34D" i],
+html.light [style*="color: #FBBF24" i],
+html.light [style*="color: #F59E0B" i],
+html.light [style*="color: #FED7AA" i] {
+  color: #92400E !important;
+}
+
+/* Light rose / pink pastels -> Deep crimson */
+html.light [style*="color: #FBCFE8" i],
+html.light [style*="color: #F43F5E" i],
+html.light [style*="color: #F87171" i] {
+  color: #9F1239 !important;
+}
+
+/* Light purple pastels -> Deep purple */
+html.light [style*="color: #E9D5FF" i],
+html.light [style*="color: #C084FC" i] {
+  color: #6B21A8 !important;
+}
+
+/* Light backgrounds for cards and dark translucent containers */
 html.light [style*="background: rgba(255,255,255,0.03)"],
 html.light [style*="background: rgba(255, 255, 255, 0.03)"],
 html.light [style*="background: rgba(255,255,255,0.02)"],
@@ -952,9 +1005,90 @@ html.light [style*="background:rgba(255,255,255,0.03)"],
 html.light [style*="background:rgba(255,255,255,0.02)"],
 html.light [style*="background:rgba(255,255,255,0.04)"],
 html.light [style*="background: rgba(0,0,0,0.2)"],
+html.light [style*="background: rgba(0, 0, 0, 0.2)"],
+html.light [style*="background: rgba(0,0,0,0.35)"],
 html.light [style*="background: rgba(15, 23, 42, 0.6)"] {
   background: #F8FAFC !important;
   border-color: #E2E8F0 !important;
+}
+
+/* Specific Component Overrides in Light Mode */
+html.light form label:has(input[name="target_orientations"]) {
+  background: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+html.light form label:has(input[name="target_orientations"]:checked) {
+  background: #EEF2FF !important;
+  border-color: #818CF8 !important;
+}
+
+html.light form label:has(input[name="target_orientations"]) div {
+  color: #0F172A !important;
+}
+
+html.light form label:has(input[name="target_orientations"]) div[style*="font-size: 11px"] {
+  color: #475569 !important;
+}
+
+html.light #riasec-questions-container > div {
+  background: #FFFFFF !important;
+  border-color: #CBD5E1 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+html.light #riasec-questions-container strong {
+  color: #4F46E5 !important;
+}
+
+html.light #riasec-questions-container label {
+  background: #F8FAFC !important;
+  border-color: #CBD5E1 !important;
+  color: #334155 !important;
+}
+
+html.light #riasec-questions-container label:hover {
+  background: #EEF2FF !important;
+}
+
+html.light #dashboard-next-action-card .card-box {
+  background: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  border-left: 4px solid #4F46E5 !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light #dashboard-next-action-card [style*="background: rgba(99, 102, 241"] {
+  background: #EEF2FF !important;
+  border-color: #C7D2FE !important;
+}
+
+html.light .task-item-badge {
+  background: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+  color: #1E293B !important;
+}
+
+html.light .signal-badge {
+  background: #EEF2FF !important;
+  color: #3730A3 !important;
+  border-color: #C7D2FE !important;
+}
+
+html.light .sub-tab-container {
+  background: #F1F5F9 !important;
+  border-color: #E2E8F0 !important;
+}
+
+html.light .sub-tab-btn {
+  color: #475569 !important;
+}
+
+html.light .sub-tab-btn.active {
+  background: #FFFFFF !important;
+  color: #4338CA !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
 }
 
 html.light .btn-primary,
