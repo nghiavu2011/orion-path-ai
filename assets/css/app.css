@@ -737,6 +737,8 @@ body.parent-font-zoom .results-section h3 {
   .tab-pane {
     display: block !important;
   }
+}
+
 /* ==================== THEME MODE (LIGHT / DARK) ==================== */
 html.light {
   --bg-main: #F8FAFC;
@@ -907,6 +909,57 @@ html.light .modal-header {
 html.light .modal-footer {
   background: #F8FAFC !important;
   border-color: #E2E8F0 !important;
+}
+
+/* Global Light Mode Contrast & Readability Enhancements */
+html.light h1, 
+html.light h2, 
+html.light h3, 
+html.light h4, 
+html.light h5, 
+html.light h6 {
+  color: #0F172A !important;
+}
+
+html.light [style*="color: #fff"],
+html.light [style*="color:#fff"],
+html.light [style*="color: #FFFFFF"],
+html.light [style*="color:#FFFFFF"],
+html.light [style*="color: white"] {
+  color: #0F172A !important;
+}
+
+html.light [style*="color: #F8FAFC"],
+html.light [style*="color:#F8FAFC"],
+html.light [style*="color: #cbd5e1"],
+html.light [style*="color:#cbd5e1"],
+html.light [style*="color: #CBD5E1"],
+html.light [style*="color:#CBD5E1"],
+html.light [style*="color: #E2E8F0"],
+html.light [style*="color:#E2E8F0"],
+html.light [style*="color: #e2e8f0"],
+html.light [style*="color:#e2e8f0"] {
+  color: #334155 !important;
+}
+
+html.light [style*="background: rgba(255,255,255,0.03)"],
+html.light [style*="background: rgba(255, 255, 255, 0.03)"],
+html.light [style*="background: rgba(255,255,255,0.02)"],
+html.light [style*="background: rgba(255, 255, 255, 0.02)"],
+html.light [style*="background: rgba(255,255,255,0.04)"],
+html.light [style*="background: rgba(255, 255, 255, 0.04)"],
+html.light [style*="background:rgba(255,255,255,0.03)"],
+html.light [style*="background:rgba(255,255,255,0.02)"],
+html.light [style*="background:rgba(255,255,255,0.04)"],
+html.light [style*="background: rgba(0,0,0,0.2)"],
+html.light [style*="background: rgba(15, 23, 42, 0.6)"] {
+  background: #F8FAFC !important;
+  border-color: #E2E8F0 !important;
+}
+
+html.light .btn-primary,
+html.light .btn-primary * {
+  color: #FFFFFF !important;
 }
 
 /* ==================== THEME SLIDER SWITCH COMPONENT ==================== */
