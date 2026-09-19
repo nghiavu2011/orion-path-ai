@@ -142,6 +142,48 @@
     background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 55%, rgba(255, 255, 255, 0.3) 100%) !important;
   }
 
+  /* Hero Dynamic Backdrop for Dark & Light modes */
+  .hero-backdrop {
+    background: radial-gradient(circle at 30% 40%, rgba(11, 15, 25, 0.78) 0%, rgba(5, 8, 17, 0.94) 85%), url('image/hero_star_chart.png') center/cover no-repeat;
+    transition: background 0.4s ease;
+  }
+
+  html.light .hero-backdrop {
+    background: radial-gradient(circle at 30% 40%, rgba(248, 250, 252, 0.86) 0%, rgba(241, 245, 249, 0.96) 85%), url('image/hero_star_chart_light.png'), url('image/hero_star_chart.png') center/cover no-repeat !important;
+  }
+
+  html.light .hero-backdrop h1 {
+    color: #0F172A !important;
+  }
+
+  html.light .hero-backdrop p,
+  html.light .hero-backdrop .text-slate-200 {
+    color: #334155 !important;
+  }
+
+  html.light .hero-backdrop .text-slate-400 {
+    color: #64748B !important;
+  }
+
+  html.light .hero-backdrop .border-white\/15,
+  html.light .hero-backdrop .border-white\/10 {
+    border-color: rgba(0, 0, 0, 0.1) !important;
+  }
+
+  html.light .panorama-showcase {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.88) 55%, rgba(255, 255, 255, 0.45) 100%) !important;
+    border-color: rgba(0, 0, 0, 0.12) !important;
+  }
+
+  html.light .panorama-showcase h2,
+  html.light .panorama-showcase h3 {
+    color: #0F172A !important;
+  }
+
+  html.light .panorama-showcase p {
+    color: #334155 !important;
+  }
+
   /* Slider switch styling */
   .theme-switch-wrapper {
     display: inline-flex;
@@ -358,7 +400,7 @@
 
 <main class="pt-24">
   <!-- Hero Section -->
-  <section class="relative min-h-[88vh] flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-12 px-margin-mobile md:px-margin-desktop py-16 max-w-full mx-auto" style="background: radial-gradient(circle at 30% 40%, rgba(11, 15, 25, 0.78) 0%, rgba(5, 8, 17, 0.94) 85%), url('image/hero_star_chart.png') center/cover no-repeat;">
+  <section id="hero-section" class="hero-backdrop relative min-h-[88vh] flex flex-col lg:flex-row items-center justify-center text-center lg:text-left gap-12 px-margin-mobile md:px-margin-desktop py-16 max-w-full mx-auto">
     <div class="relative z-10 max-w-2xl lg:max-w-2xl flex flex-col items-center lg:items-start">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-xs sm:text-sm font-semibold text-primary mb-5">
         <span class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse"></span>
@@ -594,7 +636,7 @@
   <!-- SECTION: AI RESILIENCE INDEX SPOTLIGHT -->
   <section id="ai-resilience" class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto border-t border-white/10 scroll-mt-20">
     <!-- Full-Bleed Panorama Showcase for AI Resilience -->
-    <div class="w-full rounded-3xl overflow-hidden mb-12 border border-emerald-500/30 shadow-2xl relative" style="min-height: 270px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/ai_resilience_2026.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
+    <div class="panorama-showcase w-full rounded-3xl overflow-hidden mb-12 border border-emerald-500/30 shadow-2xl relative" style="min-height: 270px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/ai_resilience_2026.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
       <div class="p-8 md:p-12 max-w-2xl">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-xs sm:text-sm font-bold text-emerald-300 mb-3">
           <span class="material-symbols-outlined text-sm">psychology</span>
@@ -781,7 +823,7 @@
   <!-- SECTION 5: CAREER HYPOTHESES -->
   <section id="hypotheses" class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto border-t border-white/10 scroll-mt-20">
     <!-- Full-Bleed Panorama Showcase for Hypotheses -->
-    <div class="w-full rounded-3xl overflow-hidden mb-12 border border-indigo-500/30 shadow-2xl relative" style="min-height: 270px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/galaxy_careers.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
+    <div class="panorama-showcase w-full rounded-3xl overflow-hidden mb-12 border border-indigo-500/30 shadow-2xl relative" style="min-height: 270px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/galaxy_careers.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
       <div class="p-8 md:p-12 max-w-2xl">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs sm:text-sm font-bold text-indigo-300 mb-3">
           <span class="material-symbols-outlined text-sm">explore</span>
@@ -860,7 +902,7 @@
   <!-- SECTION 6: CAREER EXPERIMENTS -->
   <section id="experiments" class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto border-t border-white/10 scroll-mt-20">
     <!-- Full-Bleed Panorama Showcase for Career Experiments -->
-    <div class="w-full rounded-3xl overflow-hidden mb-12 border border-amber-500/30 shadow-2xl relative" style="min-height: 270px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/career_experiments_lab.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
+    <div class="panorama-showcase w-full rounded-3xl overflow-hidden mb-12 border border-amber-500/30 shadow-2xl relative" style="min-height: 270px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/career_experiments_lab.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
       <div class="p-8 md:p-12 max-w-2xl">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-xs sm:text-sm font-bold text-amber-300 mb-3">
           <span class="material-symbols-outlined text-sm">science</span>
@@ -948,7 +990,7 @@
   <!-- SECTION 7: FAMILY BRIDGE -->
   <section id="family" class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto border-t border-white/10 scroll-mt-20">
     <!-- Full-Bleed Panorama Showcase for Family Bridge -->
-    <div class="w-full rounded-3xl overflow-hidden mb-12 border border-rose-500/30 shadow-2xl relative" style="min-height: 280px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/mobile_parent_child.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
+    <div class="panorama-showcase w-full rounded-3xl overflow-hidden mb-12 border border-rose-500/30 shadow-2xl relative" style="min-height: 280px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/mobile_parent_child.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
       <div class="p-8 md:p-12 max-w-2xl">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-xs sm:text-sm font-bold text-rose-300 mb-3">
           <span class="material-symbols-outlined text-sm">family_restroom</span>
@@ -1010,7 +1052,7 @@
   <!-- SECTION 8: EDUCATION / REALITY -->
   <section id="education" class="px-margin-mobile md:px-margin-desktop py-20 max-w-container-max mx-auto border-t border-white/10 scroll-mt-20">
     <!-- Full-Bleed Panorama Showcase for Education THPT Mới -->
-    <div class="w-full rounded-3xl overflow-hidden mb-12 border border-cyan-500/30 shadow-2xl relative" style="min-height: 270px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/academic_pathways_gdpt.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
+    <div class="panorama-showcase w-full rounded-3xl overflow-hidden mb-12 border border-cyan-500/30 shadow-2xl relative" style="min-height: 270px; background-image: linear-gradient(to right, rgba(5,8,17,0.95) 0%, rgba(5,8,17,0.8) 55%, rgba(5,8,17,0.25) 100%), url('image/academic_pathways_gdpt.png'); background-size: cover; background-position: center; display: flex; align-items: center;">
       <div class="p-8 md:p-12 max-w-2xl">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-xs sm:text-sm font-bold text-cyan-300 mb-3">
           <span class="material-symbols-outlined text-sm">school</span>
