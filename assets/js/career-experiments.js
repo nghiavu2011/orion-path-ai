@@ -228,14 +228,14 @@ class CareerExperimentManager {
 
   getCompletedList() {
     const list = [];
-    for (const id in this.state) {
+    Object.keys(this.state).forEach(id => {
       if (this.getExperimentStatus(id) === 'COMPLETED') {
         const exp = this.getExperiment(id);
         if (exp) {
           list.push({ ...exp, ...this.state[id] });
         }
       }
-    }
+    });
     return list;
   }
 }

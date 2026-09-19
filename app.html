@@ -84,6 +84,17 @@
         <span style="font-size: 13px; color: var(--text-muted); display: none;" id="active-student-badge">
           👤 <strong style="color: var(--text-main);" id="badge-student-name">Học sinh</strong>
         </span>
+        <!-- Theme Mode Slider Switch -->
+        <div class="theme-switch-wrapper" title="Chuyển chế độ Giao diện Sáng / Tối">
+          <label class="theme-switch" for="theme-toggle-app" aria-label="Chuyển đổi giao diện Sáng / Tối">
+            <input type="checkbox" id="theme-toggle-app" onchange="handleThemeToggle(this.checked)">
+            <span class="theme-slider">
+              <span class="material-symbols-outlined switch-icon-moon">dark_mode</span>
+              <span class="material-symbols-outlined switch-icon-sun">light_mode</span>
+            </span>
+          </label>
+          <span class="theme-switch-label" id="theme-mode-label" onclick="document.getElementById('theme-toggle-app').click()">Tối</span>
+        </div>
         <button type="button" id="parent-font-toggle-btn" onclick="toggleParentFontSize()" class="btn btn-secondary" style="padding: 7px 14px; font-size: 13px; display: flex; align-items: center; gap: 6px;" title="Phóng to cỡ chữ cho cha mẹ dễ đọc">
           <span class="material-symbols-outlined" style="font-size: 18px; color: #F59E0B;">text_increase</span>
           <span id="font-toggle-label">Cỡ chữ lớn (A+)</span>
@@ -1554,7 +1565,14 @@
             academic: {
               math: profile ? profile.math : null,
               lit: profile ? profile.lit : null,
-              eng: profile ? profile.eng : null
+              eng: profile ? profile.eng : null,
+              physics: profile ? profile.physics : null,
+              chemistry: profile ? profile.chemistry : null,
+              biology: profile ? profile.biology : null,
+              history: profile ? profile.history : null,
+              geography: profile ? profile.geography : null,
+              informatics: profile ? profile.informatics : null,
+              civics: profile ? profile.civics : null
             },
             targets: profile ? profile.targets : []
           });
@@ -2665,6 +2683,7 @@
       chatBox.appendChild(userDiv);
       input.value = '';
       chatBox.scrollTop = chatBox.scrollHeight;
+      lastChatMessage = text;
 
       // Loading bot message
       const botDiv = document.createElement('div');
@@ -2680,20 +2699,18 @@
         if (res && res.error) {
           botDiv.innerHTML = `
             <div style="color:#ef4444; line-height:1.4;">
-              <div style="margin-bottom:6px;">⚠️ ${res.error}</div>
-              <button type="button" onclick="retryChat('${text.replace(/'/g, "\\'")}')" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fff; font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">Thử lại</button>
+              <div style="margin-bottom:6px;">⚠️ ${escapeHtmlStr(res.error)}</div>
+              <button type="button" onclick="retryLastChatMessage()" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fff; font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">Thử lại</button>
             </div>
           `;
         } else if (res && res.reply) {
-          // Safe formatting
-          botDiv.innerHTML = res.reply
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\n/g, '<br/>');
+          // Safe formatting: escape raw HTML first, then parse bold & newlines
+          botDiv.innerHTML = formatSafeAiMarkdown(res.reply);
         } else {
           botDiv.innerHTML = `
             <div style="color:#ef4444; line-height:1.4;">
               <div style="margin-bottom:6px;">⚠️ Không nhận được phản hồi từ AI.</div>
-              <button type="button" onclick="retryChat('${text.replace(/'/g, "\\'")}')" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fff; font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">Thử lại</button>
+              <button type="button" onclick="retryLastChatMessage()" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fff; font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">Thử lại</button>
             </div>
           `;
         }
@@ -2701,16 +2718,36 @@
         botDiv.innerHTML = `
           <div style="color:#ef4444; line-height:1.4;">
             <div style="margin-bottom:6px;">⚠️ Sự cố kết nối AI. Vui lòng thử lại.</div>
-            <button type="button" onclick="retryChat('${text.replace(/'/g, "\\'")}')" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fff; font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">Thử lại</button>
+            <button type="button" onclick="retryLastChatMessage()" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fff; font-size:11px; padding:3px 10px; border-radius:6px; cursor:pointer;">Thử lại</button>
           </div>
         `;
       }
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function retryChat(msg) {
-      document.getElementById('chat-user-input').value = msg;
-      sendChatMessage();
+    let lastChatMessage = '';
+    function retryLastChatMessage() {
+      if (lastChatMessage) {
+        document.getElementById('chat-user-input').value = lastChatMessage;
+        sendChatMessage();
+      }
+    }
+
+    function escapeHtmlStr(str) {
+      if (!str || typeof str !== 'string') return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatSafeAiMarkdown(raw) {
+      if (!raw || typeof raw !== 'string') return '';
+      return escapeHtmlStr(raw)
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br/>');
     }
 
     // Global Escape Key Listener for Modals
@@ -3063,7 +3100,36 @@
         document.body.classList.add('parent-font-zoom');
         updateAppFontToggleUI(true);
       }
+
+      initThemeMode();
     });
+
+    // Theme Mode Controller (Light / Dark)
+    function handleThemeToggle(isLight) {
+      if (isLight) {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+        localStorage.setItem('orion_theme_mode', 'light');
+      } else {
+        document.documentElement.classList.remove('light');
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('orion_theme_mode', 'dark');
+      }
+      updateThemeUI(isLight);
+    }
+
+    function updateThemeUI(isLight) {
+      const toggle = document.getElementById('theme-toggle-app');
+      const label = document.getElementById('theme-mode-label');
+      if (toggle) toggle.checked = isLight;
+      if (label) label.textContent = isLight ? 'Sáng' : 'Tối';
+    }
+
+    function initThemeMode() {
+      const saved = localStorage.getItem('orion_theme_mode');
+      const isLight = saved === 'light';
+      handleThemeToggle(isLight);
+    }
 
     // Accessibility: Parent Reading Font Zoom
     window.toggleParentFontSize = function() {

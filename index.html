@@ -91,6 +91,135 @@
   body.parent-font-zoom .text-sm {
     font-size: 1.05rem !important;
   }
+
+  /* ==================== THEME MODE (LIGHT / DARK) FOR INDEX ==================== */
+  html.light body {
+    background-color: #F8FAFC !important;
+    color: #0F172A !important;
+  }
+  html.light nav {
+    background-color: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+  }
+  html.light nav a.text-slate-300 {
+    color: #475569 !important;
+  }
+  html.light nav a.text-slate-300:hover {
+    color: #0F172A !important;
+  }
+  html.light nav .text-white {
+    color: #0F172A !important;
+  }
+  html.light .glass-card {
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+  }
+  html.light .text-slate-300,
+  html.light .text-slate-400 {
+    color: #475569 !important;
+  }
+  html.light .text-slate-100,
+  html.light .text-white {
+    color: #0F172A !important;
+  }
+  html.light .bg-surface-container-lowest,
+  html.light .bg-surface-container-low,
+  html.light .bg-surface-container {
+    background-color: #FFFFFF !important;
+    border-color: #E2E8F0 !important;
+  }
+  html.light .border-white\/10,
+  html.light .border-white\/5,
+  html.light .border-white\/20 {
+    border-color: rgba(0, 0, 0, 0.08) !important;
+  }
+  html.light .bg-white\/5,
+  html.light .bg-white\/10 {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+  }
+  html.light .panorama-overlay {
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.8) 55%, rgba(255, 255, 255, 0.3) 100%) !important;
+  }
+
+  /* Slider switch styling */
+  .theme-switch-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+  .theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    cursor: pointer;
+  }
+  .theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .theme-slider {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+  }
+  html.light .theme-slider {
+    background-color: #E2E8F0;
+    border-color: #CBD5E1;
+  }
+  .theme-slider .switch-icon-sun {
+    font-size: 13px;
+    color: #F59E0B;
+    transition: opacity 0.3s ease;
+    opacity: 0.3;
+  }
+  .theme-slider .switch-icon-moon {
+    font-size: 13px;
+    color: #93C5FD;
+    transition: opacity 0.3s ease;
+    opacity: 1;
+  }
+  .theme-slider::after {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+  }
+  .theme-switch input:checked + .theme-slider {
+    background-color: #EEF2FF;
+    border-color: #6366F1;
+  }
+  .theme-switch input:checked + .theme-slider::after {
+    transform: translateX(22px);
+    background-color: #4F46E5;
+  }
+  .theme-switch input:checked + .theme-slider .switch-icon-sun {
+    opacity: 1;
+  }
+  .theme-switch input:checked + .theme-slider .switch-icon-moon {
+    opacity: 0.2;
+  }
+  .theme-switch-label {
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
 </style>
 </head>
 <body class="bg-background text-slate-100 font-sans min-h-screen selection:bg-primary selection:text-white overflow-x-hidden">
@@ -167,6 +296,17 @@
   </div>
   
   <div class="flex items-center gap-2.5">
+    <!-- Theme Switch Slider -->
+    <div class="theme-switch-wrapper" title="Chuyển chế độ Giao diện Sáng / Tối">
+      <label class="theme-switch" for="theme-toggle-index" aria-label="Chuyển đổi giao diện Sáng / Tối">
+        <input type="checkbox" id="theme-toggle-index" onchange="handleThemeToggle(this.checked)">
+        <span class="theme-slider">
+          <span class="material-symbols-outlined switch-icon-moon">dark_mode</span>
+          <span class="material-symbols-outlined switch-icon-sun">light_mode</span>
+        </span>
+      </label>
+      <span class="theme-switch-label text-slate-200 hidden sm:inline" id="theme-mode-label" onclick="document.getElementById('theme-toggle-index').click()">Tối</span>
+    </div>
     <button id="font-size-toggle" onclick="toggleParentFontSize()" title="Phóng to cỡ chữ cho cha mẹ dễ đọc" class="px-3 py-1.5 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-bold flex items-center gap-1.5 transition-all">
       <span class="material-symbols-outlined text-sm text-amber-400">text_increase</span>
       <span id="font-toggle-label">Chữ lớn (A+)</span>
@@ -1372,6 +1512,38 @@
     document.body.classList.add('parent-font-zoom');
     updateFontToggleUI(true);
   }
+
+  // Theme Mode Controller (Light / Dark) for Index
+  function handleThemeToggle(isLight) {
+    if (isLight) {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+      localStorage.setItem('orion_theme_mode', 'light');
+    } else {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('orion_theme_mode', 'dark');
+    }
+    updateThemeUI(isLight);
+  }
+
+  function updateThemeUI(isLight) {
+    const toggle = document.getElementById('theme-toggle-index');
+    const label = document.getElementById('theme-mode-label');
+    if (toggle) toggle.checked = isLight;
+    if (label) {
+      label.textContent = isLight ? 'Sáng' : 'Tối';
+      label.className = isLight ? 'theme-switch-label text-slate-700 hidden sm:inline' : 'theme-switch-label text-slate-200 hidden sm:inline';
+    }
+  }
+
+  function initThemeMode() {
+    const saved = localStorage.getItem('orion_theme_mode');
+    const isLight = saved === 'light';
+    handleThemeToggle(isLight);
+  }
+
+  initThemeMode();
 </script>
 </body>
 </html>

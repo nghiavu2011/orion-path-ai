@@ -36,6 +36,13 @@ class OrionAIClient {
       math: careerProfile.math,
       lit: careerProfile.lit,
       eng: careerProfile.eng,
+      physics: careerProfile.physics,
+      chemistry: careerProfile.chemistry,
+      biology: careerProfile.biology,
+      history: careerProfile.history,
+      geography: careerProfile.geography,
+      informatics: careerProfile.informatics,
+      civics: careerProfile.civics,
       riasec: careerProfile.riasec,
       targets: careerProfile.targets || [],
       completedExperiments: careerProfile.completedExperiments || []

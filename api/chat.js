@@ -47,6 +47,14 @@ const ipRateLimitMap = new Map();
 
 function checkRateLimit(ip) {
   const now = Date.now();
+  if (ipRateLimitMap.size > 1000) {
+    for (const [key, val] of ipRateLimitMap.entries()) {
+      if (now - val.startTime > RATE_LIMIT_WINDOW_MS) {
+        ipRateLimitMap.delete(key);
+      }
+    }
+    if (ipRateLimitMap.size > 1000) ipRateLimitMap.clear();
+  }
   const record = ipRateLimitMap.get(ip);
   if (!record || (now - record.startTime > RATE_LIMIT_WINDOW_MS)) {
     ipRateLimitMap.set(ip, { count: 1, startTime: now });
@@ -299,7 +307,7 @@ Học sinh hoặc phụ huynh đang thể hiện dấu hiệu áp lực, mệt m
       }
 
       console.warn(`Model ${modelToUse} returned status ${response.status}, trying next fallback...`);
-      if (response.status !== 429 && response.status !== 503) {
+      if (response.status === 400) {
         break;
       }
     }
